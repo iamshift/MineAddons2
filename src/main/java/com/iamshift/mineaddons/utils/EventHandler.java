@@ -234,15 +234,10 @@ public class EventHandler
 
 		if(target instanceof IUncapturable)
 		{
-			if(Config.captureItems.containsKey(stack.getItem().getRegistryName()))
+			if(Config.isCaptureItem(stack.getItem()))
 			{
-				int meta = Config.captureItems.get(stack.getItem().getRegistryName());
-
-				if(meta == -1 || meta == stack.getItemDamage())
-				{
-					event.setCanceled(true);
-					return;
-				}
+				event.setCanceled(true);
+				return;
 			}
 		}
 
@@ -250,15 +245,10 @@ public class EventHandler
 		{
 			if(Config.CaptureAncientCarps)
 			{
-				if(Config.captureItems.containsKey(stack.getItem().getRegistryName()))
+				if(Config.isCaptureItem(stack.getItem()))
 				{
-					int meta = Config.captureItems.get(stack.getItem().getRegistryName());
-
-					if(meta == -1 || meta == stack.getItemDamage())
-					{
-						event.setCanceled(true);
-						return;
-					}
+					event.setCanceled(true);
+					return;
 				}
 			}
 		}
@@ -273,15 +263,10 @@ public class EventHandler
 
 		if(target instanceof IUncapturable)
 		{
-			if(Config.captureItems.containsKey(stack.getItem().getRegistryName()))
+			if(Config.isCaptureItem(stack.getItem()))
 			{
-				int meta = Config.captureItems.get(stack.getItem().getRegistryName());
-
-				if(meta == -1 || meta == stack.getItemDamage())
-				{
-					event.setCanceled(true);
-					return;
-				}
+				event.setCanceled(true);
+				return;
 			}
 		}
 
@@ -289,15 +274,10 @@ public class EventHandler
 		{
 			if(Config.CaptureAncientCarps)
 			{
-				if(Config.captureItems.containsKey(stack.getItem().getRegistryName()))
+				if(Config.isCaptureItem(stack.getItem()))
 				{
-					int meta = Config.captureItems.get(stack.getItem().getRegistryName());
-
-					if(meta == -1 || meta == stack.getItemDamage())
-					{
-						event.setCanceled(true);
-						return;
-					}
+					event.setCanceled(true);
+					return;
 				}
 			}
 		}
@@ -314,7 +294,7 @@ public class EventHandler
 
 		if(target instanceof IUncapturable)
 		{
-			if(Config.captureEntities.contains(entry.getRegistryName()))
+			if(Config.isCaptureEntity(entry))
 			{
 				event.setCanceled(true);
 				return;
@@ -325,7 +305,7 @@ public class EventHandler
 		{
 			if(Config.CaptureAncientCarps)
 			{
-				if(Config.captureEntities.contains(entry.getRegistryName()))
+				if(Config.isCaptureEntity(entry))
 				{
 					event.setCanceled(true);
 					return;

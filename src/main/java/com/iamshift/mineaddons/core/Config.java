@@ -2,12 +2,12 @@ package com.iamshift.mineaddons.core;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 
 public class Config 
 {
@@ -20,8 +20,8 @@ public class Config
 	public static int 		MaxAncientCarps = 20;
 	public static boolean 	CaptureAncientCarps = false;
 	
-	public static Map<ResourceLocation, Integer> captureItems = new HashMap<ResourceLocation, Integer>();
-	public static List<ResourceLocation> captureEntities = new ArrayList<ResourceLocation>();
+	private static List<String> cItems = new ArrayList<String>(); 
+	private static List<String> cEntities = new ArrayList<String>();
 	
 	public static Configuration conf;
 
@@ -39,16 +39,11 @@ public class Config
 		
 		MaxAncientCarps = 		conf.getInt("MaxAncientCarps",  "AncientCarps",  MaxAncientCarps,	0,	Integer.MAX_VALUE,	"");
 		CaptureAncientCarps =	conf.getBoolean("CaptureAncientCarps", "AncientCarps", false, "Allow Ancient Carps to be capture.");
+
+		initCaptures();
 		
-		captureItems.put(new ResourceLocation("industrialforegoing", "mob_imprisonment_tool"), -1);
-		captureItems.put(new ResourceLocation("notenoughwands", "capturing_wand"), -1);
-		captureItems.put(new ResourceLocation("rftools", "syringe"), -1);
-//		captureItems.put(new ResourceLocation("mob_grinding_utils", "mob_swab"), -1);
-		captureItems.put(new ResourceLocation("actuallyadditions", "item_spawner_changer"), -1);
-		captureItems.put(new ResourceLocation("extrautils2", "goldenlasso"), -1);
-		captureItems.put(new ResourceLocation("woot", "endershard"), -1);
-		
-		captureEntities.add(new ResourceLocation("thermalexpansion", "morb"));
+		cItems = Arrays.asList(conf.getStringList("CaptureItems", "Capture", cItems.toArray(new String[0]), ""));
+		cEntities = Arrays.asList(conf.getStringList("CaptureEntities", "Capture", cEntities.toArray(new String[0]), ""));
 		
 		if(conf.hasChanged())
 			conf.save();
@@ -59,5 +54,29 @@ public class Config
 			configFile.delete();
 			init(configFile);
 		}
+	}
+	
+	private static void initCaptures()
+	{
+		cItems.add("industrialforegoing:mob_imprisonment_tool");
+		cItems.add("notenoughwands:capturing_wand");
+		cItems.add("rftools:syringe");
+		cItems.add("mob_grinding_utils:mob_swab");
+		cItems.add("actuallyadditions:item_spawner_changer");
+		cItems.add("extrautils2:goldenlasso");
+		cItems.add("woot:endershard");
+		cItems.add("enderio:item_soul_vial");
+		
+		cEntities.add("thermalexpansion:morb");
+	}
+	
+	public static boolean isCaptureItem(Item item)
+	{
+		return cItems.contains(item.getRegistryName().getResourceDomain() + ":" + item.getRegistryName().getResourcePath());
+	}
+	
+	public static boolean isCaptureEntity(EntityEntry entity)
+	{
+		return cEntities.contains(entity.getRegistryName().getResourceDomain() + ":" + entity.getRegistryName().getResourcePath());
 	}
 }
