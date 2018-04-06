@@ -195,7 +195,7 @@ public class BossManager
 	
 		if(pos.getY() >= 10 && world.getDifficulty() != EnumDifficulty.PEACEFUL && !world.isRemote)
 		{
-			if(event.getPlacedBlock().getBlock() instanceof BlockSkull && world.getTileEntity(pos) instanceof TileEntitySkull && ((TileEntitySkull)world.getTileEntity(pos)).getSkullType() == 1 && world.provider instanceof WorldProviderEnd) //&& world.provider instanceof WorldProviderEnd
+			if(event.getPlacedBlock().getBlock() instanceof BlockSkull && world.getTileEntity(pos) instanceof TileEntitySkull && ((TileEntitySkull)world.getTileEntity(pos)).getSkullType() == 1) //&& world.provider instanceof WorldProviderEnd
 			{
 				BlockPattern.PatternHelper helper = voixPattern.match(world, pos.down(2));
 
