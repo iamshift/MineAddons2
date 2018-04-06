@@ -1,0 +1,7 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "mineaddons:items/ultimate_chestplate",
+		"layer1": "mineaddons:items/ultimate_chestplate_overlay"
+	}	
+}

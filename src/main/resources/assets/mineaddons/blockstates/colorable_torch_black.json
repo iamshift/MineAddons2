@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "facing=up": { "model": "mineaddons:colorable_torch_black" },
+        "facing=east": { "model": "mineaddons:colorable_torch_black_wall" },
+        "facing=south": { "model": "mineaddons:colorable_torch_black_wall", "y": 90 },
+        "facing=west": { "model": "mineaddons:colorable_torch_black_wall", "y": 180 },
+        "facing=north": { "model": "mineaddons:colorable_torch_black_wall", "y": 270 }
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "parent": "block/torch",
+    "textures": {
+        "torch": "mineaddons:blocks/colorable_torch_purple"
+    }
+}

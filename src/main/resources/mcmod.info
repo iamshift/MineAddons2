@@ -1,0 +1,16 @@
+[
+{
+  "modid": "mineaddons",
+  "name": "Mine Addons 2",
+  "description": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["IamShift"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

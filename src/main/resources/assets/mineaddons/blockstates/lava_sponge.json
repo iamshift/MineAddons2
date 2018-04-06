@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"wet=false": { "model": "mineaddons:lava_sponge_dry" },
+		"wet=true": { "model": "mineaddons:lava_sponge_wet" }
+	}
+}
