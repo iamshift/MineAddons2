@@ -69,14 +69,14 @@ public class Config
 		
 		cEntities.add("thermalexpansion:morb");
 	}
-	
-	public static boolean isCaptureItem(Item item)
+
+	public static boolean isCaptureItem(String string)
 	{
-		return cItems.contains(item.getRegistryName().getResourceDomain() + ":" + item.getRegistryName().getResourcePath());
+		return cItems.contains(string);
 	}
 	
-	public static boolean isCaptureEntity(EntityEntry entity)
+	public static boolean isCaptureEntity(String string)
 	{
-		return cEntities.contains(entity.getRegistryName().getResourceDomain() + ":" + entity.getRegistryName().getResourcePath());
+		return cItems.contains(string);
 	}
 }

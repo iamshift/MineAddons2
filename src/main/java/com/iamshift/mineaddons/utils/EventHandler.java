@@ -5,24 +5,18 @@ import java.util.Random;
 import com.iamshift.mineaddons.blocks.BlockInvLight;
 import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.core.Refs;
-import com.iamshift.mineaddons.enchantment.EnchantmentElytra;
 import com.iamshift.mineaddons.entities.EntityAncientCarp;
 import com.iamshift.mineaddons.entities.EntityBrainlessShulker;
 import com.iamshift.mineaddons.entities.EntityHellhound;
 import com.iamshift.mineaddons.fluids.blocks.BlockCursedWater;
 import com.iamshift.mineaddons.fluids.blocks.BlockSacredWater;
-import com.iamshift.mineaddons.init.ModEnchants;
 import com.iamshift.mineaddons.init.ModEntities;
 import com.iamshift.mineaddons.init.ModItems;
 import com.iamshift.mineaddons.interfaces.IUncapturable;
-import com.iamshift.mineaddons.items.ItemWings;
 import com.iamshift.mineaddons.items.tools.ItemBreaker;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentData;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityWolf;
@@ -30,13 +24,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemFirework;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -45,7 +35,6 @@ import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
-import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
@@ -228,13 +217,13 @@ public class EventHandler
 
 		if(event.getItemStack() == null)
 			return;
-
-		ItemStack stack = event.getItemStack();
+		
+		Item item = event.getItemStack().getItem();
 		Entity target = event.getTarget();
 
 		if(target instanceof IUncapturable)
 		{
-			if(Config.isCaptureItem(stack.getItem()))
+			if(Config.isCaptureItem(item.getRegistryName().getResourceDomain() + ":" + item.getRegistryName().getResourcePath()))
 			{
 				event.setCanceled(true);
 				return;
@@ -245,7 +234,7 @@ public class EventHandler
 		{
 			if(Config.CaptureAncientCarps)
 			{
-				if(Config.isCaptureItem(stack.getItem()))
+				if(Config.isCaptureItem(item.getRegistryName().getResourceDomain() + ":" + item.getRegistryName().getResourcePath()))
 				{
 					event.setCanceled(true);
 					return;
@@ -259,11 +248,11 @@ public class EventHandler
 	{
 		EntityPlayer player = event.getEntityPlayer();
 		Entity target = event.getTarget();
-		ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
+		Item item = player.getHeldItem(EnumHand.MAIN_HAND).getItem();
 
 		if(target instanceof IUncapturable)
 		{
-			if(Config.isCaptureItem(stack.getItem()))
+			if(Config.isCaptureItem(item.getRegistryName().getResourceDomain() + ":" + item.getRegistryName().getResourcePath()))
 			{
 				event.setCanceled(true);
 				return;
@@ -274,7 +263,7 @@ public class EventHandler
 		{
 			if(Config.CaptureAncientCarps)
 			{
-				if(Config.isCaptureItem(stack.getItem()))
+				if(Config.isCaptureItem(item.getRegistryName().getResourceDomain() + ":" + item.getRegistryName().getResourcePath()))
 				{
 					event.setCanceled(true);
 					return;
@@ -287,14 +276,14 @@ public class EventHandler
 	public static void onEntityCollide(ProjectileImpactEvent.Throwable event)
 	{
 		Entity target = event.getRayTraceResult().entityHit;
-		EntityEntry entry = EntityRegistry.getEntry(event.getThrowable().getClass());
+		EntityEntry entity = EntityRegistry.getEntry(event.getThrowable().getClass());
 
-		if(entry == null)
+		if(entity == null)
 			return;
 
 		if(target instanceof IUncapturable)
 		{
-			if(Config.isCaptureEntity(entry))
+			if(Config.isCaptureEntity(entity.getRegistryName().getResourceDomain() + ":" + entity.getRegistryName().getResourcePath()))
 			{
 				event.setCanceled(true);
 				return;
@@ -305,7 +294,7 @@ public class EventHandler
 		{
 			if(Config.CaptureAncientCarps)
 			{
-				if(Config.isCaptureEntity(entry))
+				if(Config.isCaptureEntity(entity.getRegistryName().getResourceDomain() + ":" + entity.getRegistryName().getResourcePath()))
 				{
 					event.setCanceled(true);
 					return;

@@ -2,17 +2,20 @@ package com.iamshift.mineaddons.core;
 
 import java.util.List;
 
+import com.iamshift.mineaddons.MineAddons;
 import com.iamshift.mineaddons.init.ModBlocks;
 import com.iamshift.mineaddons.init.ModEnchants;
 import com.iamshift.mineaddons.init.ModItems;
 import com.iamshift.mineaddons.init.ModPotions;
 import com.iamshift.mineaddons.init.ModSounds;
+import com.iamshift.mineaddons.integration.mobgrindutils.ItemMobSwab;
 import com.iamshift.mineaddons.interfaces.IHasModel;
 import com.iamshift.mineaddons.interfaces.IRecipeProvider;
 import com.iamshift.mineaddons.items.armors.ItemUltimateArmor;
 import com.iamshift.mineaddons.utils.RecipesUltimateArmorDyes;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.enchantment.Enchantment;
@@ -25,8 +28,10 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -37,6 +42,8 @@ public class Register
 	public static void onItemRegister(RegistryEvent.Register<Item> event)
 	{
 		event.getRegistry().registerAll(ModItems.ITEMS.toArray(new Item[0]));
+		
+		MineAddons.reg = event.getRegistry();
 	}
 
 	@SubscribeEvent
@@ -100,7 +107,7 @@ public class Register
 		for(Potion p : ModPotions.potions)
 			event.getRegistry().register(p);
 	}
-	
+
 	@SubscribeEvent
 	public static void onEnchantmentRegister(RegistryEvent.Register<Enchantment> event)
 	{
@@ -133,4 +140,17 @@ public class Register
 			}
 		}, ModItems.BrainlessShulkerEgg);
 	}
+
+//	@SubscribeEvent
+//	public static void replaceItems(RegistryEvent.Register<Item> event)
+//	{
+//		if(Loader.isModLoaded("mob_grinding_utils"))
+//			event.getRegistry().register(new ItemMobSwab()
+//			{
+//				{
+//					setRegistryName("mob_grinding_utils", "gm_chicken_feed");
+//					setUnlocalizedName("mob_grinding_utils.gm_chicken_feed");
+//				}
+//			});
+//	}
 }
