@@ -1,6 +1,7 @@
 package com.iamshift.mineaddons.network;
 
 import com.iamshift.mineaddons.init.ModNetwork;
+import com.iamshift.mineaddons.interfaces.IUncapturable;
 import com.iamshift.mineaddons.utils.ElytraHelper;
 
 import net.minecraft.entity.EntityLivingBase;

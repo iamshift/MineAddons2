@@ -77,6 +77,6 @@ public class Config
 	
 	public static boolean isCaptureEntity(String string)
 	{
-		return cItems.contains(string);
+		return cEntities.contains(string);
 	}
 }

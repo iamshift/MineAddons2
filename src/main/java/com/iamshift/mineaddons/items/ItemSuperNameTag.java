@@ -75,6 +75,5 @@ public class ItemSuperNameTag extends ItemBase
 				);
 		
 		return list;
-
 	}
 }
