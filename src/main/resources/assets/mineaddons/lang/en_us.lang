@@ -112,6 +112,8 @@ text.timeskipclock.cooldown=TimeSkip in cooldown. %s seconds left.
 text.timeskipclock.timeleft=Advancing time in %s seconds.
 text.timeskipclock.noton=TimeSkip not active.
 
+text.antiboss.msg=%s does not work in this entity.
+
 text.rocketboots.toggle.off=Rocket Power: §cOFF
 text.rocketboots.toggle.on=Rocket Power: §aON
 

@@ -31,7 +31,7 @@ public class EntityDeadHorse extends AbstractHorse implements IUncapturable
 		super(worldIn);
 		this.isImmuneToFire = true;
 	}
-
+	
 	@Override
 	protected void applyEntityAttributes()
 	{
@@ -263,6 +263,27 @@ public class EntityDeadHorse extends AbstractHorse implements IUncapturable
 			return false;
 		
 		return super.attackEntityFrom(source, amount);
+	}
+	
+	@Override
+	public void onDeath(DamageSource cause)
+	{
+		if(this.isBeingRidden())
+		{
+			if(this.isGhostHorse())
+			{
+				EntityGhostRider gr = (EntityGhostRider) this.getPassengers().get(0);
+				
+				if(gr.getStage() == 1)
+				{
+					gr.setHealth(300F);
+					gr.setInvulTime(60);
+					gr.updateBars();
+				}
+			}
+		}
+		
+		super.onDeath(cause);
 	}
 
 	@Override

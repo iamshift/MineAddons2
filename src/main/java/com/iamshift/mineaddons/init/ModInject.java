@@ -13,7 +13,6 @@ public class ModInject implements IFMLLoadingPlugin
 	@Override
 	public String[] getASMTransformerClass()
 	{
-		System.out.println("taet");
 		return new String[] {Inject.class.getName()};
 	}
 

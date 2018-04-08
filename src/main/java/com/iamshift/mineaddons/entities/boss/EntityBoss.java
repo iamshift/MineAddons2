@@ -187,6 +187,7 @@ public abstract class EntityBoss extends EntityMob
 			{
 				if(!this.stage1)
 				{
+					this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(450.0F);
 					this.setHealth(450F);
 					this.stage1 = true;
 				}

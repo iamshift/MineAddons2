@@ -8,6 +8,8 @@ import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.entities.EntityAncientCarp;
 import com.iamshift.mineaddons.entities.EntityBrainlessShulker;
 import com.iamshift.mineaddons.entities.EntityHellhound;
+import com.iamshift.mineaddons.entities.boss.EntityBoss;
+import com.iamshift.mineaddons.entities.boss.EntityDeadHorse;
 import com.iamshift.mineaddons.fluids.blocks.BlockCursedWater;
 import com.iamshift.mineaddons.fluids.blocks.BlockSacredWater;
 import com.iamshift.mineaddons.init.ModEntities;
@@ -30,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
@@ -264,6 +267,18 @@ public class EventHandler
 					event.setCanceled(true);
 					return;
 				}
+			}
+		}
+		
+		if(target instanceof EntityBoss || target instanceof EntityDeadHorse)
+		{
+			if(Config.isAntiBoss(item.getRegistryName().getResourceDomain() + ":" + item.getRegistryName().getResourcePath()))
+			{
+				if(!player.world.isRemote)
+					player.sendMessage(new TextComponentTranslation("text.antiboss.msg", player.getHeldItem(EnumHand.MAIN_HAND).getDisplayName()));
+				
+				event.setCanceled(true);
+				return;
 			}
 		}
 	}

@@ -524,7 +524,6 @@ public class EntityVoix extends EntityBoss implements IUncapturable
 	class AISpiritBomb extends EntityBoss.AIUseSpell
 	{
 		private final EntityVoix voix;
-//		private EntitySpiritBomb bomb;
 		private final double range = 16.0D;
 
 		public AISpiritBomb(EntityVoix voix)
@@ -546,17 +545,6 @@ public class EntityVoix extends EntityBoss implements IUncapturable
 				return true;
 		}
 		
-//		@Override
-//		public boolean shouldContinueExecuting()
-//		{
-//			if(!super.shouldContinueExecuting())
-//				return false;
-//			else if(!((EntityPlayer)voix.getAttackTarget()).capabilities.isCreativeMode)
-//				return false;
-//			else
-//				return true;
-//		}
-
 		@Override
 		public void startExecuting()
 		{

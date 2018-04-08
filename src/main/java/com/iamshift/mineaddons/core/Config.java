@@ -23,6 +23,8 @@ public class Config
 	private static List<String> cItems = new ArrayList<String>(); 
 	private static List<String> cEntities = new ArrayList<String>();
 	
+	private static List<String> nBoss = new ArrayList<String>();
+	
 	public static Configuration conf;
 
 	public static void init(File configFile) 
@@ -44,6 +46,8 @@ public class Config
 		
 		cItems = Arrays.asList(conf.getStringList("CaptureItems", "Capture", cItems.toArray(new String[0]), ""));
 		cEntities = Arrays.asList(conf.getStringList("CaptureEntities", "Capture", cEntities.toArray(new String[0]), ""));
+		
+		nBoss = Arrays.asList(conf.getStringList("AntiBossItems", "Bosses", nBoss.toArray(new String[0]), ""));
 		
 		if(conf.hasChanged())
 			conf.save();
@@ -68,6 +72,8 @@ public class Config
 		cItems.add("enderio:item_soul_vial");
 		
 		cEntities.add("thermalexpansion:morb");
+		
+		nBoss.add("avaritia:infinity_sword");
 	}
 
 	public static boolean isCaptureItem(String string)
@@ -78,5 +84,10 @@ public class Config
 	public static boolean isCaptureEntity(String string)
 	{
 		return cEntities.contains(string);
+	}
+	
+	public static boolean isAntiBoss(String string)
+	{
+		return nBoss.contains(string);
 	}
 }
