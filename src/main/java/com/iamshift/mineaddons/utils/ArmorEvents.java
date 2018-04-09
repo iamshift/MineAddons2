@@ -29,7 +29,9 @@ public class ArmorEvents
 	public static HashMap<UUID, Integer> setItems = new HashMap<UUID, Integer>();
 
 	public static final HashMap<EntityEquipmentSlot, PotionEffect> armorEffects = new HashMap<>();
-	
+
+	private static List<EntityPlayer> flyOn = new ArrayList<EntityPlayer>();
+
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event)
 	{
@@ -42,7 +44,7 @@ public class ArmorEvents
 			{
 				if(stack.getItem() instanceof ItemUltimateArmor)
 					i++;
-				
+
 				if(stack.getItem() instanceof ItemFiberglassArmor || stack.getItem() instanceof ItemUltimateArmor)
 					potions.remove(armorEffects.get(((ItemArmor)stack.getItem()).armorType));
 			}
@@ -152,14 +154,20 @@ public class ArmorEvents
 					player.capabilities.isFlying = true;
 					player.setLocationAndAngles(player.posX, 1, player.posZ, player.cameraYaw, player.cameraPitch);
 				}
+
+				if(!flyOn.contains(player))
+					flyOn.add(player);
 			}
-			else
+			else if(flyOn.contains(player))
 			{
-				if(player.capabilities.allowFlying)
+				if(player.world.isRemote)
+				{
 					player.capabilities.allowFlying = false;
 
-				if(player.capabilities.isFlying)
 					player.capabilities.isFlying = false;
+
+					flyOn.remove(player);
+				}
 			}
 		}
 	}
