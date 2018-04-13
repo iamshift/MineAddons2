@@ -3,9 +3,7 @@ package com.iamshift.mineaddons.entities.boss;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.iamshift.mineaddons.entities.items.EntitySpiritBomb;
 import com.iamshift.mineaddons.init.ModLoot;
-import com.iamshift.mineaddons.init.ModSounds;
 import com.iamshift.mineaddons.interfaces.IUncapturable;
 
 import net.minecraft.block.Block;
@@ -21,7 +19,6 @@ import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityVex;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityLargeFireball;
 import net.minecraft.init.Blocks;
@@ -39,7 +36,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

@@ -5,7 +5,6 @@ import java.util.Random;
 import com.iamshift.mineaddons.init.ModLoot;
 import com.iamshift.mineaddons.init.ModSounds;
 
-import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;

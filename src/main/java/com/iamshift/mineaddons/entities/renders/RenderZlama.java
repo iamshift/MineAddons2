@@ -2,13 +2,11 @@ package com.iamshift.mineaddons.entities.renders;
 
 import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.entities.EntityZlama;
-import com.iamshift.mineaddons.entities.EntityiSheep;
 import com.iamshift.mineaddons.entities.renders.layers.LayerZlamaDecor;
 
 import net.minecraft.client.model.ModelLlama;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.layers.LayerLlamaDecor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

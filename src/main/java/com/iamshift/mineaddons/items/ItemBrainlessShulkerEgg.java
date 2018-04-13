@@ -6,13 +6,10 @@ import com.iamshift.mineaddons.MineAddons;
 import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.entities.EntityBrainlessShulker;
 import com.iamshift.mineaddons.interfaces.ISpawner;
-import com.iamshift.mineaddons.items.ItemEnchanted.Types;
 
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;

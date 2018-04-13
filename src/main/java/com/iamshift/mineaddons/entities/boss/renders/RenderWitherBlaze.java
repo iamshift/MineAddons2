@@ -1,10 +1,8 @@
 package com.iamshift.mineaddons.entities.boss.renders;
 
 import com.iamshift.mineaddons.core.Refs;
-import com.iamshift.mineaddons.entities.EntityHellhound;
 import com.iamshift.mineaddons.entities.boss.EntityWitherBlaze;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBlaze;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;

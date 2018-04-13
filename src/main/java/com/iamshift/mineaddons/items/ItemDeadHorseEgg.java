@@ -7,14 +7,12 @@ import com.iamshift.mineaddons.entities.boss.EntityDeadHorse;
 import com.iamshift.mineaddons.interfaces.ISpawner;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;

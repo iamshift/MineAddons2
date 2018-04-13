@@ -1,17 +1,12 @@
 package com.iamshift.mineaddons.entities.items;
 
-import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.init.ModBlocks;
 import com.iamshift.mineaddons.items.ItemRainbowBottle;
 import com.iamshift.mineaddons.items.ItemWitherDust;
 
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.command.AdvancementCommand;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;

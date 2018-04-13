@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iamshift.mineaddons.core.Refs;
-import com.iamshift.mineaddons.init.ModItems;
 import com.iamshift.mineaddons.utils.TimeSkipHandler;
 
 import net.minecraft.client.util.ITooltipFlag;

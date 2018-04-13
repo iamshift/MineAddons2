@@ -1,20 +1,13 @@
 package com.iamshift.mineaddons.items;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.iamshift.mineaddons.core.Refs;
-
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class ItemCellulose extends ItemBase
 {

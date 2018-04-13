@@ -1,20 +1,13 @@
 package com.iamshift.mineaddons.entities;
 
-import com.iamshift.mineaddons.init.ModItems;
-import com.iamshift.mineaddons.init.ModLoot;
 import com.iamshift.mineaddons.interfaces.IUncapturable;
-import com.iamshift.mineaddons.items.ItemBrainlessShulkerEgg;
 
-import mcp.mobius.waila.utils.InventoryUtils;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -23,7 +16,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class EntityBrainlessShulker extends EntityShulker implements IUncapturable
 {

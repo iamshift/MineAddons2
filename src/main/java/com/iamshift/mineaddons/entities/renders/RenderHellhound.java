@@ -1,22 +1,13 @@
 package com.iamshift.mineaddons.entities.renders;
 
-import java.util.List;
-
 import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.entities.EntityHellhound;
 import com.iamshift.mineaddons.entities.models.ModelHellhound;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

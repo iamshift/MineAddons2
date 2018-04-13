@@ -2,7 +2,6 @@ package com.iamshift.mineaddons.core;
 
 import java.util.List;
 
-import com.iamshift.mineaddons.MineAddons;
 import com.iamshift.mineaddons.init.ModBlocks;
 import com.iamshift.mineaddons.init.ModEnchants;
 import com.iamshift.mineaddons.init.ModItems;
@@ -38,8 +37,6 @@ public class Register
 	public static void onItemRegister(RegistryEvent.Register<Item> event)
 	{
 		event.getRegistry().registerAll(ModItems.ITEMS.toArray(new Item[0]));
-		
-		MineAddons.reg = event.getRegistry();
 	}
 
 	@SubscribeEvent

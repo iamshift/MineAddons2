@@ -1,7 +1,6 @@
 package com.iamshift.mineaddons.items;
 
 import com.iamshift.mineaddons.MineAddons;
-import com.iamshift.mineaddons.init.ModItems;
 import com.iamshift.mineaddons.interfaces.IHasModel;
 
 import net.minecraft.block.BlockDispenser;

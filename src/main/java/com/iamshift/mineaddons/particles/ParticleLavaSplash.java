@@ -1,7 +1,5 @@
 package com.iamshift.mineaddons.particles;
 
-import net.minecraft.client.particle.Particle;
-
 import net.minecraft.client.particle.ParticleSplash;
 import net.minecraft.world.World;
 

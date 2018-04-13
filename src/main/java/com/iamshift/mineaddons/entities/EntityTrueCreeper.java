@@ -3,7 +3,6 @@ package com.iamshift.mineaddons.entities;
 import javax.annotation.Nullable;
 
 import com.iamshift.mineaddons.api.IMobChanger;
-import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.entities.ais.EntityAITrueCreeperSwell;
 
 import net.minecraft.entity.Entity;

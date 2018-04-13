@@ -6,7 +6,6 @@ import java.util.List;
 import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.init.ModBlocks;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;

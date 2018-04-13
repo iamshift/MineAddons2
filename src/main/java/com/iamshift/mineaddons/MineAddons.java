@@ -19,7 +19,6 @@ import com.iamshift.mineaddons.utils.MineTab;
 import com.iamshift.mineaddons.utils.OreDict;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -27,7 +26,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.registries.IForgeRegistry;
 
 @Mod(modid = Refs.ID, name = Refs.NAME ,version = Refs.VERSION, acceptedMinecraftVersions = Refs.MCVERSIONS, dependencies = Refs.DEPENDENCIES, certificateFingerprint = Refs.FINGER)
 public class MineAddons
@@ -39,8 +37,6 @@ public class MineAddons
     public static CommonProxy proxy;
     
     public static CreativeTabs minetab;
-    
-    public static IForgeRegistry<Item> reg;
     
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)

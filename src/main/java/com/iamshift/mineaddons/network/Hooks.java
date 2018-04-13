@@ -1,14 +1,12 @@
 package com.iamshift.mineaddons.network;
 
 import com.iamshift.mineaddons.init.ModNetwork;
-import com.iamshift.mineaddons.interfaces.IUncapturable;
 import com.iamshift.mineaddons.utils.ElytraHelper;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.FMLLog;
 
 public class Hooks
 {

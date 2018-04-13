@@ -1,8 +1,7 @@
 package com.iamshift.mineaddons.integration.tinkers;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -33,9 +32,20 @@ public class TraitLightspeed extends AbstractTrait
 			String mytool = tool.getDisplayName().toLowerCase();
 
 			int speed = 1;
-			
+
 			if(toolType.equals("default"))
-				speed = 25;
+			{
+				if(state.getMaterial() == Material.ROCK && (mytool.contains("pickaxe") || mytool.contains("hammer")))
+					speed = 50;
+				else if(state.getMaterial() == Material.WOOD && (mytool.contains("hatchet") || mytool.contains("mattock") || mytool.contains("lumberaxe")))
+					speed = 50;
+				else if((state.getMaterial() == Material.GROUND || state.getMaterial() == Material.SAND) && (mytool.contains("mattock") || mytool.contains("shovel") || mytool.contains("excavator")))
+					speed = 50;
+				else if(state.getMaterial() == Material.GLASS)
+					speed = 50;
+				else
+					speed = 25;
+			}
 			else
 			{
 				if(toolType.equals("pickaxe") && mytool.contains("pickaxe"))

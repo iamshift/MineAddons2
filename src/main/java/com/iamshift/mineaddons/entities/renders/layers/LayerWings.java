@@ -5,11 +5,9 @@ import com.iamshift.mineaddons.entities.models.ModelWings;
 import com.iamshift.mineaddons.init.ModEnchants;
 import com.iamshift.mineaddons.items.ItemWings;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerArmorBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;

@@ -1,15 +1,12 @@
 package com.iamshift.mineaddons.blocks;
 
-import com.iamshift.mineaddons.MineAddons;
 import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.init.ModBlocks;
-import com.iamshift.mineaddons.interfaces.IHasModel;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGlowstone;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;

@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.registry.EntityEntry;
 
 public class Config 
 {

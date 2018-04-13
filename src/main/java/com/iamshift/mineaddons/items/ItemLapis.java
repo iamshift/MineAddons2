@@ -2,7 +2,6 @@ package com.iamshift.mineaddons.items;
 
 import com.iamshift.mineaddons.MineAddons;
 import com.iamshift.mineaddons.entities.items.EntityLapis;
-import com.iamshift.mineaddons.items.ItemEnchanted.Types;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;

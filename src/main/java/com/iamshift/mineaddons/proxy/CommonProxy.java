@@ -1,6 +1,5 @@
 package com.iamshift.mineaddons.proxy;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 
 public class CommonProxy
