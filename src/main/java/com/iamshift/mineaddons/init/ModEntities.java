@@ -46,13 +46,13 @@ public class ModEntities
 		Setup();
 
 		EntityRegistry.registerModEntity(new ResourceLocation(Refs.ID, "hellhound"), EntityHellhound.class, "hellhound", ++ENTITY_ID, MineAddons.instance, 128, 2, true, new Color(50, 50, 50).getRGB(), new Color(150, 0, 0).getRGB());
-		EntityRegistry.addSpawn(EntityHellhound.class, 12, 2, 4, EnumCreatureType.MONSTER, endBiomes.toArray(new Biome[0]));
+		EntityRegistry.addSpawn(EntityHellhound.class, 12, 2, 4, EnumCreatureType.MONSTER, netherBiomes.toArray(new Biome[0]));
 
 		EntityRegistry.registerModEntity(new ResourceLocation(Refs.ID, "isheep"), EntityiSheep.class, "isheep", ++ENTITY_ID, MineAddons.instance, 128, 2, true, new Color(50, 0, 50).getRGB(), new Color(150, 0, 25).getRGB());
-		EntityRegistry.addSpawn(EntityiSheep.class, 12, 3, 4, EnumCreatureType.MONSTER, endBiomes.toArray(new Biome[0]));
+		EntityRegistry.addSpawn(EntityiSheep.class, 12, 3, 4, EnumCreatureType.MONSTER, netherBiomes.toArray(new Biome[0]));
 
 		EntityRegistry.registerModEntity(new ResourceLocation(Refs.ID, "zlama"), EntityZlama.class, "zlama", ++ENTITY_ID, MineAddons.instance, 128, 2, true, new Color(50, 50, 0).getRGB(), new Color(150, 25, 0).getRGB());
-		EntityRegistry.addSpawn(EntityZlama.class, 12, 2, 4, EnumCreatureType.MONSTER, endBiomes.toArray(new Biome[0]));
+		EntityRegistry.addSpawn(EntityZlama.class, 12, 2, 4, EnumCreatureType.MONSTER, netherBiomes.toArray(new Biome[0]));
 
 		EntityRegistry.registerModEntity(new ResourceLocation(Refs.ID, "wither_blaze"), EntityWitherBlaze.class, "wither_blaze", ++ENTITY_ID, MineAddons.instance, 128, 2, true);
 
