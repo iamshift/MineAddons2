@@ -3,6 +3,7 @@ package com.iamshift.mineaddons.network;
 import com.iamshift.mineaddons.init.ModNetwork;
 import com.iamshift.mineaddons.utils.ElytraHelper;
 
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

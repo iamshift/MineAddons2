@@ -72,7 +72,7 @@ public class EventHandler
 			return;
 		}
 	}
-
+	
 	@SubscribeEvent
 	public static void onLootTableLoad(LootTableLoadEvent event)
 	{

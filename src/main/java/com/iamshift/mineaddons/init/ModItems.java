@@ -13,7 +13,9 @@ import com.iamshift.mineaddons.items.ItemDeadHorseEgg;
 import com.iamshift.mineaddons.items.ItemEnchanted;
 import com.iamshift.mineaddons.items.ItemFiberglass;
 import com.iamshift.mineaddons.items.ItemLapis;
+import com.iamshift.mineaddons.items.ItemO2Bottle;
 import com.iamshift.mineaddons.items.ItemRainbowBottle;
+import com.iamshift.mineaddons.items.ItemRespirator;
 import com.iamshift.mineaddons.items.ItemRib;
 import com.iamshift.mineaddons.items.ItemSoul;
 import com.iamshift.mineaddons.items.ItemSuperNameTag;
@@ -33,6 +35,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.Loader;
 
 public class ModItems 
 {
@@ -67,6 +70,9 @@ public class ModItems
 	public static Item Blazelier;
 	public static Item DarkCore;
 	public static Item Wings;
+	
+	public static Item Respirator;
+	public static Item O2Bottle;
 
 	public static Item DeadHorseEgg;
 
@@ -81,26 +87,29 @@ public class ModItems
 
 		Cellulose = new ItemCellulose("cellulose");
 
-
-		GlassPile = new ItemBase("glass_pile");
-		Fiberglass = new ItemFiberglass("fiberglass");
-
-		ArmorEvents.armorEffects.put(EntityEquipmentSlot.HEAD, new PotionEffect(MobEffects.NIGHT_VISION, 999999, 0, false, false));
-		ArmorEvents.armorEffects.put(EntityEquipmentSlot.CHEST, new PotionEffect(MobEffects.HASTE, 999999, 0, false, false));
-		ArmorEvents.armorEffects.put(EntityEquipmentSlot.LEGS, new PotionEffect(MobEffects.SPEED, 999999, 0, false, false));
-		ArmorEvents.armorEffects.put(EntityEquipmentSlot.FEET, new PotionEffect(MobEffects.JUMP_BOOST, 999999, 0, false, false));
 		
-		FiberHelmet = new ItemFiberglassArmor("fiberglass_helmet", ARMOR_FIBERGLASS, 1, EntityEquipmentSlot.HEAD);
-		FiberChestplate = new ItemFiberglassArmor("fiberglass_chestplate", ARMOR_FIBERGLASS, 1, EntityEquipmentSlot.CHEST);
-		FiberLeggings = new ItemFiberglassArmor("fiberglass_leggings", ARMOR_FIBERGLASS, 1, EntityEquipmentSlot.LEGS);
-		FiberBoots = new ItemFiberglassArmor("fiberglass_boots", ARMOR_FIBERGLASS, 1, EntityEquipmentSlot.FEET);
+		if(Loader.isModLoaded("tconstruct"))
+		{
+			ArmorEvents.armorEffects.put(EntityEquipmentSlot.HEAD, new PotionEffect(MobEffects.NIGHT_VISION, 999999, 0, false, false));
+			ArmorEvents.armorEffects.put(EntityEquipmentSlot.CHEST, new PotionEffect(MobEffects.HASTE, 999999, 0, false, false));
+			ArmorEvents.armorEffects.put(EntityEquipmentSlot.LEGS, new PotionEffect(MobEffects.SPEED, 999999, 0, false, false));
+			ArmorEvents.armorEffects.put(EntityEquipmentSlot.FEET, new PotionEffect(MobEffects.JUMP_BOOST, 999999, 0, false, false));
+			
+			GlassPile = new ItemBase("glass_pile");
+			Fiberglass = new ItemFiberglass("fiberglass");
+			
+			FiberHelmet = new ItemFiberglassArmor("fiberglass_helmet", ARMOR_FIBERGLASS, 1, EntityEquipmentSlot.HEAD);
+			FiberChestplate = new ItemFiberglassArmor("fiberglass_chestplate", ARMOR_FIBERGLASS, 1, EntityEquipmentSlot.CHEST);
+			FiberLeggings = new ItemFiberglassArmor("fiberglass_leggings", ARMOR_FIBERGLASS, 1, EntityEquipmentSlot.LEGS);
+			FiberBoots = new ItemFiberglassArmor("fiberglass_boots", ARMOR_FIBERGLASS, 1, EntityEquipmentSlot.FEET);
 
-		UltimateHelmet = new ItemUltimateArmor("ultimate_helmet", ARMOR_ULTIMATE, 1, EntityEquipmentSlot.HEAD);
-		UltimateChestplate = new ItemUltimateArmor("ultimate_chestplate", ARMOR_ULTIMATE, 1, EntityEquipmentSlot.CHEST);
-		UltimateLeggings = new ItemUltimateArmor("ultimate_leggings", ARMOR_ULTIMATE, 1, EntityEquipmentSlot.LEGS);
-		UltimateBoots = new ItemUltimateArmor("ultimate_boots", ARMOR_ULTIMATE, 1, EntityEquipmentSlot.FEET);
+			UltimateHelmet = new ItemUltimateArmor("ultimate_helmet", ARMOR_ULTIMATE, 1, EntityEquipmentSlot.HEAD);
+			UltimateChestplate = new ItemUltimateArmor("ultimate_chestplate", ARMOR_ULTIMATE, 1, EntityEquipmentSlot.CHEST);
+			UltimateLeggings = new ItemUltimateArmor("ultimate_leggings", ARMOR_ULTIMATE, 1, EntityEquipmentSlot.LEGS);
+			UltimateBoots = new ItemUltimateArmor("ultimate_boots", ARMOR_ULTIMATE, 1, EntityEquipmentSlot.FEET);
+		}
 
-
+		
 		AncientEssence = new ItemAncientEssence("ancient_essence");
 		BrainlessShulkerEgg = new ItemBrainlessShulkerEgg("brainless_shulker_egg");
 		Sushi = new ItemSushi("sushi");
@@ -113,6 +122,9 @@ public class ModItems
 		DarkCore = new ItemBase("dark_core");
 		Wings = new ItemWings("wings");
 
+		
+		Respirator = new ItemRespirator("respirator");
+		O2Bottle = new ItemO2Bottle("o2bottle");
 		
 		RainbowBottle = new ItemRainbowBottle("rainbow_bottle");
 		WitherDust = new ItemWitherDust("wither_dust");

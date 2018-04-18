@@ -331,7 +331,9 @@ public class EntityHellhound extends EntityTameable implements IMobChanger
 				{
 					float f1 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
 					float f2 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
-					ParticleUtils.spawn(EnumParticles.LAVA_SPLASH, world, this.posX + (double)f1, (double)(f + 0.8F), this.posZ + (double)f2, this.motionX, this.motionY, this.motionZ);
+					
+					if(this.world.isRemote)
+						ParticleUtils.spawn(EnumParticles.LAVA_SPLASH, world, this.posX + (double)f1, (double)(f + 0.8F), this.posZ + (double)f2, this.motionX, this.motionY, this.motionZ);
 				}
 			}
 		}

@@ -52,6 +52,9 @@ item.wings.name=Wings of the Void
 
 item.dead_horse_egg.name=Dead Horse Spawn Egg
 
+item.respirator.name=Respirator
+item.o2bottle.name=O2 Bottle
+
 tile.lava_sponge_dry.name=Lava Sponge
 tile.lava_sponge_wet.name=Wet Lava Sponge
 tile.colorable_torch_white.name=White Torch

@@ -1,0 +1,11 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "mineaddons:items/respirator"
+	},
+	"display": {
+	   "head": {
+	       "scale": [0, 0, 0]
+	   }
+	}
+}

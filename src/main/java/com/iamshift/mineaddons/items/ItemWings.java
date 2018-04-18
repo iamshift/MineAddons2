@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemWings extends ItemBase implements IHasModel
+public class ItemWings extends ItemBase
 {
 	public ItemWings(String name)
 	{
@@ -57,11 +57,5 @@ public class ItemWings extends ItemBase implements IHasModel
         {
             return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
         }
-	}
-	
-	@Override
-	public void registerModels()
-	{
-		MineAddons.proxy.registerItemRenderer(this, 0, "inventory");
 	}
 }

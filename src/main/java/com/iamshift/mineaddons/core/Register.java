@@ -16,15 +16,19 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -114,15 +118,17 @@ public class Register
 	{
 		final ItemColors itemColors = event.getItemColors();
 
-		itemColors.registerItemColorHandler(new IItemColor() 
+		if(Loader.isModLoaded("tconstruct"))
 		{
-			@Override
-			public int colorMultiplier(ItemStack stack, int tintIndex) 
+			itemColors.registerItemColorHandler(new IItemColor() 
 			{
-				return tintIndex > 0 ? -1 : ((ItemUltimateArmor)stack.getItem()).getColor(stack);
-			}
-		}, ModItems.UltimateHelmet, ModItems.UltimateChestplate, ModItems.UltimateLeggings, ModItems.UltimateBoots);
-
+				@Override
+				public int colorMultiplier(ItemStack stack, int tintIndex) 
+				{
+					return tintIndex > 0 ? -1 : ((ItemUltimateArmor)stack.getItem()).getColor(stack);
+				}
+			}, ModItems.UltimateHelmet, ModItems.UltimateChestplate, ModItems.UltimateLeggings, ModItems.UltimateBoots);
+		}
 
 		itemColors.registerItemColorHandler(new IItemColor() 
 		{
@@ -133,17 +139,4 @@ public class Register
 			}
 		}, ModItems.BrainlessShulkerEgg);
 	}
-
-//	@SubscribeEvent
-//	public static void replaceItems(RegistryEvent.Register<Item> event)
-//	{
-//		if(Loader.isModLoaded("mob_grinding_utils"))
-//			event.getRegistry().register(new ItemMobSwab()
-//			{
-//				{
-//					setRegistryName("mob_grinding_utils", "gm_chicken_feed");
-//					setUnlocalizedName("mob_grinding_utils.gm_chicken_feed");
-//				}
-//			});
-//	}
 }

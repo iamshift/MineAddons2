@@ -57,7 +57,9 @@ public class EntityWaterChanger extends EntityItem
 				&& state.getBlock().getUnlocalizedName().equals("tile.water") 
 				&& state.getBlock().getMetaFromState(state) == 0 
 				&& biome != Biomes.OCEAN 
-				&& biome != Biomes.DEEP_OCEAN)
+				&& biome != Biomes.DEEP_OCEAN
+				&& biome != Biomes.RIVER
+				&& biome != Biomes.FROZEN_RIVER)
 		{
 			if(item instanceof ItemRainbowBottle)
 			{

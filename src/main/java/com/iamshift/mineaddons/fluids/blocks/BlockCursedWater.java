@@ -3,6 +3,7 @@ package com.iamshift.mineaddons.fluids.blocks;
 import java.util.Random;
 
 import com.iamshift.mineaddons.api.IMobChanger;
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.entities.EntityHellhound;
 import com.iamshift.mineaddons.entities.EntityZlama;
@@ -72,13 +73,13 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 		super(ModFluids.CursedWater, Material.WATER);
 		setUnlocalizedName(name);
 		setRegistryName(new ResourceLocation(Refs.ID, name));
-		
+
 		setHardness(100.0F);
 		setLightOpacity(3);
 		disableStats();
 
 		setDensity(1);
-		
+
 		ModBlocks.BLOCKS.add(this);
 	}
 
@@ -93,16 +94,16 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 	protected boolean canFlowInto(IBlockAccess world, BlockPos pos)
 	{
 		if(!world.isAirBlock(pos)) return false;
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, SpawnPlacementType type)
 	{
 		return false;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand)
@@ -111,7 +112,7 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 		if (rand.nextInt(50)==0)
 			ParticleUtils.spawn(EnumParticles.CURSED_CLOUD, worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
 	}
-	
+
 	@Override
 	public boolean displaceIfPossible(World world, BlockPos pos)
 	{
@@ -144,33 +145,41 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 				return false;
 			}
 
-			if(biome != Biomes.OCEAN && biome != Biomes.DEEP_OCEAN)
+			if(Config.WaterSpread)
 			{
-				int level = block.getMetaFromState(state);
-				world.setBlockState(pos, this.getDefaultState().withProperty(LEVEL, level));
+				if(biome != Biomes.OCEAN && biome != Biomes.DEEP_OCEAN && biome != Biomes.RIVER && biome != Biomes.FROZEN_RIVER)
+				{
+					int level = block.getMetaFromState(state);
+					world.setBlockState(pos, this.getDefaultState().withProperty(LEVEL, level));
+					return false;
+				}
+			}
+			else
+			{
+				world.setBlockState(pos, Blocks.COBBLESTONE.getDefaultState());
 				return false;
 			}
 		}
 
 		return false;
 	}
-	
+
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
 	{
 		if(world.isRemote)
 			return;
-		
+
 		if(entity instanceof EntityItem)
 		{
 			EntityItem eItem = (EntityItem) entity;
-			
+
 			if(eItem.getItem().getItem() instanceof ItemDye && eItem.getItem().getItemDamage() == 4)
 			{
 				eItem.setDead();
 				InventoryHelper.spawnItemStack(world, eItem.posX, eItem.posY, eItem.posZ, new ItemStack(ModItems.Lapis, eItem.getItem().getCount(), 1));
 			}
-			
+
 			return;
 		}
 
@@ -186,13 +195,16 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 			return;
 		}
 
+		if(!Config.MobConvertion)
+			return;
+		
 		if(((EntityLivingBase)entity).isPotionActive(ModPotions.PotionMobChanger) && ((EntityLivingBase)entity).getActivePotionEffect(ModPotions.PotionMobChanger).getDuration() <= 0)
 			((EntityLivingBase)entity).removeActivePotionEffect(ModPotions.PotionMobChanger);
 
 		if(!(((EntityLivingBase)entity).isPotionActive(ModPotions.PotionMobChanger)) && tryConvertMob(world, pos, state, entity))
 			((EntityLivingBase)entity).addPotionEffect(new PotionEffect(ModPotions.PotionMobChanger, 6000));
 	}
-	
+
 	private boolean tryConvertMob(World world, BlockPos pos, IBlockState state, Entity entity) 
 	{
 		if(entity instanceof IMobChanger)
@@ -200,12 +212,12 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 			((IMobChanger) entity).cursedWaterEffect();
 			return true;
 		}
-		
+
 		if (entity instanceof EntitySkeleton) 
 		{
 			EntitySkeleton skeleton = (EntitySkeleton) entity;
 			skeleton.setDead();
-			
+
 			EntityWitherSkeleton witherSkeleton = new EntityWitherSkeleton(world);
 			witherSkeleton.setLocationAndAngles(skeleton.posX, skeleton.posY, skeleton.posZ, skeleton.rotationYaw, skeleton.rotationPitch);
 			witherSkeleton.renderYawOffset = skeleton.renderYawOffset;
@@ -293,7 +305,7 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 		{
 			EntityGuardian guardian = (EntityGuardian) entity;
 			guardian.setDead();
-			
+
 			EntityElderGuardian elderGuardian = new EntityElderGuardian(world);
 			elderGuardian.setLocationAndAngles(guardian.posX, guardian.posY, guardian.posZ, guardian.rotationYaw, guardian.rotationPitch);
 			elderGuardian.renderYawOffset = guardian.renderYawOffset;
@@ -323,7 +335,7 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 		{
 			EntityHorse horse = (EntityHorse) entity;
 			horse.setDead();
-			
+
 			EntityZombieHorse zombieHorse = new EntityZombieHorse(world);
 			zombieHorse.setLocationAndAngles(horse.posX, horse.posY, horse.posZ, horse.rotationYaw, horse.rotationPitch);
 			zombieHorse.renderYawOffset = horse.renderYawOffset;
@@ -361,12 +373,12 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 
 			return true;
 		}
-		
+
 		if(entity instanceof EntityWolf)
 		{
 			EntityWolf wolf = (EntityWolf) entity;
 			wolf.setDead();
-			
+
 			EntityHellhound hellhound = new EntityHellhound(world);
 			hellhound.setLocationAndAngles(wolf.posX, wolf.posY, wolf.posZ, wolf.rotationYaw, wolf.rotationPitch);
 			hellhound.renderYawOffset = wolf.renderYawOffset;
@@ -376,12 +388,12 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 
 			return true;
 		}
-		
+
 		if(entity instanceof EntitySheep)
 		{
 			EntitySheep sheep = (EntitySheep) entity;
 			sheep.setDead();
-			
+
 			EntityiSheep isheep = new EntityiSheep(world);
 			isheep.setLocationAndAngles(sheep.posX, sheep.posY, sheep.posZ, sheep.rotationYaw, sheep.rotationPitch);
 			isheep.renderYawOffset = sheep.renderYawOffset;
@@ -391,12 +403,12 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 
 			return true;
 		}
-		
+
 		if(entity instanceof EntityLlama)
 		{
 			EntityLlama llama = (EntityLlama) entity;
 			llama.setDead();
-			
+
 			EntityZlama zlama = new EntityZlama(world);
 			zlama.setLocationAndAngles(llama.posX, llama.posY, llama.posZ, llama.rotationYaw, llama.rotationPitch);
 			zlama.renderYawOffset = llama.renderYawOffset;
@@ -406,7 +418,7 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 
 			return true;
 		}
-		
+
 		return false;
 	}
 }

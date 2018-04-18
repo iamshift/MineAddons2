@@ -6,6 +6,7 @@ import com.iamshift.mineaddons.init.ModFluids;
 import com.iamshift.mineaddons.init.ModItems;
 import com.iamshift.mineaddons.integration.Tinkers;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import slimeknights.tconstruct.library.MaterialIntegration;
 import slimeknights.tconstruct.library.TinkerRegistry;

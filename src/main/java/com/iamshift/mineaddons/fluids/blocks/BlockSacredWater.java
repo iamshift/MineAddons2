@@ -3,6 +3,7 @@ package com.iamshift.mineaddons.fluids.blocks;
 import java.util.Random;
 
 import com.iamshift.mineaddons.api.IMobChanger;
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.init.ModBlocks;
 import com.iamshift.mineaddons.init.ModFluids;
@@ -65,13 +66,13 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 		super(ModFluids.SacredWater, Material.WATER);
 		setUnlocalizedName(name);
 		setRegistryName(new ResourceLocation(Refs.ID, name));
-		
+
 		setHardness(100.0F);
 		setLightOpacity(3);
 		disableStats();
 
 		setDensity(1);
-		
+
 		ModBlocks.BLOCKS.add(this);
 	}
 
@@ -81,21 +82,21 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 	{
 		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(LEVEL).build());
 	}
-	
+
 	@Override
 	protected boolean canFlowInto(IBlockAccess world, BlockPos pos)
 	{
 		if(!world.isAirBlock(pos)) return false;
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, SpawnPlacementType type)
 	{
 		return false;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand)
@@ -104,7 +105,7 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 		if (rand.nextInt(50)==0)
 			ParticleUtils.spawn(EnumParticles.SACRED_CLOUD, worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
 	}
-	
+
 	@Override
 	public boolean displaceIfPossible(World world, BlockPos pos)
 	{
@@ -137,47 +138,58 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 				return false;
 			}
 
-			if(biome != Biomes.OCEAN && biome != Biomes.DEEP_OCEAN)
+			if(Config.WaterSpread)
 			{
-				int level = block.getMetaFromState(state);
-				world.setBlockState(pos, this.getDefaultState().withProperty(LEVEL, level));
+				if(biome != Biomes.OCEAN && biome != Biomes.DEEP_OCEAN && biome != Biomes.RIVER && biome != Biomes.FROZEN_RIVER)
+				{
+					int level = block.getMetaFromState(state);
+					world.setBlockState(pos, this.getDefaultState().withProperty(LEVEL, level));
+					return false;
+				}
+			}
+			else
+			{
+				world.setBlockState(pos, Blocks.COBBLESTONE.getDefaultState());
 				return false;
 			}
 		}
 
 		return false;
 	}
-	
+
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
 	{
 		if(world.isRemote)
 			return;
-		
+
 		if(entity instanceof EntityItem)
 		{
 			EntityItem eItem = (EntityItem) entity;
-			
+
 			if(eItem.getItem().getItem() instanceof ItemDye && eItem.getItem().getItemDamage() == 4)
 			{
 				eItem.setDead();
 				InventoryHelper.spawnItemStack(world, eItem.posX, eItem.posY, eItem.posZ, new ItemStack(ModItems.Lapis, eItem.getItem().getCount(), 0));
 			}
-			
+
 			return;
 		}
-		
+
 		if(!(entity instanceof EntityLivingBase))
 			return;
 
 		if(entity.isDead)
 			return;
-		
+
 		if (entity instanceof EntityPlayer)
 		{
 			((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 100));
 			return;
 		}
+
+		if(!Config.MobConvertion)
+			return;
 
 		if(((EntityLivingBase)entity).isPotionActive(ModPotions.PotionMobChanger) && ((EntityLivingBase)entity).getActivePotionEffect(ModPotions.PotionMobChanger).getDuration() <= 0)
 			((EntityLivingBase)entity).removeActivePotionEffect(ModPotions.PotionMobChanger);
@@ -193,19 +205,19 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 			((IMobChanger) entity).sacredWaterEffect();
 			return true;
 		}
-		
+
 		if(entity instanceof EntityWitherSkeleton)
 		{
 			EntityWitherSkeleton witherSkeleton = (EntityWitherSkeleton) entity;
 			witherSkeleton.setDead();
-			
+
 			EntitySkeleton skeleton = new EntitySkeleton(world);
 			skeleton.setLocationAndAngles(witherSkeleton.posX, witherSkeleton.posY, witherSkeleton.posZ, witherSkeleton.rotationYaw, witherSkeleton.rotationPitch);
 			skeleton.renderYawOffset = witherSkeleton.renderYawOffset;
 			skeleton.setHealth(skeleton.getMaxHealth());
-			
+
 			world.spawnEntity(skeleton);
-			
+
 			return true;
 		}
 
@@ -292,7 +304,7 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 		{
 			EntityElderGuardian elderGuardian = (EntityElderGuardian) entity;
 			elderGuardian.setDead();
-			
+
 			EntityGuardian guardian = new EntityGuardian(world);
 			guardian.setLocationAndAngles(elderGuardian.posX, elderGuardian.posY, elderGuardian.posZ, elderGuardian.rotationYaw, elderGuardian.rotationPitch);
 			guardian.renderYawOffset = elderGuardian.renderYawOffset;
@@ -322,9 +334,9 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 		{
 			EntityZombieHorse zombieHorse = (EntityZombieHorse) entity;
 			zombieHorse.setDead();
-			
+
 			int rand = new Random().nextInt(3);
-			
+
 			EntityHorse horse = new EntityHorse(world);
 			horse.setHorseVariant(rand);
 			horse.setLocationAndAngles(zombieHorse.posX, zombieHorse.posY, zombieHorse.posZ, zombieHorse.rotationYaw, zombieHorse.rotationPitch);
@@ -365,7 +377,7 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 
 			return true;
 		}
-		
+
 		return false;
 	}
 }

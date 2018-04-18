@@ -84,17 +84,4 @@ public class LayerWings implements LayerRenderer
 	{
 		return false;
 	}
-	
-	private boolean checkEquip(EntityPlayer p)
-	{
-		if(p != null && p.getItemStackFromSlot(EntityEquipmentSlot.CHEST) != null)
-		{
-			ItemStack s = p.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-			
-			if(s.getSubCompound("Wings") != null && s.getSubCompound("Wings").hasKey("enabled"))
-				return true;
-		}
-		
-		return false;
-	}
 }

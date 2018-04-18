@@ -18,6 +18,9 @@ public class Config
 	public static int 		MaxAncientCarps = 20;
 	public static boolean 	CaptureAncientCarps = false;
 	
+	public static boolean	MobConvertion = true;
+	public static boolean	WaterSpread = true;
+	
 	private static List<String> cItems = new ArrayList<String>(); 
 	private static List<String> cEntities = new ArrayList<String>();
 	
@@ -39,6 +42,9 @@ public class Config
 		
 		MaxAncientCarps = 		conf.getInt("MaxAncientCarps",  "AncientCarps",  MaxAncientCarps,	0,	Integer.MAX_VALUE,	"");
 		CaptureAncientCarps =	conf.getBoolean("CaptureAncientCarps", "AncientCarps", false, "Allow Ancient Carps to be capture.");
+		
+		MobConvertion =			conf.getBoolean("MobConvertion", "Waters", MobConvertion, "Enable / disable the sacred and cursed water ability to convert mobs");
+		WaterSpread =			conf.getBoolean("WaterSpread", "Waters", WaterSpread, "Enable / disable the sacred and cursed water spreading.");
 
 		initCaptures();
 		

@@ -55,7 +55,7 @@ public class Inject implements IClassTransformer
 
 	private static byte[] transformElytraUpdate(byte[] basicClass)
 	{
-		log("Preparing to transform EntityLivingBase");
+		log("Preparing to transform EntityLivingBase (Elytra)");
 		MethodSignature sig = new MethodSignature("onLivingUpdate", "func_70636_d", "n", "()V");
 
 		byte[] transClass = transform(basicClass, Pair.of(sig, combine(
@@ -64,7 +64,7 @@ public class Inject implements IClassTransformer
 
 					InsnList toInject = new InsnList();
 					toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/iamshift/mineaddons/network/Hooks", "update", "(Lnet/minecraft/entity/EntityLivingBase;)V"));
-
+					
 					method.instructions.insert(node, toInject);
 					method.instructions.remove(node);
 
@@ -94,7 +94,7 @@ public class Inject implements IClassTransformer
 
 		return transClass;
 	}
-
+	
 	private static byte[] transform(byte[] basicClass, Pair<MethodSignature, MethodAction>... methods) 
 	{
 		ClassReader reader = new ClassReader(basicClass);

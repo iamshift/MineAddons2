@@ -34,6 +34,7 @@ import com.iamshift.mineaddons.entities.renders.RenderVoidball;
 import com.iamshift.mineaddons.entities.renders.RenderZlama;
 import com.iamshift.mineaddons.entities.renders.RenderiSheep;
 import com.iamshift.mineaddons.entities.renders.layers.LayerElytraEnchant;
+import com.iamshift.mineaddons.entities.renders.layers.LayerRespirator;
 import com.iamshift.mineaddons.entities.renders.layers.LayerWings;
 
 import net.minecraft.client.Minecraft;
@@ -230,11 +231,13 @@ public class ClientProxy extends CommonProxy
 		{
 			rp.addLayer(new LayerElytraEnchant(rp));
 			rp.addLayer(new LayerWings(rp));
+			rp.addLayer(new LayerRespirator(rp));
 		}
 		
 		Render<?> render = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(EntityArmorStand.class);
 		((RenderLivingBase<?>) render).addLayer(new LayerElytraEnchant((RenderLivingBase<?>) render));
 		((RenderLivingBase<?>) render).addLayer(new LayerWings((RenderLivingBase<?>) render));
+		((RenderLivingBase<?>) render).addLayer(new LayerRespirator((RenderLivingBase<?>) render));
  	}
 	
 	@Override
