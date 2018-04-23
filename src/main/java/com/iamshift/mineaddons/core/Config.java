@@ -10,7 +10,7 @@ import net.minecraftforge.common.config.Configuration;
 public class Config 
 {
 	// CONTROL
-	private static final int VERSION = 1;
+	private static final int VERSION = 2;
 	private static int ver;
 
 	public static int 		TimeSkipDelay = 30;
@@ -20,6 +20,7 @@ public class Config
 	
 	public static boolean	MobConvertion = true;
 	public static boolean	WaterSpread = true;
+	public static boolean	WaterSource = false;
 	
 	private static List<String> cItems = new ArrayList<String>(); 
 	private static List<String> cEntities = new ArrayList<String>();
@@ -35,16 +36,17 @@ public class Config
 		if(conf == null)
 			conf = new Configuration(file);
 		
-		ver = conf.get("version", "version", VERSION).getInt();
+		ver = 					conf.getInt("version", "Version", VERSION, 1, Integer.MAX_VALUE, "");
 		
-		TimeSkipDelay = 		conf.getInt("TimeSkipDelay", 	"TimeSkipClock",  TimeSkipDelay,		0,	Integer.MAX_VALUE,	"");
-		TimeSkipCooldown = 		conf.getInt("TimeSkipCooldown", "TimeSkipClock",  TimeSkipCooldown,	0,	Integer.MAX_VALUE,	"");
+		TimeSkipDelay = 		conf.getInt("TimeSkipDelay", "TimeSkipClock", TimeSkipDelay, 0,	Integer.MAX_VALUE, "");
+		TimeSkipCooldown = 		conf.getInt("TimeSkipCooldown", "TimeSkipClock", TimeSkipCooldown, 0,	Integer.MAX_VALUE, "");
 		
-		MaxAncientCarps = 		conf.getInt("MaxAncientCarps",  "AncientCarps",  MaxAncientCarps,	0,	Integer.MAX_VALUE,	"");
+		MaxAncientCarps = 		conf.getInt("MaxAncientCarps", "AncientCarps", MaxAncientCarps, 0, Integer.MAX_VALUE,	"");
 		CaptureAncientCarps =	conf.getBoolean("CaptureAncientCarps", "AncientCarps", false, "Allow Ancient Carps to be capture.");
 		
 		MobConvertion =			conf.getBoolean("MobConvertion", "Waters", MobConvertion, "Enable / disable the sacred and cursed water ability to convert mobs");
 		WaterSpread =			conf.getBoolean("WaterSpread", "Waters", WaterSpread, "Enable / disable the sacred and cursed water spreading.");
+		WaterSource =			conf.getBoolean("WaterSource", "Waters", WaterSource, "Enable / disable the sacred and cursed water infinite source creation.");
 
 		initCaptures();
 		
@@ -59,7 +61,12 @@ public class Config
 		if(ver != VERSION)
 		{
 			conf = null;
-			configFile.delete();
+			file.delete();
+			
+			cItems = new ArrayList<String>();
+			cEntities = new ArrayList<String>();
+			nBoss = new ArrayList<String>();
+			
 			init(configFile);
 		}
 	}

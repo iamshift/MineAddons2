@@ -60,6 +60,9 @@ public class EventHandler
 	@SubscribeEvent
 	public static void createFluidSource(BlockEvent.CreateFluidSourceEvent event)
 	{
+		if(!Config.WaterSource)
+			return;
+		
 		if(event.getState().getBlock() instanceof BlockSacredWater)
 		{
 			event.setResult(Event.Result.ALLOW);

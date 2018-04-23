@@ -709,7 +709,7 @@ public class EntityHellhound extends EntityTameable implements IMobChanger
 	@Override
 	public boolean getCanSpawnHere()
 	{
-		if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.world.provider.getDimensionType() == DimensionType.NETHER)
+		if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.world.provider.getDimensionType() == DimensionType.NETHER && this.rand.nextInt(15) == 0)
 			return true;
 
 		return false;

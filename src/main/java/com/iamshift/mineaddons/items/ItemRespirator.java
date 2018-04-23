@@ -108,9 +108,8 @@ public class ItemRespirator extends ItemBase
 				new ShapedOreRecipe(new ResourceLocation(Refs.ID), 
 						new ItemStack(this, 1), 
 						new Object[] {
-								"III", "IGI", " I ", 
-								'I', Items.IRON_INGOT, 
-								'G', new ItemStack(Blocks.GLASS_PANE)
+								"III", " I ", 
+								'I', Items.IRON_INGOT
 				}).setRegistryName(new ResourceLocation(Refs.ID, "respirator"))
 				);
 
