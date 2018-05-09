@@ -3,12 +3,14 @@ package com.iamshift.mineaddons.init;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.iamshift.mineaddons.blocks.BlockForgottenAnvil;
 import com.iamshift.mineaddons.blocks.BlockColorableTorch;
 import com.iamshift.mineaddons.blocks.BlockFrozenforgottenWater;
 import com.iamshift.mineaddons.blocks.BlockInvLight;
 import com.iamshift.mineaddons.blocks.BlockLavaSponge;
 import com.iamshift.mineaddons.blocks.BlockScaffolding;
 import com.iamshift.mineaddons.blocks.BlockSoul;
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.fluids.blocks.BlockCursedWater;
 import com.iamshift.mineaddons.fluids.blocks.BlockForgottenWater;
 import com.iamshift.mineaddons.fluids.blocks.BlockLiquidFiberglass;
@@ -16,6 +18,7 @@ import com.iamshift.mineaddons.fluids.blocks.BlockLiquidStar;
 import com.iamshift.mineaddons.fluids.blocks.BlockSacredWater;
 
 import net.minecraft.block.Block;
+import net.minecraftforge.fml.common.Loader;
 
 public class ModBlocks 
 {
@@ -45,9 +48,6 @@ public class ModBlocks
 	public static Block InfusedSoulBlock;
 	public static Block FrozenForgottenWater;
 
-	public static Block Liquifier;
-	public static Block Infuser;
-
 	public static Block SacredWater;
 	public static Block CursedWater;
 	public static Block ForgottenWater;
@@ -55,6 +55,8 @@ public class ModBlocks
 	public static Block LiquidStar;
 
 	public static Block InvLight;
+
+	public static Block ForgottenAnvil;
 
 	public static void init()
 	{
@@ -79,9 +81,12 @@ public class ModBlocks
 
 		LavaSponge = new BlockLavaSponge("lava_sponge");
 
-		Fiberglass = new BlockLiquidFiberglass("liquid_fiberglass");
-		LiquidStar = new BlockLiquidStar("liquid_star");
-		InfusedSoulBlock = new BlockSoul("infused_soul_block");
+		if(Loader.isModLoaded("tconstruct") && Config.Tinker)
+		{
+			Fiberglass = new BlockLiquidFiberglass("liquid_fiberglass");
+			LiquidStar = new BlockLiquidStar("liquid_star");
+			InfusedSoulBlock = new BlockSoul("infused_soul_block");
+		}
 
 		SoulBlock = new BlockSoul("soul_block");
 		InvLight = new BlockInvLight("invlight");
@@ -90,5 +95,7 @@ public class ModBlocks
 		CursedWater = new BlockCursedWater("cursed_water");
 		FrozenForgottenWater = new BlockFrozenforgottenWater("frozen_forgotten_water");
 		ForgottenWater = new BlockForgottenWater("forgotten_water");
+
+		ForgottenAnvil = new BlockForgottenAnvil("forgotten_anvil");
 	}
 }

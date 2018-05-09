@@ -2,6 +2,8 @@ package com.iamshift.mineaddons.entities;
 
 import java.util.Random;
 
+import com.iamshift.mineaddons.core.Config;
+import com.iamshift.mineaddons.init.ModEntities;
 import com.iamshift.mineaddons.init.ModLoot;
 import com.iamshift.mineaddons.init.ModSounds;
 
@@ -144,7 +146,7 @@ public class EntityEnderCarp extends EntityFlying
 	{
 		int i = this.rand.nextInt(4) + 1;
 		this.setCarpSize(i);
-		
+
 		return livingdata;
 	}
 
@@ -202,14 +204,14 @@ public class EntityEnderCarp extends EntityFlying
 	{
 		switch (getCarpSize()) 
 		{
-		case 1:
-			return ModSounds.carp_ambient1;
-		case 2:
-			return ModSounds.carp_ambient2;
-		case 3:
-			return ModSounds.carp_ambient3;
-		case 4:
-			return ModSounds.carp_ambient4;
+			case 1:
+				return ModSounds.carp_ambient1;
+			case 2:
+				return ModSounds.carp_ambient2;
+			case 3:
+				return ModSounds.carp_ambient3;
+			case 4:
+				return ModSounds.carp_ambient4;
 		}
 
 		return ModSounds.carp_ambient4;
@@ -236,14 +238,20 @@ public class EntityEnderCarp extends EntityFlying
 	@Override
 	public boolean getCanSpawnHere() 
 	{
-		if(this.world.provider.getDimensionType() == DimensionType.THE_END && this.rand.nextInt(5) == 0)
+		if(Config.EnderCarpSpawnRate > 0)
 		{
-			int i = MathHelper.floor(this.posX);
-			int j = MathHelper.floor(this.getEntityBoundingBox().minY);
-			int k = MathHelper.floor(this.posZ);
-			BlockPos blockpos = new BlockPos(i, j, k);
+			if(this.world.provider.getDimensionType() == DimensionType.THE_END && !isEntityInsideOpaqueBlock() && ModEntities.HasDragonBeenKilled(this.world))
+			{
+				if(this.rand.nextInt(Config.EnderCarpSpawnRate) == 0)
+				{
+					int i = MathHelper.floor(this.posX);
+					int j = MathHelper.floor(this.getEntityBoundingBox().minY);
+					int k = MathHelper.floor(this.posZ);
+					BlockPos blockpos = new BlockPos(i, j, k);
 
-			return this.world.getBlockState(blockpos.down()).getBlock() == Blocks.END_STONE;
+					return this.world.getBlockState(blockpos.down()).getBlock() == Blocks.END_STONE;
+				}
+			}
 		}
 
 		return false;

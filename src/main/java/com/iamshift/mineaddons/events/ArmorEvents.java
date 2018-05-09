@@ -1,4 +1,4 @@
-package com.iamshift.mineaddons.utils;
+package com.iamshift.mineaddons.events;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import com.iamshift.mineaddons.items.armors.ItemFiberglassArmor;
 import com.iamshift.mineaddons.items.armors.ItemUltimateArmor;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
@@ -27,11 +28,12 @@ import net.minecraftforge.fml.relauncher.Side;
 public class ArmorEvents 
 {
 	public static HashMap<UUID, Integer> setItems = new HashMap<UUID, Integer>();
+	private static HashMap<UUID, Integer> oldCount = new HashMap<>();
 
 	public static final HashMap<EntityEquipmentSlot, PotionEffect> armorEffects = new HashMap<>();
 
 	private static List<EntityPlayer> flyOn = new ArrayList<EntityPlayer>();
-
+	
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event)
 	{
@@ -40,23 +42,32 @@ public class ArmorEvents
 			EntityPlayer player = event.player;
 			List<PotionEffect> potions = new ArrayList<PotionEffect>(armorEffects.values());
 			int i = 0;
+			int count = 0;
 			for (ItemStack stack : player.inventory.armorInventory) 
 			{
 				if(stack.getItem() instanceof ItemUltimateArmor)
 					i++;
 
 				if(stack.getItem() instanceof ItemFiberglassArmor || stack.getItem() instanceof ItemUltimateArmor)
+				{
 					potions.remove(armorEffects.get(((ItemArmor)stack.getItem()).armorType));
+					count++;
+				}
 			}
 
 			if(event.side == Side.CLIENT)
 				setItems.put(player.getUniqueID(), i);
 			else
 			{
+				if (oldCount.containsKey(player.getUniqueID()) && count == oldCount.get(player.getUniqueID()))
+					return;
+				
 				for(PotionEffect effect : potions)
 				{
-					if(player.isPotionActive(effect.getPotion()) && player.getActivePotionEffect(effect.getPotion()).getDuration() >= 900000)
+					if(player.isPotionActive(effect.getPotion()) && player.getActivePotionEffect(effect.getPotion()).getAmplifier() == 0 && player.getActivePotionEffect(effect.getPotion()).getDuration() >= 900000)
+					{
 						player.removePotionEffect(effect.getPotion());
+					}
 				}
 
 				if(i < 2)
@@ -124,6 +135,8 @@ public class ArmorEvents
 						player.addPotionEffect(effect);
 					}
 				}
+				
+				oldCount.put(player.getUniqueID(), count);
 			}
 		}
 	}

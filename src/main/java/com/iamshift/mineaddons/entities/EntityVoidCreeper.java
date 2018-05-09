@@ -4,6 +4,8 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.iamshift.mineaddons.core.Config;
+import com.iamshift.mineaddons.init.ModEntities;
 import com.iamshift.mineaddons.utils.CustomExplosion;
 
 import net.minecraft.entity.Entity;
@@ -24,12 +26,15 @@ import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.end.DragonFightManager;
 
 public class EntityVoidCreeper extends EntityCreeper
 {
@@ -81,14 +86,20 @@ public class EntityVoidCreeper extends EntityCreeper
 	@Override
 	public boolean getCanSpawnHere() 
 	{
-		if(this.world.provider.getDimensionType() == DimensionType.THE_END && this.rand.nextInt(10) == 0)
+		if(Config.VoidCreeperSpawnRate > 0)
 		{
-			int i = MathHelper.floor(this.posX);
-			int j = MathHelper.floor(this.getEntityBoundingBox().minY);
-			int k = MathHelper.floor(this.posZ);
-			BlockPos blockpos = new BlockPos(i, j, k);
+			if(this.world.provider.getDimensionType() == DimensionType.THE_END && !isEntityInsideOpaqueBlock() && ModEntities.HasDragonBeenKilled(this.world))
+			{
+				if(this.rand.nextInt(Config.VoidCreeperSpawnRate) == 0)
+				{
+					int i = MathHelper.floor(this.posX);
+					int j = MathHelper.floor(this.getEntityBoundingBox().minY);
+					int k = MathHelper.floor(this.posZ);
+					BlockPos blockpos = new BlockPos(i, j, k);
 
-			return blockpos.getDistance(0, 0, 0) < 500 ? false : this.world.getBlockState(blockpos.down()).getBlock() == Blocks.END_STONE;
+					return this.world.getBlockState(blockpos.down()).getBlock() == Blocks.END_STONE;
+				}
+			}
 		}
 
 		return false;

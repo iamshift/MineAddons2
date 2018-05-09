@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCaveSpider;
@@ -169,8 +170,12 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 
 			if(eItem.getItem().getItem() instanceof ItemDye && eItem.getItem().getItemDamage() == 4)
 			{
-				eItem.setDead();
-				InventoryHelper.spawnItemStack(world, eItem.posX, eItem.posY, eItem.posZ, new ItemStack(ModItems.Lapis, eItem.getItem().getCount(), 0));
+				eItem.getItem().shrink(1);
+				
+				if(eItem.getItem().getCount() <= 0)
+					eItem.setDead();
+				
+				InventoryHelper.spawnItemStack(world, eItem.posX, eItem.posY, eItem.posZ, new ItemStack(ModItems.Lapis, 1, 0));
 			}
 
 			return;
@@ -200,18 +205,13 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 
 	private boolean tryConvertMob(World world, BlockPos pos, IBlockState state, Entity entity) 
 	{
-		if(entity instanceof IMobChanger)
-		{
-			((IMobChanger) entity).sacredWaterEffect();
-			return true;
-		}
-
 		if(entity instanceof EntityWitherSkeleton)
 		{
 			EntityWitherSkeleton witherSkeleton = (EntityWitherSkeleton) entity;
 			witherSkeleton.setDead();
 
 			EntitySkeleton skeleton = new EntitySkeleton(world);
+			skeleton.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			skeleton.setLocationAndAngles(witherSkeleton.posX, witherSkeleton.posY, witherSkeleton.posZ, witherSkeleton.rotationYaw, witherSkeleton.rotationPitch);
 			skeleton.renderYawOffset = witherSkeleton.renderYawOffset;
 			skeleton.setHealth(skeleton.getMaxHealth());
@@ -230,6 +230,7 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 				creeper.setDead();
 
 				EntityCreeper newCreeper = new EntityCreeper(world);
+				newCreeper.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 				newCreeper.setLocationAndAngles(creeper.posX, creeper.posY, creeper.posZ, creeper.rotationYaw, creeper.rotationPitch);
 				newCreeper.renderYawOffset = creeper.renderYawOffset;
 				newCreeper.setHealth(newCreeper.getMaxHealth());
@@ -246,6 +247,7 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 			cavespider.setDead();
 
 			EntitySpider spider = new EntitySpider(world);
+			spider.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			spider.setLocationAndAngles(cavespider.posX, cavespider.posY, cavespider.posZ, cavespider.rotationYaw, cavespider.rotationPitch);
 			spider.renderYawOffset = cavespider.renderYawOffset;
 			spider.setHealth(spider.getMaxHealth());
@@ -261,6 +263,7 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 			ghast.setDead();
 
 			EntitySquid squid = new EntitySquid(world);
+			squid.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			squid.setLocationAndAngles(ghast.posX, ghast.posY, ghast.posZ, ghast.rotationYaw, ghast.rotationPitch);
 			squid.renderYawOffset = ghast.renderYawOffset;
 			squid.setHealth(squid.getMaxHealth());
@@ -276,6 +279,7 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 			endermite.setDead();
 
 			EntitySilverfish silverfish = new EntitySilverfish(world);
+			silverfish.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			silverfish.setLocationAndAngles(endermite.posX, endermite.posY, endermite.posZ, endermite.rotationYaw, endermite.rotationPitch);
 			silverfish.renderYawOffset = endermite.renderYawOffset;
 			silverfish.setHealth(silverfish.getMaxHealth());
@@ -291,6 +295,7 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 			witch.setDead();
 
 			EntityVillager villager = new EntityVillager(world);
+			villager.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			villager.setLocationAndAngles(witch.posX, witch.posY, witch.posZ, witch.rotationYaw, witch.rotationPitch);
 			villager.renderYawOffset = witch.renderYawOffset;
 			villager.setHealth(villager.getMaxHealth());
@@ -306,6 +311,7 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 			elderGuardian.setDead();
 
 			EntityGuardian guardian = new EntityGuardian(world);
+			guardian.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			guardian.setLocationAndAngles(elderGuardian.posX, elderGuardian.posY, elderGuardian.posZ, elderGuardian.rotationYaw, elderGuardian.rotationPitch);
 			guardian.renderYawOffset = elderGuardian.renderYawOffset;
 			guardian.setHealth(guardian.getMaxHealth());
@@ -321,6 +327,7 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 			blaze.setDead();
 
 			EntityBat bat = new EntityBat(world);
+			bat.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			bat.setLocationAndAngles(blaze.posX, blaze.posY, blaze.posZ, blaze.rotationYaw, blaze.rotationPitch);
 			bat.renderYawOffset = blaze.renderYawOffset;
 			bat.setHealth(bat.getMaxHealth());
@@ -338,6 +345,7 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 			int rand = new Random().nextInt(3);
 
 			EntityHorse horse = new EntityHorse(world);
+			horse.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			horse.setHorseVariant(rand);
 			horse.setLocationAndAngles(zombieHorse.posX, zombieHorse.posY, zombieHorse.posZ, zombieHorse.rotationYaw, zombieHorse.rotationPitch);
 			horse.renderYawOffset = zombieHorse.renderYawOffset;
@@ -369,12 +377,19 @@ public class BlockSacredWater extends BlockFluidClassic implements IHasModel
 			pigzombie.setDead();
 
 			EntityZombie zombie = new EntityZombie(world);
+			zombie.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			zombie.setLocationAndAngles(pigzombie.posX, pigzombie.posY, pigzombie.posZ, pigzombie.rotationYaw, pigzombie.rotationPitch);
 			zombie.renderYawOffset = pigzombie.renderYawOffset;
 			zombie.setHealth(zombie.getMaxHealth());
 
 			world.spawnEntity(zombie);
 
+			return true;
+		}
+		
+		if(entity instanceof IMobChanger)
+		{
+			((IMobChanger) entity).sacredWaterEffect();
 			return true;
 		}
 

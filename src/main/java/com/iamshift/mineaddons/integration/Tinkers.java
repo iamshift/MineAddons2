@@ -1,5 +1,6 @@
 package com.iamshift.mineaddons.integration;
 
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.init.ModBlocks;
 import com.iamshift.mineaddons.init.ModFluids;
 import com.iamshift.mineaddons.init.ModItems;
@@ -8,6 +9,7 @@ import com.iamshift.mineaddons.integration.tinkers.RepairRecipe;
 import com.iamshift.mineaddons.integration.tinkers.TiCMaterial;
 import com.iamshift.mineaddons.integration.tinkers.TraitLightspeed;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -50,7 +52,14 @@ public class Tinkers
 		
 		TinkerRegistry.registerBasinCasting(new CastingRecipe(new ItemStack(ModBlocks.InfusedSoulBlock), RecipeMatch.of(ModBlocks.SoulBlock), new FluidStack(ModFluids.Fiberglass, Material.VALUE_Block), 1105, true, false));
 		
-		TinkerRegistry.registerMelting(Items.NETHER_STAR, ModFluids.LiquidStar, Material.VALUE_Ingot);
+		TinkerRegistry.registerBasinCasting(new CastingRecipe(new ItemStack(ModBlocks.ForgottenAnvil), RecipeMatch.of(new ItemStack(Blocks.ANVIL, 1, 0)), new FluidStack(ModFluids.ForgottenWater, 1000), 260, true, false));
+		TinkerRegistry.registerBasinCasting(new CastingRecipe(new ItemStack(ModBlocks.ForgottenAnvil), RecipeMatch.of(new ItemStack(Blocks.ANVIL, 1, 1)), new FluidStack(ModFluids.ForgottenWater, 1000), 260, true, false));
+		TinkerRegistry.registerBasinCasting(new CastingRecipe(new ItemStack(ModBlocks.ForgottenAnvil), RecipeMatch.of(new ItemStack(Blocks.ANVIL, 1, 2)), new FluidStack(ModFluids.ForgottenWater, 1000), 260, true, false));
+		
+		if(Config.HardLiquidStar)
+			TinkerRegistry.registerMelting(Items.NETHER_STAR, ModFluids.LiquidStar, Material.VALUE_Ingot);
+		else
+			TinkerRegistry.registerMelting(Items.NETHER_STAR, ModFluids.LiquidStar, Material.VALUE_Ingot * 2);
 		
 		TinkerRegistry.registerTableCasting(new EnchantCastRecipe(new ItemStack(ModItems.UltimateHelmet), RecipeMatch.of(ModItems.FiberHelmet), new FluidStack(ModFluids.LiquidStar, Material.VALUE_Ingot * 4), 496));
 		TinkerRegistry.registerTableCasting(new EnchantCastRecipe(new ItemStack(ModItems.UltimateChestplate), RecipeMatch.of(ModItems.FiberChestplate), new FluidStack(ModFluids.LiquidStar, Material.VALUE_Ingot * 8), 984));

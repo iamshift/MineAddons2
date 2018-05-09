@@ -4,6 +4,8 @@ import java.util.Random;
 
 import com.iamshift.mineaddons.api.IMobChanger;
 import com.iamshift.mineaddons.core.Refs;
+import com.iamshift.mineaddons.entities.EntityTrueCreeper;
+import com.iamshift.mineaddons.entities.EntityVoidCreeper;
 import com.iamshift.mineaddons.init.ModBlocks;
 import com.iamshift.mineaddons.init.ModFluids;
 import com.iamshift.mineaddons.init.ModPotions;
@@ -18,7 +20,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
@@ -125,6 +129,22 @@ public class BlockForgottenWater extends BlockFluidClassic implements IHasModel
 	
 	private boolean tryConvertMob(World world, BlockPos pos, IBlockState state, Entity entity) 
 	{
+		if (entity instanceof EntityCreeper && !(entity instanceof EntityVoidCreeper)) 
+		{
+			EntityCreeper creeper = (EntityCreeper) entity;
+			creeper.setDead();
+			
+			EntityVoidCreeper voidcreeper = new EntityVoidCreeper(world);
+			voidcreeper.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
+			voidcreeper.setLocationAndAngles(creeper.posX, creeper.posY, creeper.posZ, creeper.rotationYaw, creeper.rotationPitch);
+			voidcreeper.renderYawOffset = creeper.renderYawOffset;
+			voidcreeper.setHealth(voidcreeper.getMaxHealth());
+
+			world.spawnEntity(voidcreeper);
+
+			return true;
+		}
+		
 		if(entity instanceof IMobChanger)
 		{
 			((IMobChanger) entity).forgottenWaterEffect();

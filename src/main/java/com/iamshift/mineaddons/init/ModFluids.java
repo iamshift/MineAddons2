@@ -1,5 +1,6 @@
 package com.iamshift.mineaddons.init;
 
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.fluids.FluidCursedWater;
 import com.iamshift.mineaddons.fluids.FluidFiberglass;
 import com.iamshift.mineaddons.fluids.FluidForgottenWater;
@@ -7,6 +8,7 @@ import com.iamshift.mineaddons.fluids.FluidSacredWater;
 import com.iamshift.mineaddons.fluids.FluidStar;
 
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.common.Loader;
 
 public class ModFluids
 {
@@ -19,8 +21,11 @@ public class ModFluids
 
 	public static void init()
 	{
-		Fiberglass = new FluidFiberglass();
-		LiquidStar = new FluidStar();
+		if(Loader.isModLoaded("tconstruct") && Config.Tinker)
+		{
+			Fiberglass = new FluidFiberglass();
+			LiquidStar = new FluidStar();
+		}
 
 
 		SacredWater = new FluidSacredWater();

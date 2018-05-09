@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.iamshift.mineaddons.MineAddons;
 import com.iamshift.mineaddons.core.Refs;
+import com.iamshift.mineaddons.init.ModEnchants;
 import com.iamshift.mineaddons.init.ModItems;
 
 import net.minecraft.block.BlockDispenser;
@@ -23,6 +24,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -33,6 +35,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -165,30 +168,10 @@ public class ItemRespirator extends ItemBase
 
 			if(isRespirator(event.getRight()))
 			{
-				out.getOrCreateSubCompound("Respirator");
+				out.addEnchantment(ModEnchants.respirator, 1);
 				event.setOutput(out);
 				event.setMaterialCost(1);
 				event.setCost(10);
-			}
-		}
-	}
-
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public static void onTooltipHandler(ItemTooltipEvent event)
-	{
-		ItemStack stack = event.getItemStack();
-
-		if(isHelmet(stack))
-		{
-			if(stack.hasTagCompound() && stack.getTagCompound().hasKey("Respirator"))
-			{
-				if(!event.getToolTip().contains("Respirator"))
-				{
-					event.getToolTip().add(" ");
-					event.getToolTip().add(TextFormatting.AQUA + "Respirator Infused");
-					event.getToolTip().add(" ");
-				}
 			}
 		}
 	}

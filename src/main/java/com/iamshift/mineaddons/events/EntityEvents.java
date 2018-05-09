@@ -1,4 +1,4 @@
-package com.iamshift.mineaddons.utils;
+package com.iamshift.mineaddons.events;
 
 import java.util.Random;
 
@@ -55,27 +55,8 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 @Mod.EventBusSubscriber(modid = Refs.ID)
-public class EventHandler
+public class EntityEvents
 {
-	@SubscribeEvent
-	public static void createFluidSource(BlockEvent.CreateFluidSourceEvent event)
-	{
-		if(!Config.WaterSource)
-			return;
-		
-		if(event.getState().getBlock() instanceof BlockSacredWater)
-		{
-			event.setResult(Event.Result.ALLOW);
-			return;
-		}
-
-		if(event.getState().getBlock() instanceof BlockCursedWater)
-		{
-			event.setResult(Event.Result.ALLOW);
-			return;
-		}
-	}
-	
 	@SubscribeEvent
 	public static void onLootTableLoad(LootTableLoadEvent event)
 	{
@@ -155,63 +136,6 @@ public class EventHandler
 				ModEntities.ANCIENT_LIMIT++;
 			else
 				event.setCanceled(true);
-		}
-	}
-
-	@SubscribeEvent
-	public static void onFireworkUse(RightClickItem event) 
-	{
-		if(event.getItemStack() == null)
-			return;
-
-		EntityPlayer player = event.getEntityPlayer();
-		if(player == null)
-			return;
-
-		if((event.getItemStack().getItem() instanceof ItemFirework))
-		{	
-			if(player.isSneaking() && !player.isElytraFlying())
-			{
-				player.addVelocity(0D, 3D, 0D);
-				player.playSound(SoundEvents.ENTITY_FIREWORK_LAUNCH, 1.0F, 1.0F);
-
-				if(!player.capabilities.isCreativeMode)
-					event.getItemStack().shrink(1);
-			}
-
-			return;
-		}
-	}
-
-	@SubscribeEvent
-	public static void onBlockMined(LeftClickBlock event)
-	{
-		EntityPlayer player = event.getEntityPlayer();
-		World world = player.world;
-
-		if(!player.capabilities.isCreativeMode)
-		{
-			if((player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemBreaker))
-			{
-				if(!world.isRemote)
-				{
-					BlockPos pos = event.getPos();
-					IBlockState state = world.getBlockState(pos);
-					boolean unbreakable = state.getBlockHardness(world, pos) < 0.0F ? true : false;
-
-					if(!unbreakable && !(state.getBlock() instanceof BlockInvLight))
-					{
-						event.setCanceled(true);
-						return;
-					}
-
-					world.setBlockToAir(pos);
-					world.playEvent(2001, pos, Block.getStateId(state));
-
-					ItemStack stack = new ItemStack(Item.getItemFromBlock(state.getBlock()), 1, state.getBlock().getMetaFromState(state));
-					world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), stack));
-				}
-			}
 		}
 	}
 

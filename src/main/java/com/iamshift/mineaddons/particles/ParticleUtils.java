@@ -31,6 +31,8 @@ public class ParticleUtils
 			case WITHER_CLOUD:
 				particle = new ParticleWitherCloud(world, x, y, z, xSpeed, ySpeed, zSpeed);
 				break;
+			case ANVIL_SPELL:
+				particle = new ParticleAnvilSpell(world, x, y, z, xSpeed, ySpeed, zSpeed);
 			default:
 				break;
 		}
@@ -45,6 +47,7 @@ public class ParticleUtils
 		CURSED_CLOUD,
 		FORGOTTEN_CLOUD,
 		LAVA_SPLASH,
-		WITHER_CLOUD;
+		WITHER_CLOUD,
+		ANVIL_SPELL;
 	}
 }

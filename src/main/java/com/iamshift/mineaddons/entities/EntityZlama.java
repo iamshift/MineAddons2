@@ -2,6 +2,7 @@ package com.iamshift.mineaddons.entities;
 
 import com.google.common.base.Predicate;
 import com.iamshift.mineaddons.api.IMobChanger;
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.entities.ais.EntityAIWanderAvoidLava;
 import com.iamshift.mineaddons.init.ModLoot;
 
@@ -182,8 +183,14 @@ public class EntityZlama extends EntityLlama implements IMobChanger
 	@Override
 	public boolean getCanSpawnHere()
 	{
-		if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.world.provider.getDimensionType() == DimensionType.NETHER && this.rand.nextInt(15) == 0)
-			return true;
+		if(Config.ZlamaSpawnRate > 0)
+		{
+			if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.world.provider.getDimensionType() == DimensionType.NETHER && !isEntityInsideOpaqueBlock())
+			{
+				if(this.rand.nextInt(Config.ZlamaSpawnRate) == 0)
+					return true;
+			}
+		}
 
 		return false;
 	}

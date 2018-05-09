@@ -1,5 +1,6 @@
 package com.iamshift.mineaddons.init;
 
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.integration.Tinkers;
 import com.iamshift.mineaddons.integration.Waila;
 
@@ -10,7 +11,7 @@ public class ModIntegrations
 {
 	public static void init()
 	{
-		if(Loader.isModLoaded("tconstruct"))
+		if(Loader.isModLoaded("tconstruct") && Config.Tinker)
 			Tinkers.init();
 		
 		if(FMLCommonHandler.instance().getSide().isClient())

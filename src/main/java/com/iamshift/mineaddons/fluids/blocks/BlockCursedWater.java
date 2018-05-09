@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCaveSpider;
@@ -176,8 +177,12 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 
 			if(eItem.getItem().getItem() instanceof ItemDye && eItem.getItem().getItemDamage() == 4)
 			{
-				eItem.setDead();
-				InventoryHelper.spawnItemStack(world, eItem.posX, eItem.posY, eItem.posZ, new ItemStack(ModItems.Lapis, eItem.getItem().getCount(), 1));
+				eItem.getItem().shrink(1);
+				
+				if(eItem.getItem().getCount() <= 0)
+					eItem.setDead();
+				
+				InventoryHelper.spawnItemStack(world, eItem.posX, eItem.posY, eItem.posZ, new ItemStack(ModItems.Lapis, 1, 1));
 			}
 
 			return;
@@ -207,18 +212,13 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 
 	private boolean tryConvertMob(World world, BlockPos pos, IBlockState state, Entity entity) 
 	{
-		if(entity instanceof IMobChanger)
-		{
-			((IMobChanger) entity).cursedWaterEffect();
-			return true;
-		}
-
 		if (entity instanceof EntitySkeleton) 
 		{
 			EntitySkeleton skeleton = (EntitySkeleton) entity;
 			skeleton.setDead();
 
 			EntityWitherSkeleton witherSkeleton = new EntityWitherSkeleton(world);
+			witherSkeleton.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			witherSkeleton.setLocationAndAngles(skeleton.posX, skeleton.posY, skeleton.posZ, skeleton.rotationYaw, skeleton.rotationPitch);
 			witherSkeleton.renderYawOffset = skeleton.renderYawOffset;
 			witherSkeleton.setHealth(witherSkeleton.getMaxHealth());
@@ -247,6 +247,7 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 			spider.setDead();
 
 			EntityCaveSpider caveSpider = new EntityCaveSpider(world);
+			caveSpider.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			caveSpider.setLocationAndAngles(spider.posX, spider.posY, spider.posZ, spider.rotationYaw, spider.rotationPitch);
 			caveSpider.renderYawOffset = spider.renderYawOffset;
 			caveSpider.setHealth(caveSpider.getMaxHealth());
@@ -262,6 +263,7 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 			squid.setDead();
 
 			EntityGhast ghast = new EntityGhast(world);
+			ghast.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			ghast.setLocationAndAngles(squid.posX, squid.posY, squid.posZ, squid.rotationYaw, squid.rotationPitch);
 			ghast.renderYawOffset = squid.renderYawOffset;
 			ghast.setHealth(ghast.getMaxHealth());
@@ -277,6 +279,7 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 			silverfish.setDead();
 
 			EntityEndermite endermite = new EntityEndermite(world);
+			endermite.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			endermite.setLocationAndAngles(silverfish.posX, silverfish.posY, silverfish.posZ, silverfish.rotationYaw, silverfish.rotationPitch);
 			endermite.renderYawOffset = silverfish.renderYawOffset;
 			endermite.setHealth(endermite.getMaxHealth());
@@ -292,6 +295,7 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 			villager.setDead();
 
 			EntityWitch witch = new EntityWitch(world);
+			witch.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			witch.setLocationAndAngles(villager.posX, villager.posY, villager.posZ, villager.rotationYaw, villager.rotationPitch);
 			witch.renderYawOffset = villager.renderYawOffset;
 			witch.setHealth(witch.getMaxHealth());
@@ -301,12 +305,13 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 			return true;
 		}
 
-		if (entity instanceof EntityGuardian) 
+		if (entity instanceof EntityGuardian && !(entity instanceof EntityElderGuardian)) 
 		{
 			EntityGuardian guardian = (EntityGuardian) entity;
 			guardian.setDead();
 
 			EntityElderGuardian elderGuardian = new EntityElderGuardian(world);
+			elderGuardian.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			elderGuardian.setLocationAndAngles(guardian.posX, guardian.posY, guardian.posZ, guardian.rotationYaw, guardian.rotationPitch);
 			elderGuardian.renderYawOffset = guardian.renderYawOffset;
 			elderGuardian.setHealth(elderGuardian.getMaxHealth());
@@ -322,6 +327,7 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 			bat.setDead();
 
 			EntityBlaze blaze = new EntityBlaze(world);
+			blaze.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			blaze.setLocationAndAngles(bat.posX, bat.posY, bat.posZ, bat.rotationYaw, bat.rotationPitch);
 			blaze.renderYawOffset = bat.renderYawOffset;
 			blaze.setHealth(blaze.getMaxHealth());
@@ -337,6 +343,7 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 			horse.setDead();
 
 			EntityZombieHorse zombieHorse = new EntityZombieHorse(world);
+			zombieHorse.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			zombieHorse.setLocationAndAngles(horse.posX, horse.posY, horse.posZ, horse.rotationYaw, horse.rotationPitch);
 			zombieHorse.renderYawOffset = horse.renderYawOffset;
 			zombieHorse.setHealth(zombieHorse.getMaxHealth());
@@ -365,6 +372,7 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 			zombie.setDead();
 
 			EntityPigZombie pigzombie = new EntityPigZombie(world);
+			pigzombie.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			pigzombie.setLocationAndAngles(zombie.posX, zombie.posY, zombie.posZ, zombie.rotationYaw, zombie.rotationPitch);
 			pigzombie.renderYawOffset = zombie.renderYawOffset;
 			pigzombie.setHealth(pigzombie.getMaxHealth());
@@ -380,6 +388,7 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 			wolf.setDead();
 
 			EntityHellhound hellhound = new EntityHellhound(world);
+			hellhound.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			hellhound.setLocationAndAngles(wolf.posX, wolf.posY, wolf.posZ, wolf.rotationYaw, wolf.rotationPitch);
 			hellhound.renderYawOffset = wolf.renderYawOffset;
 			hellhound.setHealth(hellhound.getMaxHealth());
@@ -395,6 +404,7 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 			sheep.setDead();
 
 			EntityiSheep isheep = new EntityiSheep(world);
+			isheep.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			isheep.setLocationAndAngles(sheep.posX, sheep.posY, sheep.posZ, sheep.rotationYaw, sheep.rotationPitch);
 			isheep.renderYawOffset = sheep.renderYawOffset;
 			isheep.setHealth(isheep.getMaxHealth());
@@ -404,18 +414,25 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 			return true;
 		}
 
-		if(entity instanceof EntityLlama)
+		if(entity instanceof EntityLlama && !(entity instanceof EntityZlama))
 		{
 			EntityLlama llama = (EntityLlama) entity;
 			llama.setDead();
 
 			EntityZlama zlama = new EntityZlama(world);
+			zlama.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 			zlama.setLocationAndAngles(llama.posX, llama.posY, llama.posZ, llama.rotationYaw, llama.rotationPitch);
 			zlama.renderYawOffset = llama.renderYawOffset;
 			zlama.setHealth(zlama.getMaxHealth());
 
 			world.spawnEntity(zlama);
 
+			return true;
+		}
+		
+		if(entity instanceof IMobChanger)
+		{
+			((IMobChanger) entity).cursedWaterEffect();
 			return true;
 		}
 

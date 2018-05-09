@@ -38,7 +38,7 @@ public class TiCMaterial
 				new HeadMaterialStats(600, 1, 15, 6), 
 				new HandleMaterialStats(1F, 175), 
 				new ExtraMaterialStats(600), 
-				new BowMaterialStats(40F, 7.5F, 200),
+				new BowMaterialStats(40F, 7.5F, 25),
 				new ArrowShaftMaterialStats(8F, 100));
 		
 		MaterialIntegration m = new MaterialIntegration(fiberglass, ModFluids.Fiberglass, "Fiberglass");

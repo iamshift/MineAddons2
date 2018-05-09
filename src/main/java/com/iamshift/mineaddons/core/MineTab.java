@@ -1,4 +1,4 @@
-package com.iamshift.mineaddons.utils;
+package com.iamshift.mineaddons.core;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fml.common.Loader;
 
 public class MineTab extends CreativeTabs
 {
@@ -36,8 +37,11 @@ public class MineTab extends CreativeTabs
 		list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.CursedWater, 1000)));
 		list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.ForgottenWater, 1000)));
 
-		list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.Fiberglass, 1000)));
-		list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.LiquidStar, 1000)));
+		if(Loader.isModLoaded("tconstruct") && Config.Tinker)
+		{
+			list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.Fiberglass, 1000)));
+			list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.LiquidStar, 1000)));
+		}
 
 		Collections.sort(list, new Comparator<ItemStack>()
 		{

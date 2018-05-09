@@ -24,8 +24,12 @@ import com.iamshift.mineaddons.entities.items.EntitySpiritBomb;
 import com.iamshift.mineaddons.entities.items.EntityVoidball;
 
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityEndPortal;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -107,5 +111,26 @@ public class ModEntities
 		overworldBiomes.removeAll(BiomeDictionary.getBiomes(Type.END));
 		netherBiomes.addAll(BiomeDictionary.getBiomes(Type.NETHER));
 		endBiomes.addAll(BiomeDictionary.getBiomes(Type.END));
+	}
+	
+	public static boolean HasDragonBeenKilled(World world)
+	{
+		for (int i = -8; i <= 8; ++i)
+        {
+            for (int j = -8; j <= 8; ++j)
+            {
+                Chunk chunk = world.getChunkFromChunkCoords(i, j);
+
+                for (TileEntity tileentity : chunk.getTileEntityMap().values())
+                {
+                    if (tileentity instanceof TileEntityEndPortal)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+		
+		return false;
 	}
 }

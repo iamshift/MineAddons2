@@ -2,6 +2,7 @@ package com.iamshift.mineaddons.entities;
 
 import java.util.Random;
 
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.init.ModEntities;
 import com.iamshift.mineaddons.init.ModLoot;
 import com.iamshift.mineaddons.init.ModSounds;
@@ -69,7 +70,7 @@ public class EntityAncientCarp extends EntityFlying
 		this.tasks.addTask(1, new EntityAncientCarp.AIRandomFly(this));
 		this.tasks.addTask(2, new EntityAncientCarp.AILookAround(this));
 	}
-	
+
 	private boolean isSyncedFlagSet(int flagId)
 	{
 		return (((Byte)this.dataManager.get(ANCIENT_STATUS)).byteValue() & flagId) != 0;
@@ -102,17 +103,23 @@ public class EntityAncientCarp extends EntityFlying
 	@Override
 	public boolean getCanSpawnHere() 
 	{
-		if(this.world.provider.getDimensionType() == DimensionType.THE_END && this.rand.nextInt(25) == 0)
+		if(Config.AncientCarpSpawnRate > 0)
 		{
-			int i = MathHelper.floor(this.posX);
-			int j = MathHelper.floor(this.getEntityBoundingBox().minY);
-			int k = MathHelper.floor(this.posZ);
-			BlockPos blockpos = new BlockPos(i, j, k);
+			if(this.world.provider.getDimensionType() == DimensionType.THE_END && ModEntities.HasDragonBeenKilled(this.world) && !isEntityInsideOpaqueBlock() && ModEntities.ANCIENT_LIMIT < Config.MaxAncientCarps)
+			{
+				if(this.rand.nextInt(Config.AncientCarpSpawnRate) == 0)
+				{
+					int i = MathHelper.floor(this.posX);
+					int j = MathHelper.floor(this.getEntityBoundingBox().minY);
+					int k = MathHelper.floor(this.posZ);
+					BlockPos blockpos = new BlockPos(i, j, k);
 
-			if(ModEntities.ANCIENT_LIMIT > 9)
-				return false;
+					if(ModEntities.ANCIENT_LIMIT > Config.MaxAncientCarps)
+						return false;
 
-			return blockpos.getDistance(0, 0, 0) < 500 ? false : this.world.getBlockState(blockpos.down()).getBlock() == Blocks.END_STONE;
+					return blockpos.getDistance(0, 0, 0) < 500 ? false : this.world.getBlockState(blockpos.down()).getBlock() == Blocks.END_STONE;
+				}
+			}
 		}
 
 		return false;
@@ -198,6 +205,14 @@ public class EntityAncientCarp extends EntityFlying
 		}
 
 		super.onLivingUpdate();
+	}
+
+	@Override
+	public void setDead()
+	{
+		super.setDead();
+
+		ModEntities.ANCIENT_LIMIT--;
 	}
 
 	static class AILookAround extends EntityAIBase

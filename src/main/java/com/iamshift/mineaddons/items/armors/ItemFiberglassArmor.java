@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.iamshift.mineaddons.MineAddons;
 import com.iamshift.mineaddons.core.Refs;
+import com.iamshift.mineaddons.events.ArmorEvents;
 import com.iamshift.mineaddons.init.ModItems;
 import com.iamshift.mineaddons.interfaces.IHasModel;
-import com.iamshift.mineaddons.utils.ArmorEvents;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -84,7 +84,5 @@ public class ItemFiberglassArmor extends ItemArmor implements IHasModel
 				break;
 		}
 		tooltip.add(a);
-		
-		tooltip.add(" ");
 	}
 }

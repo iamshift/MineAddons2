@@ -78,6 +78,8 @@ tile.soul_block.name=Soul Block
 tile.infused_soul_block.name=Infused Soul Block
 tile.frozen_forgotten_water.name=Frozen Forgotten Water
 
+tile.forgotten_anvil.name=Forgotten Anvil
+
 fluid.sacred_water=Sacred Water
 fluid.cursed_water=Cursed Water
 fluid.forgotten_water=Forgotten Water
@@ -102,6 +104,7 @@ entity.voix.name=Voix
 enchantment.elytra=Elytra Infusion
 enchantment.wings=Wings Infusion
 enchantment.rocket=Rocket Power
+enchantment.respirator=Respirator Infused
 
 key.mineaddons.cat=Mine Addons
 key.mineaddons.toggle.desc=Rocket Power Toggle

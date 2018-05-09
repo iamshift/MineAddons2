@@ -11,6 +11,7 @@ import com.iamshift.mineaddons.interfaces.IHasModel;
 import com.iamshift.mineaddons.interfaces.IRecipeProvider;
 
 import net.minecraft.block.BlockTorch;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -38,7 +39,9 @@ public class BlockColorableTorch extends BlockTorch implements IHasModel, IRecip
 		super();
 		setUnlocalizedName(name);
 		setRegistryName(new ResourceLocation(Refs.ID, name));
-		
+		this.setLightLevel(0.9375F);
+		this.setHardness(0.0F);
+		this.setSoundType(SoundType.WOOD);
 		this.meta = meta;
 		
 		setCreativeTab(MineAddons.minetab);

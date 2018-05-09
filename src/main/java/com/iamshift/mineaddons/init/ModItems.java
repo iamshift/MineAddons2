@@ -3,7 +3,9 @@ package com.iamshift.mineaddons.init;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.core.Refs;
+import com.iamshift.mineaddons.events.ArmorEvents;
 import com.iamshift.mineaddons.items.ItemAncientEssence;
 import com.iamshift.mineaddons.items.ItemBase;
 import com.iamshift.mineaddons.items.ItemBlazelier;
@@ -26,7 +28,6 @@ import com.iamshift.mineaddons.items.ItemWitherDust;
 import com.iamshift.mineaddons.items.armors.ItemFiberglassArmor;
 import com.iamshift.mineaddons.items.armors.ItemUltimateArmor;
 import com.iamshift.mineaddons.items.tools.ItemBreaker;
-import com.iamshift.mineaddons.utils.ArmorEvents;
 
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -88,7 +89,7 @@ public class ModItems
 		Cellulose = new ItemCellulose("cellulose");
 
 		
-		if(Loader.isModLoaded("tconstruct"))
+		if(Loader.isModLoaded("tconstruct") && Config.Tinker)
 		{
 			ArmorEvents.armorEffects.put(EntityEquipmentSlot.HEAD, new PotionEffect(MobEffects.NIGHT_VISION, 999999, 0, false, false));
 			ArmorEvents.armorEffects.put(EntityEquipmentSlot.CHEST, new PotionEffect(MobEffects.HASTE, 999999, 0, false, false));

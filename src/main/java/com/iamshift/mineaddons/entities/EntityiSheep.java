@@ -3,6 +3,7 @@ package com.iamshift.mineaddons.entities;
 import java.util.List;
 
 import com.iamshift.mineaddons.api.IMobChanger;
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.entities.ais.EntityAIWanderAvoidLava;
 import com.iamshift.mineaddons.init.ModLoot;
 
@@ -78,7 +79,7 @@ public class EntityiSheep extends EntityAnimal implements IShearable, IMobChange
 	{
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
 	}
 
@@ -276,8 +277,14 @@ public class EntityiSheep extends EntityAnimal implements IShearable, IMobChange
 	@Override
 	public boolean getCanSpawnHere()
 	{
-		if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.world.provider.getDimensionType() == DimensionType.NETHER && this.rand.nextInt(15) == 0)
-			return true;
+		if(Config.iSheepSpawnRate > 0)
+		{
+			if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.world.provider.getDimensionType() == DimensionType.NETHER && !isEntityInsideOpaqueBlock())
+			{
+				if(this.rand.nextInt(Config.iSheepSpawnRate) == 0)
+					return true;
+			}
+		}
 
 		return false;
 	}

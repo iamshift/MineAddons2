@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
 import com.iamshift.mineaddons.api.IMobChanger;
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.entities.ais.EntityAITargetTamed;
 import com.iamshift.mineaddons.entities.ais.EntityAIWanderAvoidLava;
 import com.iamshift.mineaddons.init.ModLoot;
@@ -270,18 +271,15 @@ public class EntityHellhound extends EntityTameable implements IMobChanger
 
 		if(this.world.isRemote && !this.isTamed())
 		{
-//			if(!(this.world.getBlockState(this.getPosition()).getBlock() instanceof BlockFire) && (this.world.getBlockState(this.getPosition()).getBlock() instanceof BlockAir) && this.rand.nextInt(10) == 0)
-//				this.world.setBlockState(this.getPosition(), Blocks.FIRE.getDefaultState());
-			
 			if(this.rand.nextInt(15) == 0)
 				for (int i = 0; i < 2; ++i)
 					ParticleUtils.spawn(EnumParticles.WITHER_CLOUD, this.world,
-						this.posX + (this.rand.nextDouble() - 0.5D) * ((double)this.width * 1.5D), 
-						this.posY + this.rand.nextDouble() * ((double)this.height * 1.5D) - 0.25D, 
-						this.posZ + (this.rand.nextDouble() - 0.5D) * ((double)this.width * 1.5D),
-						(this.rand.nextDouble() - 0.5D) * 2.0D, 
-						-this.rand.nextDouble(), 
-						(this.rand.nextDouble() - 0.5D) * 2.0D);
+							this.posX + (this.rand.nextDouble() - 0.5D) * ((double)this.width * 1.5D), 
+							this.posY + this.rand.nextDouble() * ((double)this.height * 1.5D) - 0.25D, 
+							this.posZ + (this.rand.nextDouble() - 0.5D) * ((double)this.width * 1.5D),
+							(this.rand.nextDouble() - 0.5D) * 2.0D, 
+							-this.rand.nextDouble(), 
+							(this.rand.nextDouble() - 0.5D) * 2.0D);
 		}
 	}
 
@@ -331,7 +329,7 @@ public class EntityHellhound extends EntityTameable implements IMobChanger
 				{
 					float f1 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
 					float f2 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
-					
+
 					if(this.world.isRemote)
 						ParticleUtils.spawn(EnumParticles.LAVA_SPLASH, world, this.posX + (double)f1, (double)(f + 0.8F), this.posZ + (double)f2, this.motionX, this.motionY, this.motionZ);
 				}
@@ -593,7 +591,7 @@ public class EntityHellhound extends EntityTameable implements IMobChanger
 	@Override
 	public int getMaxSpawnedInChunk()
 	{
-		return 6;
+		return 3;
 	}
 
 	public boolean isAngry()
@@ -709,18 +707,24 @@ public class EntityHellhound extends EntityTameable implements IMobChanger
 	@Override
 	public boolean getCanSpawnHere()
 	{
-		if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.world.provider.getDimensionType() == DimensionType.NETHER && this.rand.nextInt(15) == 0)
-			return true;
+		if(Config.HellhoundSpawnRate > 0)
+		{
+			if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.world.provider.getDimensionType() == DimensionType.NETHER && !isEntityInsideOpaqueBlock())
+			{
+				if(this.rand.nextInt(Config.HellhoundSpawnRate) == 0)
+					return true;
+			}
+		}
 
 		return false;
 	}
-	
+
 	@Override
 	protected boolean canDespawn() 
 	{
 		if(!this.isTamed())
 			return true;
-		
+
 		return false;
 	}
 
