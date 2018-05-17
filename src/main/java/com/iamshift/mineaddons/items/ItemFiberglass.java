@@ -13,12 +13,11 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemFiberglass extends ItemBase
 {
-
 	public ItemFiberglass(String name)
 	{
 		super(name);
 	}
-
+	
 	@Override
 	public List<IRecipe> getRecipe()
 	{

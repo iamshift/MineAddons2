@@ -1,6 +1,8 @@
 package com.iamshift.mineaddons.init;
 
 import com.iamshift.mineaddons.core.Config;
+import com.iamshift.mineaddons.integration.CraftTweaker;
+import com.iamshift.mineaddons.integration.Foundry;
 import com.iamshift.mineaddons.integration.Tinkers;
 import com.iamshift.mineaddons.integration.Waila;
 
@@ -9,13 +11,28 @@ import net.minecraftforge.fml.common.Loader;
 
 public class ModIntegrations
 {
+	public static void preInit()
+	{
+		if(Config.CraftTweaker)
+			CraftTweaker.preInit();
+	}
+	
 	public static void init()
 	{
-		if(Loader.isModLoaded("tconstruct") && Config.Tinker)
+		if(Config.Tinker)
 			Tinkers.init();
 		
 		if(FMLCommonHandler.instance().getSide().isClient())
-			if(Loader.isModLoaded("waila"))
+			if(Config.Waila)
 				Waila.init();
+		
+		if(Config.Foundry)
+			Foundry.init();
+	}
+	
+	public static void postInit()
+	{
+		if(Config.CraftTweaker)
+			CraftTweaker.postInit();
 	}
 }

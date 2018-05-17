@@ -1,6 +1,7 @@
 package com.iamshift.mineaddons.blocks.containers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -12,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.iamshift.mineaddons.blocks.BlockForgottenAnvil;
 import com.iamshift.mineaddons.events.AnvilOutuputEvent;
 import com.iamshift.mineaddons.init.ModFluids;
+import com.iamshift.mineaddons.utils.AnvilRecipe;
 import com.iamshift.mineaddons.utils.ForgottenAnvilHelper;
 import com.iamshift.mineaddons.utils.GuiHandler;
 
@@ -27,6 +29,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -39,6 +42,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerForgottenAnvil extends Container
 {
+	public static Map<Item, ArrayList<AnvilRecipe>> recipes = new HashMap<Item, ArrayList<AnvilRecipe>>();
+
 	private IInventory outputSlot;
 	private IInventory inputSlots;
 
@@ -52,6 +57,8 @@ public class ContainerForgottenAnvil extends Container
 
 	private boolean disenchanting = false;
 	private Enchantment denchantment;
+	private boolean forgotten = false;
+	private boolean shouldDestroy = false;
 
 	private final EntityPlayer player;
 
@@ -101,11 +108,12 @@ public class ContainerForgottenAnvil extends Container
 				if(!playerIn.capabilities.isCreativeMode)
 					player.addExperienceLevel(-ContainerForgottenAnvil.this.maxCost);
 
-				if(!ContainerForgottenAnvil.this.disenchanting && onOutputTake(playerIn, ContainerForgottenAnvil.this.outputSlot.getStackInSlot(0), ContainerForgottenAnvil.this.inputSlots.getStackInSlot(0), ContainerForgottenAnvil.this.inputSlots.getStackInSlot(1)))
+				if(!ContainerForgottenAnvil.this.disenchanting && !ContainerForgottenAnvil.this.forgotten && ContainerForgottenAnvil.this.shouldDestroy &&
+						onOutputTake(playerIn, ContainerForgottenAnvil.this.outputSlot.getStackInSlot(0), ContainerForgottenAnvil.this.inputSlots.getStackInSlot(0), ContainerForgottenAnvil.this.inputSlots.getStackInSlot(1)))
 				{
 					if(ContainerForgottenAnvil.this.matCost == 0)
 						ContainerForgottenAnvil.this.matCost = 1;
-					
+
 					ItemStack item = ContainerForgottenAnvil.this.inputSlots.getStackInSlot(0);
 					if(!item.isEmpty() && item.getCount() > ContainerForgottenAnvil.this.matCost)
 					{
@@ -128,7 +136,7 @@ public class ContainerForgottenAnvil extends Container
 					ContainerForgottenAnvil.this.inputSlots.setInventorySlotContents(0, item);
 				}
 
-				if(ContainerForgottenAnvil.this.matCost > 0)
+				if(ContainerForgottenAnvil.this.matCost > 0 && !ContainerForgottenAnvil.this.forgotten)
 				{
 					ItemStack ingredient = ContainerForgottenAnvil.this.inputSlots.getStackInSlot(1);
 
@@ -140,8 +148,24 @@ public class ContainerForgottenAnvil extends Container
 					else
 						ContainerForgottenAnvil.this.inputSlots.setInventorySlotContents(1, ItemStack.EMPTY);
 				}
-				else
+				else if(!ContainerForgottenAnvil.this.forgotten)
 					ContainerForgottenAnvil.this.inputSlots.setInventorySlotContents(1, ItemStack.EMPTY);
+
+				if(ContainerForgottenAnvil.this.forgotten)
+				{
+					ItemStack item = ContainerForgottenAnvil.this.inputSlots.getStackInSlot(0);
+					if(!item.isEmpty() && item.getCount() > ContainerForgottenAnvil.this.matCost)
+					{
+						item.shrink(ContainerForgottenAnvil.this.matCost);
+						ContainerForgottenAnvil.this.inputSlots.setInventorySlotContents(0, item);
+					}
+					else
+					{
+						ContainerForgottenAnvil.this.inputSlots.setInventorySlotContents(0, ItemStack.EMPTY);
+					}
+
+					ContainerForgottenAnvil.this.inputSlots.setInventorySlotContents(1, new ItemStack(Items.BUCKET, 1));
+				}
 
 				ContainerForgottenAnvil.this.maxCost = 0;
 
@@ -183,6 +207,7 @@ public class ContainerForgottenAnvil extends Container
 		this.matCost = 1;
 		this.disenchanting = false;
 		this.denchantment = null;
+		this.forgotten = false;
 		int i = 0;
 		int j = 0;
 		int k = 0;
@@ -233,13 +258,13 @@ public class ContainerForgottenAnvil extends Container
 				}
 				else
 				{
-					if (!flag && (item.getItem() != ingredient.getItem() || !item.isItemStackDamageable()) && !fluid.isFluidEqual(ingredient) && ingredient.getItem() != Items.BOOK)
-					{
-						this.outputSlot.setInventorySlotContents(0, ItemStack.EMPTY);
-						this.maxCost = 0;
-
-						return;
-					}
+//					if (!flag && (item.getItem() != ingredient.getItem() || !item.isItemStackDamageable()) && !fluid.isFluidEqual(ingredient) && ingredient.getItem() != Items.BOOK)
+//					{
+//						this.outputSlot.setInventorySlotContents(0, ItemStack.EMPTY);
+//						this.maxCost = 0;
+//
+//						return;
+//					}
 
 					if (item.isItemStackDamageable() && !flag && !fluid.isFluidEqual(ingredient))
 					{
@@ -347,7 +372,7 @@ public class ContainerForgottenAnvil extends Container
 					}
 
 					Random rand = new Random();
-					boolean forgotten = false;
+
 					if(fluid.isFluidEqual(ingredient) && (item.isItemEnchantable() || item.isItemEnchanted()))
 					{
 						List<EnchantmentData> list = new ArrayList<>();
@@ -360,11 +385,8 @@ public class ContainerForgottenAnvil extends Container
 									list.add(temp);
 								else
 								{
-									for(Enchantment e : map.keySet())
-									{
-										if(ForgottenAnvilHelper.isCompatible(temp, new EnchantmentData(e, map.get(e))))
-											list.add(temp);
-									}
+									if(ForgottenAnvilHelper.isCompatible(temp, map))
+										list.add(temp);
 								}
 							}
 
@@ -387,13 +409,11 @@ public class ContainerForgottenAnvil extends Container
 							{
 								if (map.get(fe.enchantment) == null)
 								{
-									System.out.println("new");
 									map.put(fe.enchantment, fe.enchantmentLevel);
 									forgotten = true;
 								}
 								else
 								{
-									System.out.println("replace");
 									map.replace(fe.enchantment, fe.enchantmentLevel);
 									forgotten = true;
 								}
@@ -427,6 +447,29 @@ public class ContainerForgottenAnvil extends Container
 
 						this.detectAndSendChanges();
 						return;
+					}
+
+					if(ingredient != null)
+					{
+						if(item != null)
+						{
+							if(!recipes.isEmpty() && recipes.containsKey(ingredient.getItem()))
+							{
+								for(AnvilRecipe recipe : recipes.get(ingredient.getItem()))
+								{
+									if(recipe.matches(item, ingredient))
+									{
+										this.outputSlot.setInventorySlotContents(0, recipe.getOut().copy());
+										this.shouldDestroy = recipe.shouldDestroy();
+										this.matCost = recipe.getCost();
+										this.maxCost = recipe.getXp();
+
+										this.detectAndSendChanges();
+										return;
+									}
+								}
+							}
+						}
 					}
 
 					if (flag3 && !flag2)
@@ -587,6 +630,7 @@ public class ContainerForgottenAnvil extends Container
 		outputSlot.setInventorySlotContents(0, e.getOutput());
 		container.maxCost = e.getCost();
 		container.matCost = e.getMaterialCost();
+		container.shouldDestroy = true;
 		return false;
 	}
 

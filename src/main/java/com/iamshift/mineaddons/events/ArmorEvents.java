@@ -67,6 +67,7 @@ public class ArmorEvents
 					if(player.isPotionActive(effect.getPotion()) && player.getActivePotionEffect(effect.getPotion()).getAmplifier() == 0 && player.getActivePotionEffect(effect.getPotion()).getDuration() >= 900000)
 					{
 						player.removePotionEffect(effect.getPotion());
+						player.addPotionEffect(new PotionEffect(effect.getPotion(), 5, effect.getAmplifier(), effect.getIsAmbient(), effect.doesShowParticles()));
 					}
 				}
 
@@ -88,6 +89,7 @@ public class ArmorEvents
 					if(!player.isPotionActive(ModPotions.PotionDoubleHealth) || (player.isPotionActive(ModPotions.PotionDoubleHealth) && player.getActivePotionEffect(ModPotions.PotionDoubleHealth).getDuration() <= 900005))
 					{
 						PotionEffect effect = new PotionEffect(ModPotions.PotionDoubleHealth, 999999, 0);
+						effect.setCurativeItems(new ArrayList<>());
 
 						if (player.world.isRemote)
 							effect.setPotionDurationMax(true);
@@ -110,6 +112,7 @@ public class ArmorEvents
 					if(!player.isPotionActive(ModPotions.PotionWitherProof) || (player.isPotionActive(ModPotions.PotionWitherProof) && player.getActivePotionEffect(ModPotions.PotionWitherProof).getDuration() <= 900005))
 					{
 						PotionEffect effect = new PotionEffect(ModPotions.PotionWitherProof, 999999, 0);
+						effect.setCurativeItems(new ArrayList<>());
 
 						if (player.world.isRemote)
 							effect.setPotionDurationMax(true);
@@ -128,6 +131,7 @@ public class ArmorEvents
 					if(!player.isPotionActive(ModPotions.PotionFlight) || (player.isPotionActive(ModPotions.PotionFlight) && player.getActivePotionEffect(ModPotions.PotionFlight).getDuration() <= 900005))
 					{
 						PotionEffect effect = new PotionEffect(ModPotions.PotionFlight, 999999, 0);
+						effect.setCurativeItems(new ArrayList<>());
 
 						if (player.world.isRemote)
 							effect.setPotionDurationMax(true);

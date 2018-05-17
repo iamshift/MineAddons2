@@ -35,7 +35,8 @@ item.lapis.sacred.name=Sacred Lapis
 item.lapis.cursed.name=Cursed Lapis
 item.lapis.forgotten.name=Forgotten Lapis
 item.glass_pile.name=Glass Pile
-item.fiberglass.name=Fiberglass
+item.fiberglass.name=Fiberglass Dust
+item.fiberglass_ingot.name=Fiberglass Ingot
 item.fiberglass_helmet.name=Infused Diamond Helmet
 item.fiberglass_chestplate.name=Infused Diamond Chestplate
 item.fiberglass_leggings.name=Infused Diamond Leggings
@@ -54,6 +55,10 @@ item.dead_horse_egg.name=Dead Horse Spawn Egg
 
 item.respirator.name=Respirator
 item.o2bottle.name=O2 Bottle
+
+item.fiber_pickaxe.name=Fiberglass Pickaxe
+item.fiber_axe.name=Fiberglass Axe
+item.fiber_shovel.name=Fiberglass Shovel
 
 tile.lava_sponge_dry.name=Lava Sponge
 tile.lava_sponge_wet.name=Wet Lava Sponge
@@ -85,6 +90,8 @@ fluid.cursed_water=Cursed Water
 fluid.forgotten_water=Forgotten Water
 fluid.liquid_fiberglass=Liquid Fiberglass
 fluid.liquid_star=Liquid Star
+fluid.alloy_idiamond=Liquid Infused Diamond
+fluid.alloy_fiberstar=Liquid Fiberglass Star
 
 entity.true_creeper.name=Creepier
 entity.peace_creeper.name=Peace Creeper

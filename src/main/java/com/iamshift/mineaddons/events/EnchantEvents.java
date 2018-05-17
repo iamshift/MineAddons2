@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.entities.boss.EntityBoss;
 import com.iamshift.mineaddons.init.ModEnchants;
@@ -67,17 +68,22 @@ public class EnchantEvents
 
 		Entity entity = event.getEntity();
 		Random rand = new Random();
-
-		if(entity instanceof EntityBoss || entity instanceof EntityWither || entity instanceof EntityDragon)
+		ItemStack stack;
+		
+		if(Config.RocketEnchantDropRate > 0 && entity instanceof EntityWither)
 		{
-			if(rand.nextBoolean())
+			if(rand.nextInt(Config.RocketEnchantDropRate) == 0)
 			{
-				ItemStack stack;
-				if(rand.nextBoolean())
-					stack = ItemEnchantedBook.getEnchantedItemStack(new EnchantmentData(ModEnchants.elytra, 1));
-				else
-					stack = ItemEnchantedBook.getEnchantedItemStack(new EnchantmentData(ModEnchants.rocket, 1));
-
+				stack = ItemEnchantedBook.getEnchantedItemStack(new EnchantmentData(ModEnchants.rocket, 1));
+				entity.entityDropItem(stack, 0F);
+			}
+		}
+		
+		if(Config.ElytraEnchantDropRate > 0 && entity instanceof EntityDragon)
+		{
+			if(rand.nextInt(Config.ElytraEnchantDropRate) == 0)
+			{
+				stack = ItemEnchantedBook.getEnchantedItemStack(new EnchantmentData(ModEnchants.elytra, 1));
 				entity.entityDropItem(stack, 0F);
 			}
 		}
@@ -147,6 +153,8 @@ public class EnchantEvents
 
 							launch.put(player, t);
 						}
+						else
+							stack.getOrCreateSubCompound("Rocket").setInteger("Active", 0);
 					}
 				}
 			}
@@ -244,21 +252,24 @@ public class EnchantEvents
 				index = event.getToolTip().indexOf(ename);
 				level = I18n.translateToLocal("enchantment.level." + item.getCompoundTagAt(i).getInteger("lvl"));
 
-				if(ForgottenAnvilHelper.enchantments.containsKey(Enchantment.getEnchantmentByID(id)) && ForgottenAnvilHelper.enchantments.get(Enchantment.getEnchantmentByID(id)) == lvl)
+				if(!ename.contains("Rocket Power"))
 				{
-					replacer = FCOLOR + ename;
-					replacer = replacer.replaceAll(level, TextFormatting.RED + "F");
-				}
-				else
-				{
-					replacer = ECOLOR + ename;
+					if(ForgottenAnvilHelper.enchantments.containsKey(Enchantment.getEnchantmentByID(id)) && ForgottenAnvilHelper.enchantments.get(Enchantment.getEnchantmentByID(id)) == lvl)
+					{
+						replacer = FCOLOR + ename;
+						replacer = replacer.replaceAll(level, TextFormatting.RED + "F");
+					}
+					else
+					{
+						replacer = ECOLOR + ename;
 
-					if(lvl > 1)
-						replacer = replacer.replaceAll(level, TextFormatting.WHITE + "" + level);
-				}
+						if(lvl > 1)
+							replacer = replacer.replaceAll(level, TextFormatting.WHITE + "" + level);
+					}
 
-				if(event.getToolTip().contains(ename))
-					event.getToolTip().set(index, replacer);
+					if(event.getToolTip().contains(ename))
+						event.getToolTip().set(index, replacer);
+				}
 			}
 		}
 
@@ -341,7 +352,7 @@ public class EnchantEvents
 					out.addEnchantment(ModEnchants.rocket, 1);
 					out.getOrCreateSubCompound("Rocket").setInteger("Active", 0);
 					event.setOutput(out);
-					event.setMaterialCost(1);
+					event.setMaterialCost(2);
 					event.setCost(20);
 				}
 			}

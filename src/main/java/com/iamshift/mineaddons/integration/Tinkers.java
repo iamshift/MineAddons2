@@ -13,7 +13,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.oredict.OreDictionary;
 import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.TinkerRegistry;
@@ -34,16 +33,22 @@ public class Tinkers
 		TinkerRegistry.registerMelting(ModItems.FiberLeggings, ModFluids.Fiberglass, Material.VALUE_Ingot * 7);
 		TinkerRegistry.registerMelting(ModItems.FiberBoots, ModFluids.Fiberglass, Material.VALUE_Ingot * 4);
 		
-		if(Loader.isModLoaded("plentifluids"))
-		{
-			OreDictionary.registerOre("dustTinyFiberglass", ModItems.GlassPile);
-			OreDictionary.registerOre("dustFiberglass", ModItems.Fiberglass);
-		}
-		else
-		{
-			OreDictionary.registerOre("nuggetFiberglass", ModItems.GlassPile);
-			OreDictionary.registerOre("ingotFiberglass", ModItems.Fiberglass);
-		}
+//		if(Loader.isModLoaded("plentifluids"))
+//		{
+//			OreDictionary.registerOre("dustTinyFiberglass", ModItems.GlassPile);
+//			OreDictionary.registerOre("dustFiberglass", ModItems.Fiberglass);
+//			OreDictionary.registerOre("ingotFiberglass", ModItems.FiberglassIngot);
+//		}
+//		else
+//		{
+//			OreDictionary.registerOre("nuggetFiberglass", ModItems.GlassPile);
+//			OreDictionary.registerOre("nuggetFiberglass", ModItems.Fiberglass);
+//			OreDictionary.registerOre("ingotFiberglass", ModItems.FiberglassIngot);
+//		}
+		
+		OreDictionary.registerOre("dustTinyFiberglass", ModItems.GlassPile);
+		OreDictionary.registerOre("dustFiberglass", ModItems.Fiberglass);
+		OreDictionary.registerOre("ingotFiberglass", ModItems.FiberglassIngot);
 		
 		TinkerRegistry.registerTableCasting(new EnchantCastRecipe(new ItemStack(ModItems.FiberHelmet), RecipeMatch.of(Items.DIAMOND_HELMET), new FluidStack(ModFluids.Fiberglass, Material.VALUE_Ingot * 4), 496));
 		TinkerRegistry.registerTableCasting(new EnchantCastRecipe(new ItemStack(ModItems.FiberChestplate), RecipeMatch.of(Items.DIAMOND_CHESTPLATE), new FluidStack(ModFluids.Fiberglass, Material.VALUE_Ingot * 8), 984));
@@ -57,9 +62,9 @@ public class Tinkers
 		TinkerRegistry.registerBasinCasting(new CastingRecipe(new ItemStack(ModBlocks.ForgottenAnvil), RecipeMatch.of(new ItemStack(Blocks.ANVIL, 1, 2)), new FluidStack(ModFluids.ForgottenWater, 1000), 260, true, false));
 		
 		if(Config.HardLiquidStar)
-			TinkerRegistry.registerMelting(Items.NETHER_STAR, ModFluids.LiquidStar, Material.VALUE_Ingot);
-		else
 			TinkerRegistry.registerMelting(Items.NETHER_STAR, ModFluids.LiquidStar, Material.VALUE_Ingot * 2);
+		else
+			TinkerRegistry.registerMelting(Items.NETHER_STAR, ModFluids.LiquidStar, Material.VALUE_Ingot);
 		
 		TinkerRegistry.registerTableCasting(new EnchantCastRecipe(new ItemStack(ModItems.UltimateHelmet), RecipeMatch.of(ModItems.FiberHelmet), new FluidStack(ModFluids.LiquidStar, Material.VALUE_Ingot * 4), 496));
 		TinkerRegistry.registerTableCasting(new EnchantCastRecipe(new ItemStack(ModItems.UltimateChestplate), RecipeMatch.of(ModItems.FiberChestplate), new FluidStack(ModFluids.LiquidStar, Material.VALUE_Ingot * 8), 984));

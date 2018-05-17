@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Loader;
 
 public class Config 
 {
@@ -13,21 +14,29 @@ public class Config
 	private static final String MISC = "Miscellaneous";
 	private static final String MOBS = "Mobs";
 	private static final String WATERS = "Waters";
-	private static final String TINKERS = "Tinkers";
 	private static final String VCHECK = "Version";
 	private static final String ADDONS = "Addons";
 	
 	// VCHECK
-	private static final int VERSION = 3;
+	private static final int VERSION = 4;
 	private static int ver;
 	
 	// ADDONS
 	public static boolean Tinker = true;
+	public static boolean Foundry = true;
+	public static boolean CraftTweaker = true;
+	public static boolean Waila = true;
 
 	// MISC
 	public static int 		TimeSkipDelay = 30;
 	public static int 		TimeSkipCooldown = 60;
 	public static boolean	ForgottenEnchantments = true;
+	public static boolean	FiberTools = true;
+	public static boolean	FiberArmor = true;
+	public static boolean	UltiArmor = true;
+	public static boolean	HardLiquidStar = true;
+	public static int		RocketEnchantDropRate = 15;
+	public static int		ElytraEnchantDropRate = 15;
 	
 	// MOBS
 	public static int 		MaxAncientCarps = 20;
@@ -47,10 +56,7 @@ public class Config
 	public static boolean	MobConvertion = true;
 	public static boolean	WaterSpread = true;
 	public static boolean	WaterSource = false;
-	
-	// TINKERS
-	public static boolean	HardLiquidStar = true;
-	
+
 	
 	public static Configuration conf;
 
@@ -65,19 +71,28 @@ public class Config
 		
 		conf.setCategoryComment(ADDONS, "Enable / Disable mod addons");
 		
-		Tinker =				conf.getBoolean("Tinkers", ADDONS, Tinker, "Enable / Disable Tinkers addon");
+		Tinker =				conf.getBoolean("Tinkers", ADDONS, Tinker, "Enable / Disable Tinkers integration.") && Loader.isModLoaded("tconstruct");
+		Foundry =				conf.getBoolean("Foundry", ADDONS, Foundry, "Enable / Disable Foundry integration.") && Loader.isModLoaded("foundry");
+		CraftTweaker =			Loader.isModLoaded("crafttweaker");
+		Waila =					Loader.isModLoaded("waila");
 		
 		
-		conf.setCategoryComment(MISC, "Some random stuff that don't need a category for itself");
+		conf.setCategoryComment(MISC, "Some random stuff that don't need a category for itself.");
 		
-		TimeSkipDelay = 		conf.getInt("TimeSkipDelay", MISC, TimeSkipDelay, 0, Integer.MAX_VALUE, "Delay before skip");
-		TimeSkipCooldown = 		conf.getInt("TimeSkipCooldown", MISC, TimeSkipCooldown, 0, Integer.MAX_VALUE, "Cooldown between uses");
-		ForgottenEnchantments =	conf.getBoolean("ForgottenEnchantments", MISC, ForgottenEnchantments, "Enable / disable Forgotten Enchantments");
+		TimeSkipDelay = 		conf.getInt("TimeSkipDelay", MISC, TimeSkipDelay, 0, Integer.MAX_VALUE, "Delay before skip.");
+		TimeSkipCooldown = 		conf.getInt("TimeSkipCooldown", MISC, TimeSkipCooldown, 0, Integer.MAX_VALUE, "Cooldown between uses.");
+		ForgottenEnchantments =	conf.getBoolean("ForgottenEnchantments", MISC, ForgottenEnchantments, "Enable / disable Forgotten Enchantments.");
+		HardLiquidStar =		conf.getBoolean("HardLiquidStar", MISC, HardLiquidStar, "Easy[false] = 2 ingot per star | Hard[true] = 1 ingot per star");
+		FiberTools =			conf.getBoolean("FiberTools", MISC, FiberTools, "Enable / disable Fiberglass Tools. Only works if Tinkers and Foundry not present.");
+		FiberArmor =			conf.getBoolean("FiberArmor", MISC, FiberArmor, "Enable / disable Infused Diamond Armor. Only works if Tinkers and Foundry not present.");
+		UltiArmor =				conf.getBoolean("UltiArmor", MISC, UltiArmor, "Enable / disable Ultimate Armor. Only works if Tinkers and Foundry not present.");
+		RocketEnchantDropRate = conf.getInt("RocketEnchantment", MISC, RocketEnchantDropRate, 0, Integer.MAX_VALUE, "The higher the value the lower the rate. 0 - Disable | 1 - Always");
+		ElytraEnchantDropRate = conf.getInt("ElytraEnchantment", MISC, ElytraEnchantDropRate, 0, Integer.MAX_VALUE, "The higher the value the lower the rate. 0 - Disable | 1 - Always");
 		
 		
-		conf.setCategoryComment(MOBS, "All the configs related to mobs");
+		conf.setCategoryComment(MOBS, "All the configs related to mobs.");
 		
-		MaxAncientCarps = 		conf.getInt("AncientCarpsMaxAlive", MOBS, MaxAncientCarps, 0, Integer.MAX_VALUE,	"The max amount of Ancient Carps alive at the same time.");
+		MaxAncientCarps = 		conf.getInt("AncientCarpsMaxAlive", MOBS, MaxAncientCarps, 0, Integer.MAX_VALUE, "The max amount of Ancient Carps alive at the same time.");
 		CaptureAncientCarps =	conf.getBoolean("AncientCarpsCapturable", MOBS, false, "Allow / Prevent Ancient Carps to be capture.");
 		AncientCarpSpawnRate =	conf.getInt("SpawnRateAncientCarp", MOBS, AncientCarpSpawnRate, 0, 99, "The higher the value the lower the rate. 0 - Disable | 1 - Always");
 		EnderCarpSpawnRate =	conf.getInt("SpawnRateEnderCarp", MOBS, EnderCarpSpawnRate, 0, 99, "The higher the value the lower the rate. 0 - Disable | 1 - Always");
@@ -86,22 +101,17 @@ public class Config
 		iSheepSpawnRate =		conf.getInt("SpawnRateiSheep", MOBS, iSheepSpawnRate, 0, 99, "The higher the value the lower the rate. 0 - Disable | 1 - Always");
 		ZlamaSpawnRate =		conf.getInt("SpawnRateZlama", MOBS, ZlamaSpawnRate, 0, 99, "The higher the value the lower the rate. 0 - Disable | 1 - Always");
 		CreepierSpawnRate =		conf.getInt("SpawnRateCreepier", MOBS, CreepierSpawnRate, 0, 99, "The higher the value the lower the rate. 0 - Disable | 1 - Always");
-		cItems = 				Arrays.asList(conf.getStringList("ListCaptureItems", MOBS, cItems.toArray(new String[0]), "List of items used to capture entities"));
-		cEntities = 			Arrays.asList(conf.getStringList("ListCaptureEntities", MOBS, cEntities.toArray(new String[0]), "List of entities used to capture entities"));
-		nBoss = 				Arrays.asList(conf.getStringList("ListAntiBossItems", MOBS, nBoss.toArray(new String[0]), "List of items not usable on Bosses"));
+		cItems = 				Arrays.asList(conf.getStringList("ListCaptureItems", MOBS, cItems.toArray(new String[0]), "List of items used to capture entities."));
+		cEntities = 			Arrays.asList(conf.getStringList("ListCaptureEntities", MOBS, cEntities.toArray(new String[0]), "List of entities used to capture entities."));
+		nBoss = 				Arrays.asList(conf.getStringList("ListAntiBossItems", MOBS, nBoss.toArray(new String[0]), "List of items not usable on Bosses."));
 		
 		
 		conf.setCategoryComment(WATERS, "All the configs related to water");
 		
-		WaterSpread =			conf.getBoolean("WaterSpread", WATERS, WaterSpread, "Enable / disable the sacred and cursed water spreading");
-		WaterSource =			conf.getBoolean("WaterSource", WATERS, WaterSource, "Enable / disable the sacred and cursed water infinite source creation");
-		MobConvertion =			conf.getBoolean("MobConvertion", WATERS, MobConvertion, "Enable / disable the sacred and cursed water ability to convert mobs");
+		WaterSpread =			conf.getBoolean("WaterSpread", WATERS, WaterSpread, "Enable / disable the sacred and cursed water spreading.");
+		WaterSource =			conf.getBoolean("WaterSource", WATERS, WaterSource, "Enable / disable the sacred and cursed water infinite source creation.");
+		MobConvertion =			conf.getBoolean("MobConvertion", WATERS, MobConvertion, "Enable / disable the sacred and cursed water ability to convert mobs.");
 		
-		
-		conf.setCategoryComment(TINKERS, "All the configs related to Tinkers Integration");
-		
-		HardLiquidStar =		conf.getBoolean("HardLiquidStar", TINKERS, HardLiquidStar, "Easy[false] = 2 ingot per star | Hard[true] = 1 ingot per star");
-
 		
 		conf.setCategoryComment(VCHECK, "Version Checker");
 		

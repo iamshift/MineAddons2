@@ -3,14 +3,16 @@ package com.iamshift.mineaddons.init;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.iamshift.mineaddons.blocks.BlockForgottenAnvil;
 import com.iamshift.mineaddons.blocks.BlockColorableTorch;
+import com.iamshift.mineaddons.blocks.BlockForgottenAnvil;
 import com.iamshift.mineaddons.blocks.BlockFrozenforgottenWater;
 import com.iamshift.mineaddons.blocks.BlockInvLight;
 import com.iamshift.mineaddons.blocks.BlockLavaSponge;
 import com.iamshift.mineaddons.blocks.BlockScaffolding;
 import com.iamshift.mineaddons.blocks.BlockSoul;
 import com.iamshift.mineaddons.core.Config;
+import com.iamshift.mineaddons.fluids.blocks.BlockAlloyFiberStar;
+import com.iamshift.mineaddons.fluids.blocks.BlockAlloyIDiamond;
 import com.iamshift.mineaddons.fluids.blocks.BlockCursedWater;
 import com.iamshift.mineaddons.fluids.blocks.BlockForgottenWater;
 import com.iamshift.mineaddons.fluids.blocks.BlockLiquidFiberglass;
@@ -18,7 +20,6 @@ import com.iamshift.mineaddons.fluids.blocks.BlockLiquidStar;
 import com.iamshift.mineaddons.fluids.blocks.BlockSacredWater;
 
 import net.minecraft.block.Block;
-import net.minecraftforge.fml.common.Loader;
 
 public class ModBlocks 
 {
@@ -53,6 +54,8 @@ public class ModBlocks
 	public static Block ForgottenWater;
 	public static Block Fiberglass;
 	public static Block LiquidStar;
+	public static Block AlloyIDiamond;
+	public static Block AlloyFiberstar;
 
 	public static Block InvLight;
 
@@ -81,11 +84,17 @@ public class ModBlocks
 
 		LavaSponge = new BlockLavaSponge("lava_sponge");
 
-		if(Loader.isModLoaded("tconstruct") && Config.Tinker)
+		if(Config.Tinker || Config.Foundry)
 		{
 			Fiberglass = new BlockLiquidFiberglass("liquid_fiberglass");
 			LiquidStar = new BlockLiquidStar("liquid_star");
 			InfusedSoulBlock = new BlockSoul("infused_soul_block");
+		}
+		
+		if(Config.Foundry)
+		{
+			AlloyIDiamond = new BlockAlloyIDiamond("alloy_idiamond");
+			AlloyFiberstar = new BlockAlloyFiberStar("alloy_fiberstar");
 		}
 
 		SoulBlock = new BlockSoul("soul_block");

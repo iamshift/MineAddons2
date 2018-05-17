@@ -21,7 +21,7 @@ public class SmeltingRecipes
 		for(ItemStack stack : OreDictionary.getOres("treeSapling"))
 			FurnaceRecipes.instance().addSmeltingRecipe(stack, new ItemStack(ModItems.Cellulose, 5), 5.0F);
 
-		if(Loader.isModLoaded("tconstruct"))
+		if(Config.Tinker)
 		{
 			for(ItemStack stack : OreDictionary.getOres("blockGlass"))
 				FurnaceRecipes.instance().addSmeltingRecipe(stack, new ItemStack(ModItems.GlassPile, 2), 2.0F);
@@ -29,5 +29,7 @@ public class SmeltingRecipes
 			for(ItemStack stack : OreDictionary.getOres("paneGlass"))
 				FurnaceRecipes.instance().addSmeltingRecipe(stack, new ItemStack(ModItems.GlassPile, 1), 1.0F);
 		}
+		
+		FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(ModItems.Fiberglass, 2, 0), new ItemStack(ModItems.FiberglassIngot, 1), 3.0F);
 	}
 }
