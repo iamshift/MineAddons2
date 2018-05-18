@@ -39,7 +39,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.Loader;
 
 public class ModItems 
 {
@@ -98,7 +97,7 @@ public class ModItems
 
 		GlassPile = new ItemBase("glass_pile");
 		Fiberglass = new ItemFiberglass("fiberglass");
-		FiberglassIngot = new ItemFiberglass("fiberglass_ingot");
+		FiberglassIngot = new ItemBase("fiberglass_ingot");
 
 		ArmorEvents.armorEffects.put(EntityEquipmentSlot.HEAD, new PotionEffect(MobEffects.NIGHT_VISION, 999999, 0, false, false));
 		ArmorEvents.armorEffects.put(EntityEquipmentSlot.CHEST, new PotionEffect(MobEffects.HASTE, 999999, 0, false, false));
