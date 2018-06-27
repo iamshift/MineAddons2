@@ -2,10 +2,16 @@ package com.iamshift.mineaddons.items;
 
 import java.util.List;
 
+import com.iamshift.mineaddons.entities.boss.EntityBoss;
 import com.iamshift.mineaddons.init.ModItems;
+import com.iamshift.mineaddons.interfaces.IUncapturable;
+import com.iamshift.mineaddons.utils.NoTargetHelper;
 
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -27,15 +33,16 @@ public class ItemAncientEssence extends ItemBase
 	{
 		return true;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) 
 	{
 		super.addInformation(stack, worldIn, tooltip, flagIn);
-		tooltip.add(TextFormatting.GREEN + "Right click on a Shulker to use.");
+		tooltip.add(TextFormatting.GREEN + "Right click on a Mob to turn him peaceful.");
+		tooltip.add(TextFormatting.GREEN + "If used on a Shulker will create a Brainless Shulker.");
 	}
-	
+
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) 
 	{
@@ -52,8 +59,23 @@ public class ItemAncientEssence extends ItemBase
 
 				return true;
 			}
+
+			if(target instanceof EntityLiving && !(target instanceof EntityWither) && !(target instanceof EntityDragon) && !(target instanceof IUncapturable))
+			{
+				EntityLiving l = (EntityLiving) target;
+				if(l.targetTasks.taskEntries.size() > 0)
+				{
+					NoTargetHelper.removeTargetTasks(l);
+					l.addTag("notarget");
+
+					if(!playerIn.capabilities.isCreativeMode)
+						stack.shrink(1);
+					
+					return true;
+				}
+			}
 		}
-		
+
 		return false;
 	}
 }

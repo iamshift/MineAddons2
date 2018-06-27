@@ -4,23 +4,23 @@ import java.util.Random;
 
 import com.iamshift.mineaddons.api.IMobChanger;
 import com.iamshift.mineaddons.core.Refs;
-import com.iamshift.mineaddons.entities.EntityTrueCreeper;
-import com.iamshift.mineaddons.entities.EntityVoidCreeper;
 import com.iamshift.mineaddons.init.ModBlocks;
 import com.iamshift.mineaddons.init.ModFluids;
 import com.iamshift.mineaddons.init.ModPotions;
 import com.iamshift.mineaddons.interfaces.IHasModel;
-import com.iamshift.mineaddons.materials.Materials;
 import com.iamshift.mineaddons.particles.ParticleUtils;
 import com.iamshift.mineaddons.particles.ParticleUtils.EnumParticles;
+import com.iamshift.mineaddons.utils.ConversionHelper;
+import com.iamshift.mineaddons.utils.ConversionHelper.Conversion;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
-import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.init.Blocks;
@@ -38,7 +38,7 @@ public class BlockForgottenWater extends BlockFluidClassic implements IHasModel
 {
 	public BlockForgottenWater(String name)
 	{
-		super(ModFluids.ForgottenWater, Materials.WITHERED);
+		super(ModFluids.ForgottenWater, Material.WATER);
 		setUnlocalizedName(name);
 		setRegistryName(new ResourceLocation(Refs.ID, name));
 
@@ -72,6 +72,14 @@ public class BlockForgottenWater extends BlockFluidClassic implements IHasModel
 		if (rand.nextInt(50)==0)
 			ParticleUtils.spawn(EnumParticles.FORGOTTEN_CLOUD, worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
 	}
+	
+	@Override
+	protected boolean canFlowInto(IBlockAccess world, BlockPos pos)
+	{
+		if(!world.isAirBlock(pos)) return false;
+
+		return true;
+	}
 
 	@Override
 	public boolean displaceIfPossible(World world, BlockPos pos)
@@ -104,7 +112,6 @@ public class BlockForgottenWater extends BlockFluidClassic implements IHasModel
 				return false;
 			}
 		}
-
 		return false;
 	}
 	
@@ -123,34 +130,38 @@ public class BlockForgottenWater extends BlockFluidClassic implements IHasModel
 		if(((EntityLivingBase)entity).isPotionActive(ModPotions.PotionMobChanger) && ((EntityLivingBase)entity).getActivePotionEffect(ModPotions.PotionMobChanger).getDuration() <= 0)
 			((EntityLivingBase)entity).removeActivePotionEffect(ModPotions.PotionMobChanger);
 
-		if(!(((EntityLivingBase)entity).isPotionActive(ModPotions.PotionMobChanger)) && tryConvertMob(world, pos, state, entity))
-			((EntityLivingBase)entity).addPotionEffect(new PotionEffect(ModPotions.PotionMobChanger, 6000));
+		if(!(((EntityLivingBase)entity).isPotionActive(ModPotions.PotionMobChanger)))
+			tryConvert(world, pos, entity);
 	}
 	
-	private boolean tryConvertMob(World world, BlockPos pos, IBlockState state, Entity entity) 
+	private void tryConvert(World world, BlockPos pos, Entity entity)
 	{
-		if (entity instanceof EntityCreeper && !(entity instanceof EntityVoidCreeper)) 
+		for(Conversion c : ConversionHelper.forgottenList)
 		{
-			EntityCreeper creeper = (EntityCreeper) entity;
-			creeper.setDead();
+			EntityLiving o = (EntityLiving) EntityList.createEntityByIDFromName(c.getOutput(), world);
 			
-			EntityVoidCreeper voidcreeper = new EntityVoidCreeper(world);
-			voidcreeper.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
-			voidcreeper.setLocationAndAngles(creeper.posX, creeper.posY, creeper.posZ, creeper.rotationYaw, creeper.rotationPitch);
-			voidcreeper.renderYawOffset = creeper.renderYawOffset;
-			voidcreeper.setHealth(voidcreeper.getMaxHealth());
+			if(o == null)
+				return;
+			
+			if(c.getInput().equals(EntityList.getKey(entity)))
+			{
+				entity.setDead();
+				
+				o.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+				o.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 
-			world.spawnEntity(voidcreeper);
-
-			return true;
+				o.setHealth(o.getMaxHealth());
+				o.addPotionEffect(new PotionEffect(ModPotions.PotionMobChanger, 6000));
+				world.spawnEntity(o);
+				
+				return;
+			}
 		}
 		
 		if(entity instanceof IMobChanger)
 		{
-			((IMobChanger) entity).forgottenWaterEffect();
-			return true;
+			((IMobChanger) entity).cursedWaterEffect();
+			return;
 		}
-		
-		return false;
 	}
 }

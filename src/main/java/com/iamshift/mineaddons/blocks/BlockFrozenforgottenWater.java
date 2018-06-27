@@ -78,7 +78,7 @@ public class BlockFrozenforgottenWater extends BlockBreakable implements IHasMod
 		}
 		else
 		{
-			if (!worldIn.provider.doesWaterVaporize())
+			if (worldIn.provider.doesWaterVaporize())
             {
                 worldIn.setBlockToAir(pos);
                 return;
@@ -110,7 +110,7 @@ public class BlockFrozenforgottenWater extends BlockBreakable implements IHasMod
 	
 	protected void turnIntoWater(World worldIn, BlockPos pos)
     {
-        if (!worldIn.provider.doesWaterVaporize())
+        if (worldIn.provider.doesWaterVaporize())
         {
             worldIn.setBlockToAir(pos);
         }

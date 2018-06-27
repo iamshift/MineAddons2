@@ -12,13 +12,11 @@ import com.iamshift.mineaddons.events.ArmorEvents;
 import com.iamshift.mineaddons.init.ModItems;
 import com.iamshift.mineaddons.interfaces.IHasModel;
 import com.iamshift.mineaddons.interfaces.IRecipeProvider;
-import com.iamshift.mineaddons.items.tools.ItemFiberPickaxe;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -44,7 +42,7 @@ public class ItemUltimateArmor extends ItemArmor implements IHasModel, IRecipePr
 
 		ModItems.ITEMS.add(this);
 	}
-	
+
 	@Override
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair)
 	{
@@ -52,15 +50,16 @@ public class ItemUltimateArmor extends ItemArmor implements IHasModel, IRecipePr
 		{
 			if(toRepair.getItem() instanceof ItemUltimateArmor)
 			{
-				if(repair.isItemEqual(new ItemStack(ModItems.Fiberglass)))
+				if(repair.isItemEqual(new ItemStack(ModItems.FiberglassIngot)))
 					return true;
 
 				return false;
 			}
 		}
-		return super.getIsRepairable(toRepair, repair);
+
+		return false;
 	}
-	
+
 	@Override
 	public List<IRecipe> getRecipe()
 	{
@@ -88,7 +87,7 @@ public class ItemUltimateArmor extends ItemArmor implements IHasModel, IRecipePr
 									'S', new ItemStack(Items.NETHER_STAR, 1)
 					}).setRegistryName(new ResourceLocation(Refs.ID, "ulti_chest"))
 					);
-			
+
 			list.add(
 					new ShapedOreRecipe(new ResourceLocation(Refs.ID), 
 							new ItemStack(this, 1), 
@@ -99,7 +98,7 @@ public class ItemUltimateArmor extends ItemArmor implements IHasModel, IRecipePr
 									'S', new ItemStack(Items.NETHER_STAR, 1)
 					}).setRegistryName(new ResourceLocation(Refs.ID, "ulti_legs"))
 					);
-			
+
 			list.add(
 					new ShapedOreRecipe(new ResourceLocation(Refs.ID), 
 							new ItemStack(this, 1), 
@@ -110,13 +109,13 @@ public class ItemUltimateArmor extends ItemArmor implements IHasModel, IRecipePr
 									'S', new ItemStack(Items.NETHER_STAR, 1)
 					}).setRegistryName(new ResourceLocation(Refs.ID, "ulti_boots"))
 					);
-			
+
 			return list;
 		}
 
 		return null;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerModels()
@@ -196,6 +195,14 @@ public class ItemUltimateArmor extends ItemArmor implements IHasModel, IRecipePr
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
 	{
 		super.onArmorTick(world, player, itemStack);
+		
+		NBTTagCompound compound = itemStack.getOrCreateSubCompound("ArmorEffect");
+		
+		if (!compound.hasKey("Active"))
+			compound.setInteger("Active", 1);
+		
+		if (compound.getInteger("Active") != 1)
+			return;
 
 		Potion potion = ArmorEvents.armorEffects.get(this.armorType).getPotion();
 		if (!player.isPotionActive(potion) || (player.isPotionActive(potion) && player.getActivePotionEffect(potion).getDuration() <= 900005))
@@ -209,7 +216,7 @@ public class ItemUltimateArmor extends ItemArmor implements IHasModel, IRecipePr
 			player.addPotionEffect(effect);	
 		}
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn)
@@ -276,7 +283,7 @@ public class ItemUltimateArmor extends ItemArmor implements IHasModel, IRecipePr
 		{
 			tooltip.add(TextFormatting.WHITE + "" + TextFormatting.ITALIC + "Press " + TextFormatting.AQUA + "" + TextFormatting.ITALIC + "Shift" + TextFormatting.WHITE + "" + TextFormatting.ITALIC + " for Set Bonus info");
 		}
-		
+
 		if(stack.isItemEnchanted())
 			tooltip.add("");
 	}

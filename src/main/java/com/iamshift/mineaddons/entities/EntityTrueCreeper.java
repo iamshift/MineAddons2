@@ -2,11 +2,9 @@ package com.iamshift.mineaddons.entities;
 
 import javax.annotation.Nullable;
 
-import com.iamshift.mineaddons.api.IMobChanger;
 import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.entities.ais.EntityAITrueCreeperSwell;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -23,6 +21,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -33,7 +32,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -41,7 +39,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityTrueCreeper extends EntityMob implements IMobChanger
+public class EntityTrueCreeper extends EntityMob
 {
 	private static final DataParameter<Integer> STATE = EntityDataManager.<Integer>createKey(EntityCreeper.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> IGNITED = EntityDataManager.<Boolean>createKey(EntityCreeper.class, DataSerializers.BOOLEAN);
@@ -268,7 +266,7 @@ public class EntityTrueCreeper extends EntityMob implements IMobChanger
 	{
 		if(Config.CreepierSpawnRate > 0)
 		{
-			if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.isValidLightLevel() && !isEntityInsideOpaqueBlock() && this.world.provider.getDimensionType() == DimensionType.OVERWORLD)
+			if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.isValidLightLevel() && !isEntityInsideOpaqueBlock() && this.world.provider.getDimensionType() == DimensionType.OVERWORLD && (this.world.provider.getBiomeForCoords(this.getPosition()) != Biomes.MUSHROOM_ISLAND || this.world.provider.getBiomeForCoords(this.getPosition()) != Biomes.MUSHROOM_ISLAND_SHORE))
 			{
 				if(this.rand.nextInt(Config.CreepierSpawnRate) == 0)
 					return true;
@@ -276,18 +274,5 @@ public class EntityTrueCreeper extends EntityMob implements IMobChanger
 		}
 
 		return false;
-	}
-
-	//IMOBCHANGER
-	@Override
-	public void sacredWaterEffect() 
-	{
-		EntityPeaceCreeper creeper = new EntityPeaceCreeper(world);
-		creeper.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-		creeper.renderYawOffset = this.renderYawOffset;
-		creeper.setHealth(creeper.getMaxHealth());
-
-		this.setDead();
-		world.spawnEntity(creeper);
 	}
 }

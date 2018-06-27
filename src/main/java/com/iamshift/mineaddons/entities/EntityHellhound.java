@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
-import com.iamshift.mineaddons.api.IMobChanger;
 import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.entities.ais.EntityAITargetTamed;
 import com.iamshift.mineaddons.entities.ais.EntityAIWanderAvoidLava;
@@ -65,7 +64,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityHellhound extends EntityTameable implements IMobChanger
+public class EntityHellhound extends EntityTameable
 {
 	private static final DataParameter<Float> DATA_HEALTH_ID = EntityDataManager.<Float>createKey(EntityWolf.class, DataSerializers.FLOAT);
 
@@ -751,21 +750,6 @@ public class EntityHellhound extends EntityTameable implements IMobChanger
 	public boolean isHidden()
 	{
 		return this.hidding;
-	}
-
-	@Override
-	public void sacredWaterEffect()
-	{
-		if(!this.isTamed())
-		{
-			EntityWolf wolf = new EntityWolf(world);
-			wolf.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-			wolf.renderYawOffset = this.renderYawOffset;
-			wolf.setHealth(wolf.getMaxHealth());
-
-			this.setDead();
-			world.spawnEntity(wolf);
-		}
 	}
 
 	class AIAvoidEntity<T extends Entity> extends EntityAIAvoidEntity<T>

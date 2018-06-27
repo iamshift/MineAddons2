@@ -3,6 +3,7 @@ package com.iamshift.mineaddons.init;
 import java.util.ArrayList;
 
 import com.iamshift.mineaddons.enchantment.EnchantmentElytra;
+import com.iamshift.mineaddons.enchantment.EnchantmentHungry;
 import com.iamshift.mineaddons.enchantment.EnchantmentRespirator;
 import com.iamshift.mineaddons.enchantment.EnchantmentRocket;
 import com.iamshift.mineaddons.enchantment.EnchantmentWings;
@@ -17,6 +18,7 @@ public class ModEnchants
 	public static Enchantment wings;
 	public static Enchantment rocket;
 	public static Enchantment respirator;
+	public static Enchantment hungry;
 	
 	public static void init()
 	{
@@ -24,5 +26,6 @@ public class ModEnchants
 		wings = new EnchantmentWings("wings");
 		rocket = new EnchantmentRocket("rocket");
 		respirator = new EnchantmentRespirator("respirator");
+		hungry = new EnchantmentHungry("hungry");
 	}
 }

@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 
 public class RecipesUltimateArmorDyes extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe
 {
-
 	@Override
 	public boolean matches(InventoryCrafting inv, World worldIn)
 	{
@@ -31,7 +30,7 @@ public class RecipesUltimateArmorDyes extends net.minecraftforge.registries.IFor
                 {
                     ItemArmor itemarmor = (ItemArmor)itemstack1.getItem();
 
-                    if (itemarmor.getArmorMaterial() != ModItems.ARMOR_ULTIMATE || !itemstack.isEmpty())
+                    if ((itemarmor.getArmorMaterial() != ModItems.ARMOR_ULTIMATE && itemarmor.getArmorMaterial() != ModItems.ARMOR_ULTIMATE_UPGRADE) || !itemstack.isEmpty())
                     {
                         return false;
                     }
@@ -72,7 +71,7 @@ public class RecipesUltimateArmorDyes extends net.minecraftforge.registries.IFor
                 {
                     itemarmor = (ItemArmor)itemstack1.getItem();
 
-                    if (itemarmor.getArmorMaterial() != ModItems.ARMOR_ULTIMATE || !itemstack.isEmpty())
+                    if ((itemarmor.getArmorMaterial() != ModItems.ARMOR_ULTIMATE && itemarmor.getArmorMaterial() != ModItems.ARMOR_ULTIMATE_UPGRADE) || !itemstack.isEmpty())
                     {
                         return ItemStack.EMPTY;
                     }

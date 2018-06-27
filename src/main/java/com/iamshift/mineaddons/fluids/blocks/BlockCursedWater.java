@@ -5,9 +5,6 @@ import java.util.Random;
 import com.iamshift.mineaddons.api.IMobChanger;
 import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.core.Refs;
-import com.iamshift.mineaddons.entities.EntityHellhound;
-import com.iamshift.mineaddons.entities.EntityZlama;
-import com.iamshift.mineaddons.entities.EntityiSheep;
 import com.iamshift.mineaddons.init.ModBlocks;
 import com.iamshift.mineaddons.init.ModFluids;
 import com.iamshift.mineaddons.init.ModItems;
@@ -15,39 +12,22 @@ import com.iamshift.mineaddons.init.ModPotions;
 import com.iamshift.mineaddons.interfaces.IHasModel;
 import com.iamshift.mineaddons.particles.ParticleUtils;
 import com.iamshift.mineaddons.particles.ParticleUtils.EnumParticles;
+import com.iamshift.mineaddons.utils.ConversionHelper;
+import com.iamshift.mineaddons.utils.ConversionHelper.Conversion;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCaveSpider;
 import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityElderGuardian;
-import net.minecraft.entity.monster.EntityEndermite;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityGuardian;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityWitch;
-import net.minecraft.entity.monster.EntityWitherSkeleton;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityBat;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.EntityWolf;
-import net.minecraft.entity.passive.EntityZombieHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
@@ -68,7 +48,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 {
-
+	private static final int MAXDELAY = 20;
+	private int delay = 0;
+	
 	public BlockCursedWater(String name)
 	{
 		super(ModFluids.CursedWater, Material.WATER);
@@ -196,7 +178,14 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 
 		if (entity instanceof EntityPlayer)
 		{
-			((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.WITHER, 100));
+			if(delay >= MAXDELAY)	
+			{
+				((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.WITHER, 100));
+				delay = 0;
+			}
+			else
+				++delay;
+			
 			return;
 		}
 
@@ -206,28 +195,35 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 		if(((EntityLivingBase)entity).isPotionActive(ModPotions.PotionMobChanger) && ((EntityLivingBase)entity).getActivePotionEffect(ModPotions.PotionMobChanger).getDuration() <= 0)
 			((EntityLivingBase)entity).removeActivePotionEffect(ModPotions.PotionMobChanger);
 
-		if(!(((EntityLivingBase)entity).isPotionActive(ModPotions.PotionMobChanger)) && tryConvertMob(world, pos, state, entity))
-			((EntityLivingBase)entity).addPotionEffect(new PotionEffect(ModPotions.PotionMobChanger, 6000));
+		if(!(((EntityLivingBase)entity).isPotionActive(ModPotions.PotionMobChanger)))
+			tryConvert(world, pos, entity);
 	}
-
-	private boolean tryConvertMob(World world, BlockPos pos, IBlockState state, Entity entity) 
+	
+	private void tryConvert(World world, BlockPos pos, Entity entity)
 	{
-		if (entity instanceof EntitySkeleton) 
+		for(Conversion c : ConversionHelper.cursedList)
 		{
-			EntitySkeleton skeleton = (EntitySkeleton) entity;
-			skeleton.setDead();
+			EntityLiving o = (EntityLiving) EntityList.createEntityByIDFromName(c.getOutput(), world);
+			EntityLiving i = (EntityLiving) EntityList.createEntityByIDFromName(c.getInput(), world);
+			
+			if(o == null)
+				return;
+			
+			if(c.getInput().equals(EntityList.getKey(entity)))
+			{
+				entity.setDead();
+				
+				o.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+				o.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
 
-			EntityWitherSkeleton witherSkeleton = new EntityWitherSkeleton(world);
-			witherSkeleton.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
-			witherSkeleton.setLocationAndAngles(skeleton.posX, skeleton.posY, skeleton.posZ, skeleton.rotationYaw, skeleton.rotationPitch);
-			witherSkeleton.renderYawOffset = skeleton.renderYawOffset;
-			witherSkeleton.setHealth(witherSkeleton.getMaxHealth());
-
-			world.spawnEntity(witherSkeleton);
-
-			return true;
+				o.setHealth(o.getMaxHealth());
+				o.addPotionEffect(new PotionEffect(ModPotions.PotionMobChanger, 6000));
+				world.spawnEntity(o);
+				
+				return;
+			}
 		}
-
+		
 		if (entity instanceof EntityCreeper) 
 		{
 			EntityCreeper creeper = (EntityCreeper) entity;
@@ -237,122 +233,10 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 				creeper.onStruckByLightning(null);
 				creeper.setHealth(creeper.getMaxHealth());
 
-				return true;
+				return;
 			}
 		}
-
-		if (entity instanceof EntitySpider && !(entity instanceof EntityCaveSpider)) 
-		{
-			EntitySpider spider = (EntitySpider) entity;
-			spider.setDead();
-
-			EntityCaveSpider caveSpider = new EntityCaveSpider(world);
-			caveSpider.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
-			caveSpider.setLocationAndAngles(spider.posX, spider.posY, spider.posZ, spider.rotationYaw, spider.rotationPitch);
-			caveSpider.renderYawOffset = spider.renderYawOffset;
-			caveSpider.setHealth(caveSpider.getMaxHealth());
-
-			world.spawnEntity(caveSpider);
-
-			return true;
-		}
-
-		if (entity instanceof EntitySquid) 
-		{
-			EntitySquid squid = (EntitySquid) entity;
-			squid.setDead();
-
-			EntityGhast ghast = new EntityGhast(world);
-			ghast.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
-			ghast.setLocationAndAngles(squid.posX, squid.posY, squid.posZ, squid.rotationYaw, squid.rotationPitch);
-			ghast.renderYawOffset = squid.renderYawOffset;
-			ghast.setHealth(ghast.getMaxHealth());
-
-			world.spawnEntity(ghast);
-
-			return true;
-		}
-
-		if (entity instanceof EntitySilverfish) 
-		{
-			EntitySilverfish silverfish = (EntitySilverfish) entity;
-			silverfish.setDead();
-
-			EntityEndermite endermite = new EntityEndermite(world);
-			endermite.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
-			endermite.setLocationAndAngles(silverfish.posX, silverfish.posY, silverfish.posZ, silverfish.rotationYaw, silverfish.rotationPitch);
-			endermite.renderYawOffset = silverfish.renderYawOffset;
-			endermite.setHealth(endermite.getMaxHealth());
-
-			world.spawnEntity(endermite);
-
-			return true;
-		}
-
-		if (entity instanceof EntityVillager) 
-		{
-			EntityVillager villager = (EntityVillager) entity;
-			villager.setDead();
-
-			EntityWitch witch = new EntityWitch(world);
-			witch.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
-			witch.setLocationAndAngles(villager.posX, villager.posY, villager.posZ, villager.rotationYaw, villager.rotationPitch);
-			witch.renderYawOffset = villager.renderYawOffset;
-			witch.setHealth(witch.getMaxHealth());
-
-			world.spawnEntity(witch);
-
-			return true;
-		}
-
-		if (entity instanceof EntityGuardian && !(entity instanceof EntityElderGuardian)) 
-		{
-			EntityGuardian guardian = (EntityGuardian) entity;
-			guardian.setDead();
-
-			EntityElderGuardian elderGuardian = new EntityElderGuardian(world);
-			elderGuardian.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
-			elderGuardian.setLocationAndAngles(guardian.posX, guardian.posY, guardian.posZ, guardian.rotationYaw, guardian.rotationPitch);
-			elderGuardian.renderYawOffset = guardian.renderYawOffset;
-			elderGuardian.setHealth(elderGuardian.getMaxHealth());
-
-			world.spawnEntity(elderGuardian);
-
-			return true;
-		}
-
-		if (entity instanceof EntityBat) 
-		{
-			EntityBat bat = (EntityBat) entity;
-			bat.setDead();
-
-			EntityBlaze blaze = new EntityBlaze(world);
-			blaze.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
-			blaze.setLocationAndAngles(bat.posX, bat.posY, bat.posZ, bat.rotationYaw, bat.rotationPitch);
-			blaze.renderYawOffset = bat.renderYawOffset;
-			blaze.setHealth(blaze.getMaxHealth());
-
-			world.spawnEntity(blaze);
-
-			return true;
-		}
-
-		if (entity instanceof EntityHorse) 
-		{
-			EntityHorse horse = (EntityHorse) entity;
-			horse.setDead();
-
-			EntityZombieHorse zombieHorse = new EntityZombieHorse(world);
-			zombieHorse.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
-			zombieHorse.setLocationAndAngles(horse.posX, horse.posY, horse.posZ, horse.rotationYaw, horse.rotationPitch);
-			zombieHorse.renderYawOffset = horse.renderYawOffset;
-			zombieHorse.setHealth(zombieHorse.getMaxHealth());
-
-			world.spawnEntity(zombieHorse);
-
-			return true;
-		}
-
+		
 		if (entity instanceof EntityRabbit) 
 		{
 			EntityRabbit rabbit = (EntityRabbit) entity;
@@ -362,80 +246,14 @@ public class BlockCursedWater extends BlockFluidClassic implements IHasModel
 				rabbit.setRabbitType(99);
 				rabbit.setHealth(rabbit.getMaxHealth());
 
-				return true;
+				return;
 			}
-		}
-
-		if (entity instanceof EntityZombie && !(entity instanceof EntityPigZombie)) 
-		{
-			EntityZombie zombie = (EntityZombie) entity;
-			zombie.setDead();
-
-			EntityPigZombie pigzombie = new EntityPigZombie(world);
-			pigzombie.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
-			pigzombie.setLocationAndAngles(zombie.posX, zombie.posY, zombie.posZ, zombie.rotationYaw, zombie.rotationPitch);
-			pigzombie.renderYawOffset = zombie.renderYawOffset;
-			pigzombie.setHealth(pigzombie.getMaxHealth());
-
-			world.spawnEntity(pigzombie);
-
-			return true;
-		}
-
-		if(entity instanceof EntityWolf)
-		{
-			EntityWolf wolf = (EntityWolf) entity;
-			wolf.setDead();
-
-			EntityHellhound hellhound = new EntityHellhound(world);
-			hellhound.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
-			hellhound.setLocationAndAngles(wolf.posX, wolf.posY, wolf.posZ, wolf.rotationYaw, wolf.rotationPitch);
-			hellhound.renderYawOffset = wolf.renderYawOffset;
-			hellhound.setHealth(hellhound.getMaxHealth());
-
-			world.spawnEntity(hellhound);
-
-			return true;
-		}
-
-		if(entity instanceof EntitySheep)
-		{
-			EntitySheep sheep = (EntitySheep) entity;
-			sheep.setDead();
-
-			EntityiSheep isheep = new EntityiSheep(world);
-			isheep.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
-			isheep.setLocationAndAngles(sheep.posX, sheep.posY, sheep.posZ, sheep.rotationYaw, sheep.rotationPitch);
-			isheep.renderYawOffset = sheep.renderYawOffset;
-			isheep.setHealth(isheep.getMaxHealth());
-
-			world.spawnEntity(isheep);
-
-			return true;
-		}
-
-		if(entity instanceof EntityLlama && !(entity instanceof EntityZlama))
-		{
-			EntityLlama llama = (EntityLlama) entity;
-			llama.setDead();
-
-			EntityZlama zlama = new EntityZlama(world);
-			zlama.onInitialSpawn(world.getDifficultyForLocation(pos), (IEntityLivingData)null);
-			zlama.setLocationAndAngles(llama.posX, llama.posY, llama.posZ, llama.rotationYaw, llama.rotationPitch);
-			zlama.renderYawOffset = llama.renderYawOffset;
-			zlama.setHealth(zlama.getMaxHealth());
-
-			world.spawnEntity(zlama);
-
-			return true;
 		}
 		
 		if(entity instanceof IMobChanger)
 		{
 			((IMobChanger) entity).cursedWaterEffect();
-			return true;
+			return;
 		}
-
-		return false;
 	}
 }

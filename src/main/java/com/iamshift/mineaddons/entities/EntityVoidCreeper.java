@@ -41,8 +41,8 @@ public class EntityVoidCreeper extends EntityCreeper
 	private int lastActiveTime;
 	private int timeSinceIgnited;
 	private int fuseTime = 15;
-	private int explosionSize = 3;
-	private int explosionStrenght = 1;
+	private float explosionSize = 2.5F;
+	private float explosionStrenght = 0.75F;
 
 	public EntityVoidCreeper(World worldIn) 
 	{
@@ -74,7 +74,7 @@ public class EntityVoidCreeper extends EntityCreeper
 	protected void applyEntityAttributes() 
 	{
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16D);
+		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(8D);
 	}
 
 	@Override
@@ -178,7 +178,7 @@ public class EntityVoidCreeper extends EntityCreeper
 
 	private Explosion newExplosion(@Nullable Entity entityIn, double x, double y, double z, float size, float strength, boolean isFlaming, boolean isSmoking)
 	{
-		CustomExplosion explosion = new CustomExplosion(this.world, entityIn, x, y, z, size, strength, isFlaming, isSmoking);
+		CustomExplosion explosion = new CustomExplosion(this.world, entityIn, x, y, z, size, strength, isFlaming, isSmoking, false);
 		if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(this.world, explosion)) return explosion;
 		explosion.doExplosionA();
 		explosion.doExplosionB(true);

@@ -35,6 +35,7 @@ public class CustomExplosion extends Explosion
 {
 	private final boolean isFlaming;
     private final boolean isSmoking;
+    private final boolean isBoss;
     private final Random explosionRNG;
     private final World worldObj;
     private final double explosionX;
@@ -56,11 +57,11 @@ public class CustomExplosion extends Explosion
     @SideOnly(Side.CLIENT)
     public CustomExplosion(World worldIn, Entity entityIn, double x, double y, double z, float size, float strenght, boolean flaming, boolean smoking, List<BlockPos> affectedPositions)
     {
-        this(worldIn, entityIn, x, y, z, size, strenght, flaming, smoking);
+        this(worldIn, entityIn, x, y, z, size, strenght, flaming, smoking, false);
         this.affectedBlockPositions.addAll(affectedPositions);
     }
 
-    public CustomExplosion(World worldIn, Entity entityIn, double x, double y, double z, float size, float strenght, boolean flaming, boolean smoking)
+    public CustomExplosion(World worldIn, Entity entityIn, double x, double y, double z, float size, float strenght, boolean flaming, boolean smoking, boolean boss)
     {
     	super(worldIn, entityIn, x, y, z, size, flaming, smoking);
     	
@@ -76,6 +77,7 @@ public class CustomExplosion extends Explosion
         this.explosionZ = z;
         this.isFlaming = flaming;
         this.isSmoking = smoking;
+        this.isBoss = boss;
         this.position = new Vec3d(explosionX, explosionY, explosionZ);
     }
 
@@ -238,7 +240,10 @@ public class CustomExplosion extends Explosion
                 {
                     if (block.canDropFromExplosion(this))
                     {
-                        block.dropBlockAsItemWithChance(this.worldObj, blockpos, this.worldObj.getBlockState(blockpos), 1.0F / this.explosionSize, 0);
+                    	if(isBoss)
+                        	block.dropBlockAsItem(this.worldObj, blockpos, this.worldObj.getBlockState(blockpos), 0);
+                    	else
+                        	block.dropBlockAsItemWithChance(this.worldObj, blockpos, this.worldObj.getBlockState(blockpos), 1.0F / this.explosionSize, 0);
                     }
 
                     block.onBlockExploded(this.worldObj, blockpos, this);

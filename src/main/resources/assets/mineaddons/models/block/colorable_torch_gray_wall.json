@@ -1,6 +1,6 @@
 {
     "parent": "block/torch_wall",
     "textures": {
-        "torch": "mineaddons:blocks/colorable_torch_gray"
+        "torch": "mineaddons:blocks/torchs/colorable_torch_gray"
     }
 }

@@ -3,6 +3,7 @@ package com.iamshift.mineaddons.entities.boss;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.init.ModLoot;
 import com.iamshift.mineaddons.init.ModSounds;
 import com.iamshift.mineaddons.interfaces.IUncapturable;
@@ -46,6 +47,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -300,6 +302,9 @@ public class EntityGhostRider extends EntityBoss implements IUncapturable, IRang
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
+		if(Config.FakePlayer && source.getTrueSource() instanceof FakePlayer)
+			return false;
+		
 		if(this.isEntityInvulnerable(source) || getStage() == 1)
 			return false;
 		else if(source.getTrueSource() instanceof AbstractSkeleton)

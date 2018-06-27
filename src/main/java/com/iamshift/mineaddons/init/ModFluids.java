@@ -5,6 +5,7 @@ import com.iamshift.mineaddons.fluids.FluidCursedWater;
 import com.iamshift.mineaddons.fluids.FluidFiberStar;
 import com.iamshift.mineaddons.fluids.FluidFiberglass;
 import com.iamshift.mineaddons.fluids.FluidForgottenWater;
+import com.iamshift.mineaddons.fluids.FluidHarmonious;
 import com.iamshift.mineaddons.fluids.FluidInfusedDiamond;
 import com.iamshift.mineaddons.fluids.FluidSacredWater;
 import com.iamshift.mineaddons.fluids.FluidStar;
@@ -19,6 +20,7 @@ public class ModFluids
 
 	public static Fluid Fiberglass;
 	public static Fluid LiquidStar;
+	public static Fluid	Harmonious;
 	
 	public static Fluid InfusedDiamond;
 	public static Fluid FiberStar;
@@ -29,6 +31,9 @@ public class ModFluids
 		{
 			Fiberglass = new FluidFiberglass();
 			LiquidStar = new FluidStar();
+			
+			if(Config.Harmonious)
+				Harmonious = new FluidHarmonious();
 		}
 
 		if(Config.Foundry)

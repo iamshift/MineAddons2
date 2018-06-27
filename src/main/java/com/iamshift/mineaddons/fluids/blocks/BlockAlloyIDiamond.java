@@ -4,7 +4,6 @@ import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.init.ModBlocks;
 import com.iamshift.mineaddons.init.ModFluids;
 import com.iamshift.mineaddons.interfaces.IHasModel;
-import com.iamshift.mineaddons.materials.Materials;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -25,7 +24,7 @@ public class BlockAlloyIDiamond extends BlockFluidClassic implements IHasModel
 {
 	public BlockAlloyIDiamond(String name)
 	{
-		super(ModFluids.InfusedDiamond, Materials.ALLOY_IDIAMOND);
+		super(ModFluids.InfusedDiamond, Material.WATER);
 		setUnlocalizedName(name);
 		setRegistryName(new ResourceLocation(Refs.ID, name));
 
@@ -49,6 +48,14 @@ public class BlockAlloyIDiamond extends BlockFluidClassic implements IHasModel
 	public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, SpawnPlacementType type)
 	{
 		return false;
+	}
+	
+	@Override
+	protected boolean canFlowInto(IBlockAccess world, BlockPos pos)
+	{
+		if(!world.isAirBlock(pos)) return false;
+
+		return true;
 	}
 	
 	@Override

@@ -55,6 +55,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 public class ClientProxy extends CommonProxy
 {
 	public static KeyBinding toggleRocket;
+	public static KeyBinding toggleVision;
 	
 	@Override
 	public void registerItemRenderer(Item item, int meta, String id) 
@@ -243,7 +244,10 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void addKeybind()
 	{
-		toggleRocket = new KeyBinding("key.mineaddons.toggle.desc", Keyboard.KEY_Z, "key.mineaddons.cat");
+		toggleRocket = new KeyBinding("key.mineaddons.toggle.rocket.desc", Keyboard.KEY_Z, "key.mineaddons.cat");
 		ClientRegistry.registerKeyBinding(toggleRocket);
+		
+		toggleVision = new KeyBinding("key.mineaddons.toggle.vision.desc", Keyboard.KEY_NUMPAD1, "key.mineaddons.cat");
+		ClientRegistry.registerKeyBinding(toggleVision);
 	}
 }

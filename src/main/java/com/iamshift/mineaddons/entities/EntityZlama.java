@@ -1,7 +1,6 @@
 package com.iamshift.mineaddons.entities;
 
 import com.google.common.base.Predicate;
-import com.iamshift.mineaddons.api.IMobChanger;
 import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.entities.ais.EntityAIWanderAvoidLava;
 import com.iamshift.mineaddons.init.ModLoot;
@@ -30,7 +29,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
-public class EntityZlama extends EntityLlama implements IMobChanger
+public class EntityZlama extends EntityLlama
 {
 	private static final DataParameter<Integer> DATA_STRENGTH_ID = EntityDataManager.<Integer>createKey(EntityLlama.class, DataSerializers.VARINT);
 	private boolean didSpit;
@@ -205,18 +204,6 @@ public class EntityZlama extends EntityLlama implements IMobChanger
 	protected ResourceLocation getLootTable()
 	{
 		return ModLoot.ZLAMA;
-	}
-
-	@Override
-	public void sacredWaterEffect()
-	{
-		EntityLlama llama = new EntityLlama(world);
-		llama.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-		llama.renderYawOffset = this.renderYawOffset;
-		llama.setHealth(llama.getMaxHealth());
-
-		this.setDead();
-		world.spawnEntity(llama);
 	}
 
 	static class AIDefendTarget extends EntityAINearestAttackableTarget<EntityHellhound>

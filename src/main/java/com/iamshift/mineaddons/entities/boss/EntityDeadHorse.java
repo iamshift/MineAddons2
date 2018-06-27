@@ -1,5 +1,6 @@
 package com.iamshift.mineaddons.entities.boss;
 
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.interfaces.IUncapturable;
 
 import net.minecraft.entity.Entity;
@@ -21,6 +22,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class EntityDeadHorse extends AbstractHorse implements IUncapturable
 {
@@ -237,6 +239,9 @@ public class EntityDeadHorse extends AbstractHorse implements IUncapturable
 			Entity entity = this.getPassengers().get(0);
 			if(entity instanceof EntityGhostRider)
 			{
+				if(Config.FakePlayer && source.getTrueSource() instanceof FakePlayer)
+					return false;
+				
 				if(source.getTrueSource() instanceof EntityGhostRider)
 					return false;
 				

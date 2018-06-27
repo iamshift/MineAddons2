@@ -1,0 +1,7 @@
+{
+	"variants": {
+       "type=sandstone": { "model": "mineaddons:white_sandstone" },
+       "type=chiseled_sandstone": { "model": "mineaddons:white_sandstone_chiseled" },
+       "type=smooth_sandstone": { "model": "mineaddons:white_sandstone_smooth" }
+    }
+}

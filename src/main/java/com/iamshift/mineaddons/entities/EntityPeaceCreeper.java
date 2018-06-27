@@ -2,7 +2,6 @@ package com.iamshift.mineaddons.entities;
 
 import javax.annotation.Nullable;
 
-import com.iamshift.mineaddons.api.IMobChanger;
 import com.iamshift.mineaddons.interfaces.IUncapturable;
 
 import net.minecraft.entity.Entity;
@@ -36,7 +35,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 
-public class EntityPeaceCreeper extends EntityTameable implements IMobChanger, IUncapturable
+public class EntityPeaceCreeper extends EntityTameable implements IUncapturable
 {
 	private static final DataParameter<Integer> COLLAR_COLOR = EntityDataManager.<Integer>createKey(EntityWolf.class, DataSerializers.VARINT);
 
@@ -268,21 +267,5 @@ public class EntityPeaceCreeper extends EntityTameable implements IMobChanger, I
 	public boolean canMateWith(EntityAnimal otherAnimal) 
 	{
 		return false;
-	}
-
-	// IMOBCHANGER
-	@Override
-	public void cursedWaterEffect() 
-	{
-		if(!this.isTamed())
-		{
-			EntityTrueCreeper creeper = new EntityTrueCreeper(world);
-			creeper.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-			creeper.renderYawOffset = this.renderYawOffset;
-			creeper.setHealth(creeper.getMaxHealth());
-
-			this.setDead();
-			world.spawnEntity(creeper);
-		}
 	}
 }

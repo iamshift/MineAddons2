@@ -3,6 +3,8 @@ package com.iamshift.mineaddons.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.iamshift.mineaddons.blocks.containers.ContainerForgottenAnvil;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentLootBonus;

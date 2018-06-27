@@ -19,6 +19,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
@@ -119,6 +120,14 @@ public class ItemFiberglassArmor extends ItemArmor implements IHasModel, IRecipe
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
 	{
 		super.onArmorTick(world, player, itemStack);
+		
+		NBTTagCompound compound = itemStack.getOrCreateSubCompound("ArmorEffect");
+		
+		if (!compound.hasKey("Active"))
+			compound.setInteger("Active", 1);
+		
+		if (compound.getInteger("Active") != 1)
+			return;
 		
 		Potion potion = ArmorEvents.armorEffects.get(this.armorType).getPotion();
 		if (!player.isPotionActive(potion) || (player.isPotionActive(potion) && player.getActivePotionEffect(potion).getDuration() <= 900005))

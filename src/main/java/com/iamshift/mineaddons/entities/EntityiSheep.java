@@ -2,7 +2,6 @@ package com.iamshift.mineaddons.entities;
 
 import java.util.List;
 
-import com.iamshift.mineaddons.api.IMobChanger;
 import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.entities.ais.EntityAIWanderAvoidLava;
 import com.iamshift.mineaddons.init.ModLoot;
@@ -21,12 +20,10 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -48,7 +45,7 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityiSheep extends EntityAnimal implements IShearable, IMobChanger
+public class EntityiSheep extends EntityAnimal implements IShearable
 {
 	private static final DataParameter<Boolean> SHEARED = EntityDataManager.<Boolean>createKey(EntityiSheep.class, DataSerializers.BOOLEAN);
 	private int sheepTimer;
@@ -293,18 +290,5 @@ public class EntityiSheep extends EntityAnimal implements IShearable, IMobChange
 	public EntityAgeable createChild(EntityAgeable ageable)
 	{
 		return null;
-	}
-
-	@Override
-	public void sacredWaterEffect()
-	{
-		EntitySheep sheep = new EntitySheep(world);
-		sheep.setFleeceColor(EnumDyeColor.byMetadata(this.rand.nextInt(16)));
-		sheep.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-		sheep.renderYawOffset = this.renderYawOffset;
-		sheep.setHealth(sheep.getMaxHealth());
-
-		this.setDead();
-		world.spawnEntity(sheep);
 	}
 }

@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.iamshift.mineaddons.MineAddons;
 import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.core.Refs;
@@ -47,7 +44,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -58,7 +54,6 @@ public class BlockForgottenAnvil extends BlockFalling implements IHasModel, IRec
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	protected static final AxisAlignedBB X_AXIS_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.125D, 1.0D, 1.0D, 0.875D);
 	protected static final AxisAlignedBB Z_AXIS_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.0D, 0.875D, 1.0D, 1.0D);
-	protected static final Logger LOGGER = LogManager.getLogger();
 
 	public BlockForgottenAnvil(String name)
 	{

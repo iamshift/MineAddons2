@@ -6,10 +6,16 @@ import java.util.List;
 import java.util.UUID;
 
 import com.iamshift.mineaddons.core.Refs;
+import com.iamshift.mineaddons.init.ModEnchants;
+import com.iamshift.mineaddons.init.ModNetwork;
 import com.iamshift.mineaddons.init.ModPotions;
 import com.iamshift.mineaddons.items.armors.ItemFiberglassArmor;
 import com.iamshift.mineaddons.items.armors.ItemUltimateArmor;
+import com.iamshift.mineaddons.network.PacketToggle;
+import com.iamshift.mineaddons.proxy.ClientProxy;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -19,10 +25,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod.EventBusSubscriber(modid = Refs.ID)
 public class ArmorEvents 
@@ -70,7 +79,7 @@ public class ArmorEvents
 						player.addPotionEffect(new PotionEffect(effect.getPotion(), 5, effect.getAmplifier(), effect.getIsAmbient(), effect.doesShowParticles()));
 					}
 				}
-
+				
 				if(i < 2)
 				{
 					if(player.isPotionActive(ModPotions.PotionDoubleHealth))
@@ -150,7 +159,7 @@ public class ArmorEvents
 	{
 		if(!(event.getEntityLiving() instanceof EntityPlayer))
 			return;
-
+		
 		EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
 		if(player.isPotionActive(ModPotions.PotionWitherProof))
@@ -184,6 +193,25 @@ public class ArmorEvents
 					player.capabilities.isFlying = false;
 
 					flyOn.remove(player);
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public static void armorToggle(KeyInputEvent event)
+	{
+		if(ClientProxy.toggleVision.isPressed())
+		{
+			ItemStack stack = Minecraft.getMinecraft().player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+
+			if(!stack.isEmpty())
+			{
+				if(stack.hasTagCompound() && stack.getTagCompound().hasKey("ArmorEffect"))
+				{
+					int flag = stack.getSubCompound("ArmorEffect").getInteger("Active");
+					ModNetwork.INSTANCE.sendToServer(new PacketToggle(flag, 1));
 				}
 			}
 		}

@@ -21,7 +21,6 @@ public class ModSounds
 	
 	public static SoundEvent voidball;
 	public static SoundEvent bossfight;
-	public static SoundEvent charging;
 	
 	public static SoundEvent push;
 	public static SoundEvent pull;
@@ -39,7 +38,6 @@ public class ModSounds
 			
 			voidball = register("voidball");
 			bossfight = register("bossfight");
-			charging = register("charging");
 			
 			push = register("push");
 			pull = register("pull");

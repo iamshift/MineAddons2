@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "end": "mineaddons:blocks/black_sandstone_top",
+        "side": "mineaddons:blocks/black_sandstone_smooth"
+    }
+}

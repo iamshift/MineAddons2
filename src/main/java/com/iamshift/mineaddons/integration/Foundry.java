@@ -22,8 +22,6 @@ public class Foundry
 	{
 		if(Config.FiberTools)
 		{
-			OreMatcher extra_sticks2 = new OreMatcher("stickWood", 2);
-
 			MeltingRecipeManager.INSTANCE.addRecipe(new ItemStackMatcher(ModItems.GlassPile), new FluidStack(ModFluids.Fiberglass, FoundryAPI.FLUID_AMOUNT_INGOT / 18), getMeltingTemp(ModFluids.Fiberglass.getTemperature(), FoundryAPI.FLUID_AMOUNT_INGOT / 18), 500);
 			MeltingRecipeManager.INSTANCE.addRecipe(new ItemStackMatcher(ModItems.Fiberglass), new FluidStack(ModFluids.Fiberglass, FoundryAPI.FLUID_AMOUNT_INGOT / 2), getMeltingTemp(ModFluids.Fiberglass.getTemperature(), FoundryAPI.FLUID_AMOUNT_INGOT / 2), 500);
 			MeltingRecipeManager.INSTANCE.addRecipe(new ItemStackMatcher(ModItems.FiberglassIngot), new FluidStack(ModFluids.Fiberglass, FoundryAPI.FLUID_AMOUNT_INGOT), getMeltingTemp(ModFluids.Fiberglass.getTemperature(), FoundryAPI.FLUID_AMOUNT_INGOT), 500);
@@ -35,9 +33,9 @@ public class Foundry
 
 			if(Config.FiberTools)
 			{
-				FoundryMiscUtils.registerCasting(new ItemStack(ModItems.FiberPickaxe, 1), ModFluids.Fiberglass, 3, ItemMold.SubItem.PICKAXE, extra_sticks2);
-				FoundryMiscUtils.registerCasting(new ItemStack(ModItems.FiberAxe, 1), ModFluids.Fiberglass, 3, ItemMold.SubItem.AXE, extra_sticks2);
-				FoundryMiscUtils.registerCasting(new ItemStack(ModItems.FiberShovel, 1), ModFluids.Fiberglass, 3, ItemMold.SubItem.SHOVEL, extra_sticks2);
+				FoundryMiscUtils.registerCasting(new ItemStack(ModItems.FiberPickaxe, 1), ModFluids.FiberStar, 3, ItemMold.SubItem.PICKAXE, new ItemStackMatcher(Items.DIAMOND_PICKAXE));
+				FoundryMiscUtils.registerCasting(new ItemStack(ModItems.FiberAxe, 1), ModFluids.FiberStar, 3, ItemMold.SubItem.AXE, new ItemStackMatcher(Items.DIAMOND_AXE));
+				FoundryMiscUtils.registerCasting(new ItemStack(ModItems.FiberShovel, 1), ModFluids.FiberStar, 3, ItemMold.SubItem.SHOVEL, new ItemStackMatcher(Items.DIAMOND_SHOVEL));
 			}
 
 			AlloyingCrucibleRecipeManager.INSTANCE.addRecipe(new FluidStack(ModFluids.FiberStar, 500), new FluidStack(ModFluids.InfusedDiamond, 500), new FluidStack(ModFluids.LiquidStar, 700));

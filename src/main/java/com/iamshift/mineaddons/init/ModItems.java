@@ -6,6 +6,7 @@ import java.util.List;
 import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.events.ArmorEvents;
+import com.iamshift.mineaddons.integration.tinkers.CastLiquidStar;
 import com.iamshift.mineaddons.items.ItemAncientEssence;
 import com.iamshift.mineaddons.items.ItemBase;
 import com.iamshift.mineaddons.items.ItemBlazelier;
@@ -15,6 +16,7 @@ import com.iamshift.mineaddons.items.ItemDeadHorseEgg;
 import com.iamshift.mineaddons.items.ItemEnchanted;
 import com.iamshift.mineaddons.items.ItemFiberglass;
 import com.iamshift.mineaddons.items.ItemLapis;
+import com.iamshift.mineaddons.items.ItemMoverWand;
 import com.iamshift.mineaddons.items.ItemO2Bottle;
 import com.iamshift.mineaddons.items.ItemRainbowBottle;
 import com.iamshift.mineaddons.items.ItemRespirator;
@@ -27,6 +29,7 @@ import com.iamshift.mineaddons.items.ItemWings;
 import com.iamshift.mineaddons.items.ItemWitherDust;
 import com.iamshift.mineaddons.items.armors.ItemFiberglassArmor;
 import com.iamshift.mineaddons.items.armors.ItemUltimateArmor;
+import com.iamshift.mineaddons.items.armors.ItemUpgradeArmor;
 import com.iamshift.mineaddons.items.tools.ItemBreaker;
 import com.iamshift.mineaddons.items.tools.ItemFiberAxe;
 import com.iamshift.mineaddons.items.tools.ItemFiberPickaxe;
@@ -69,6 +72,10 @@ public class ModItems
 	public static Item UltimateChestplate;
 	public static Item UltimateLeggings;
 	public static Item UltimateBoots;
+	public static Item UpgradeHelmet;
+	public static Item UpgradeChestplate;
+	public static Item UpgradeLeggings;
+	public static Item UpgradeBoots;
 
 	public static Item Voidball;
 	public static Item Blazelier;
@@ -84,25 +91,52 @@ public class ModItems
 	public static Item FiberAxe;
 	public static Item FiberShovel;
 
-	public static final ArmorMaterial ARMOR_FIBERGLASS = EnumHelper.addArmorMaterial("armor_fiberglass", Refs.ID + ":fiberglass", 40, new int[]{4, 7, 9, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 4.0F);
-	public static final ArmorMaterial ARMOR_ULTIMATE = EnumHelper.addArmorMaterial("armor_ultimate", Refs.ID + ":ultimate", 80, new int[]{6, 9, 11, 6}, 50, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 8.0F);
+	public static Item HarmoniousIngot;
+	
+	public static Item MoverWand;
+
+	public static final ArmorMaterial ARMOR_FIBERGLASS 			= EnumHelper.addArmorMaterial("armor_fiberglass", Refs.ID + ":fiberglass", 40, new int[]{4, 7, 9, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 4.0F);
+	public static final ArmorMaterial ARMOR_ULTIMATE 			= EnumHelper.addArmorMaterial("armor_ultimate", Refs.ID + ":ultimate", 80, new int[]{6, 9, 11, 6}, 50, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 8.0F);
+	public static final ArmorMaterial ARMOR_ULTIMATE_UPGRADE 	= EnumHelper.addArmorMaterial("armor_ultimate_upgrade", Refs.ID + ":upgrade", 240, new int[]{18, 27, 33, 18}, 75, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 24.0F);
+
+	public static CastLiquidStar castliquidstar;
 
 	public static void init()
 	{
+		ArmorEvents.armorEffects.put(EntityEquipmentSlot.HEAD, new PotionEffect(MobEffects.NIGHT_VISION, 999999, 0, false, false));
+		ArmorEvents.armorEffects.put(EntityEquipmentSlot.CHEST, new PotionEffect(MobEffects.HASTE, 999999, 0, false, false));
+		ArmorEvents.armorEffects.put(EntityEquipmentSlot.LEGS, new PotionEffect(MobEffects.SPEED, 999999, 0, false, false));
+		ArmorEvents.armorEffects.put(EntityEquipmentSlot.FEET, new PotionEffect(MobEffects.JUMP_BOOST, 999999, 0, false, false));
+
 		SuperNameTag = new ItemSuperNameTag("super_name_tag");
 
-		TimeSkipClock = new ItemTimeSkipClock("time_skip_clock");
+		if(Config.TimeSkipClock)
+			TimeSkipClock = new ItemTimeSkipClock("time_skip_clock");
 
-		Cellulose = new ItemCellulose("cellulose");
+		if(Config.LavaSponge || Config.SpongeRecipe)
+			Cellulose = new ItemCellulose("cellulose");
 
 		GlassPile = new ItemBase("glass_pile");
 		Fiberglass = new ItemFiberglass("fiberglass");
 		FiberglassIngot = new ItemBase("fiberglass_ingot");
 
-		ArmorEvents.armorEffects.put(EntityEquipmentSlot.HEAD, new PotionEffect(MobEffects.NIGHT_VISION, 999999, 0, false, false));
-		ArmorEvents.armorEffects.put(EntityEquipmentSlot.CHEST, new PotionEffect(MobEffects.HASTE, 999999, 0, false, false));
-		ArmorEvents.armorEffects.put(EntityEquipmentSlot.LEGS, new PotionEffect(MobEffects.SPEED, 999999, 0, false, false));
-		ArmorEvents.armorEffects.put(EntityEquipmentSlot.FEET, new PotionEffect(MobEffects.JUMP_BOOST, 999999, 0, false, false));
+		if(Config.Tinker)
+		{
+			castliquidstar = new CastLiquidStar();
+
+			if(Config.Harmonious)
+			{
+				HarmoniousIngot = new ItemBase("harmonious_ingot");
+
+				if(Config.UpgradeArmor)
+				{
+					UpgradeHelmet = new ItemUpgradeArmor("upgrade_helmet", ARMOR_ULTIMATE_UPGRADE, 1, EntityEquipmentSlot.HEAD);
+					UpgradeChestplate = new ItemUpgradeArmor("upgrade_chestplate", ARMOR_ULTIMATE_UPGRADE, 1, EntityEquipmentSlot.CHEST);
+					UpgradeLeggings = new ItemUpgradeArmor("upgrade_leggings", ARMOR_ULTIMATE_UPGRADE, 1, EntityEquipmentSlot.LEGS);
+					UpgradeBoots = new ItemUpgradeArmor("upgrade_boots", ARMOR_ULTIMATE_UPGRADE, 1, EntityEquipmentSlot.FEET);
+				}
+			}
+		}
 
 		if(Config.FiberTools) 
 		{
@@ -127,11 +161,9 @@ public class ModItems
 			UltimateBoots = new ItemUltimateArmor("ultimate_boots", ARMOR_ULTIMATE, 1, EntityEquipmentSlot.FEET);
 		}
 
-
 		AncientEssence = new ItemAncientEssence("ancient_essence");
 		BrainlessShulkerEgg = new ItemBrainlessShulkerEgg("brainless_shulker_egg");
 		Sushi = new ItemSushi("sushi");
-
 
 		Rib = new ItemRib("rib");
 		Soul = new ItemSoul("soul");
@@ -140,15 +172,23 @@ public class ModItems
 		DarkCore = new ItemBase("dark_core");
 		Wings = new ItemWings("wings");
 
-
-		Respirator = new ItemRespirator("respirator");
-		O2Bottle = new ItemO2Bottle("o2bottle");
+		if(Config.Respirator)
+		{
+			Respirator = new ItemRespirator("respirator");
+			O2Bottle = new ItemO2Bottle("o2bottle");
+		}
 
 		RainbowBottle = new ItemRainbowBottle("rainbow_bottle");
 		WitherDust = new ItemWitherDust("wither_dust");
-		Breaker = new ItemBreaker("breaker");
 		EnchantedItems = new ItemEnchanted("enchanted");
 		Lapis = new ItemLapis("lapis");
+
+		if(Config.Breaker)
+			Breaker = new ItemBreaker("breaker");
+
 		DeadHorseEgg = new ItemDeadHorseEgg("dead_horse_egg");
+		
+		if(Config.WirelessMover)
+			MoverWand = new ItemMoverWand("mover_wand");
 	}
 }

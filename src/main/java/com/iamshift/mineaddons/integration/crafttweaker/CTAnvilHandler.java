@@ -2,11 +2,8 @@ package com.iamshift.mineaddons.integration.crafttweaker;
 
 import java.util.ArrayList;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import com.iamshift.mineaddons.MineAddons;
 import com.iamshift.mineaddons.blocks.containers.ContainerForgottenAnvil;
-import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.integration.CraftTweaker;
 import com.iamshift.mineaddons.utils.AnvilRecipe;
 
@@ -22,8 +19,6 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenClass("mods.mineaddons.ForgottenAnvil")
 public class CTAnvilHandler
 {
-	public static Logger LOGGER = LogManager.getFormatterLogger(Refs.ID);
-
 	private static class Add implements IAction
 	{
 		private final AnvilRecipe recipe;
@@ -130,7 +125,7 @@ public class CTAnvilHandler
 			}
 			catch (IllegalArgumentException e) 
 			{
-				LOGGER.error("Invalid Recipe: " + e.getMessage());
+				MineAddons.LOGGER.error("Invalid Recipe: " + e.getMessage());
 			}
 
 			CraftTweakerAPI.apply(new Add(recipe));
@@ -158,7 +153,7 @@ public class CTAnvilHandler
 
 			if(recipe == null)
 			{
-				LOGGER.error("Recipe not found.");
+				MineAddons.LOGGER.error("Recipe not found.");
 				return;
 			}
 

@@ -2,7 +2,6 @@ package com.iamshift.mineaddons.events;
 
 import java.util.Random;
 
-import com.iamshift.mineaddons.blocks.BlockInvLight;
 import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.entities.EntityAncientCarp;
@@ -10,47 +9,46 @@ import com.iamshift.mineaddons.entities.EntityBrainlessShulker;
 import com.iamshift.mineaddons.entities.EntityHellhound;
 import com.iamshift.mineaddons.entities.boss.EntityBoss;
 import com.iamshift.mineaddons.entities.boss.EntityDeadHorse;
-import com.iamshift.mineaddons.fluids.blocks.BlockCursedWater;
-import com.iamshift.mineaddons.fluids.blocks.BlockSacredWater;
 import com.iamshift.mineaddons.init.ModEntities;
 import com.iamshift.mineaddons.init.ModItems;
 import com.iamshift.mineaddons.interfaces.IUncapturable;
-import com.iamshift.mineaddons.items.tools.ItemBreaker;
+import com.iamshift.mineaddons.utils.NoTargetHelper;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFirework;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.World;
+import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.WorldProviderHell;
+import net.minecraft.world.biome.BiomeHell;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
@@ -111,6 +109,8 @@ public class EntityEvents
 			{
 				if(rand.nextInt(15) == 0)
 					entity.dropItem(Item.getItemFromBlock(Blocks.MAGMA), 1);
+
+				return;
 			}
 		}
 
@@ -120,8 +120,14 @@ public class EntityEvents
 
 			ItemStack drop = new ItemStack(ModItems.BrainlessShulkerEgg, 1, e.getColor().getDyeDamage());
 			e.entityDropItem(drop, 0.0F);
+			return;
 		}
 
+		if(entity.getEntityWorld().provider instanceof WorldProviderHell && entity.getEntityWorld().getBiome(entity.getPosition()) instanceof BiomeHell)
+		{
+			ItemStack drop = new ItemStack(ModItems.Soul, 1);
+			entity.entityDropItem(drop, 0.0F);
+		}
 	}
 
 	@SubscribeEvent
@@ -136,6 +142,18 @@ public class EntityEvents
 				ModEntities.ANCIENT_LIMIT++;
 			else
 				event.setCanceled(true);
+		}
+
+		if(event.getEntity() instanceof EntityLiving && !(event.getEntity() instanceof EntityWither) && !(event.getEntity() instanceof EntityDragon) && !(event.getEntity() instanceof IUncapturable))
+		{
+			EntityLiving l = (EntityLiving) event.getEntity();
+			if(l.targetTasks.taskEntries.size() > 0)
+			{
+				if(l.getTags().contains("notarget"))
+				{
+					NoTargetHelper.removeTargetTasks(l);
+				}
+			}
 		}
 	}
 
@@ -166,7 +184,7 @@ public class EntityEvents
 			}
 		}
 	}
-	
+
 	@SubscribeEvent(priority=EventPriority.HIGHEST)
 	public static void onLeftClick(AttackEntityEvent event)
 	{
@@ -194,14 +212,14 @@ public class EntityEvents
 				}
 			}
 		}
-		
+
 		if(target instanceof EntityBoss || target instanceof EntityDeadHorse)
 		{
 			if(Config.isAntiBoss(item.getRegistryName().getResourceDomain() + ":" + item.getRegistryName().getResourcePath()))
 			{
 				if(!player.world.isRemote)
 					player.sendMessage(new TextComponentTranslation("text.antiboss.msg", player.getHeldItem(EnumHand.MAIN_HAND).getDisplayName()));
-				
+
 				event.setCanceled(true);
 				return;
 			}

@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "bottom": "mineaddons:blocks/white_sandstone_bottom",
+        "top": "mineaddons:blocks/white_sandstone_top",
+        "side": "mineaddons:blocks/white_sandstone_normal"
+    }
+}

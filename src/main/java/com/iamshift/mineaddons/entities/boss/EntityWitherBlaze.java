@@ -3,6 +3,7 @@ package com.iamshift.mineaddons.entities.boss;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.init.ModLoot;
 import com.iamshift.mineaddons.interfaces.IUncapturable;
 
@@ -37,6 +38,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -191,6 +193,9 @@ public class EntityWitherBlaze extends EntityBoss implements IUncapturable
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
+		if(Config.FakePlayer && source.getTrueSource() instanceof FakePlayer)
+			return false;
+		
 		if(this.isEntityInvulnerable(source))
 			return false;
 		else if(source.getTrueSource() instanceof EntityBlaze)

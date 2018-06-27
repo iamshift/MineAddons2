@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iamshift.mineaddons.integration.crafttweaker.CTAnvilHandler;
+import com.iamshift.mineaddons.integration.crafttweaker.CTMobConversion;
 
 import crafttweaker.CraftTweakerAPI;
 
@@ -14,6 +15,7 @@ public class CraftTweaker
 	public static void preInit()
 	{
 		CraftTweakerAPI.registerClass(CTAnvilHandler.class);
+		CraftTweakerAPI.registerClass(CTMobConversion.class);
 	}
 	
 	public static void postInit()

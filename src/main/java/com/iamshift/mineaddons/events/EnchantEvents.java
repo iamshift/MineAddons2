@@ -4,13 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import org.lwjgl.input.Keyboard;
-
 import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.core.Refs;
-import com.iamshift.mineaddons.entities.boss.EntityBoss;
 import com.iamshift.mineaddons.init.ModEnchants;
 import com.iamshift.mineaddons.init.ModNetwork;
+import com.iamshift.mineaddons.init.ModPotions;
 import com.iamshift.mineaddons.items.ItemWings;
 import com.iamshift.mineaddons.items.armors.ItemUltimateArmor;
 import com.iamshift.mineaddons.network.PacketToggle;
@@ -29,11 +27,12 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemBook;
 import net.minecraft.item.ItemEnchantedBook;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
@@ -41,10 +40,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -58,6 +56,27 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EnchantEvents
 {
 	@SubscribeEvent
+	public static void hungryEnchantApply(LivingEntityUseItemEvent.Tick event)
+	{
+		if(!(event.getEntityLiving() instanceof EntityPlayer))
+			return;
+
+		ItemStack head = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+		ItemStack food = event.getItem();
+
+		if(head.isEmpty() || food.isEmpty())
+			return;
+
+		if(!(food.getItem() instanceof ItemFood))
+			return;
+
+		if(!head.isItemEnchanted() || !EnchantmentHelper.getEnchantments(head).containsKey(ModEnchants.hungry))
+			return;
+
+		event.setDuration(0);
+	}
+
+	@SubscribeEvent
 	public static void enchantsDrops(LivingDeathEvent event)
 	{
 		if(event.getEntity().world.isRemote)
@@ -69,7 +88,7 @@ public class EnchantEvents
 		Entity entity = event.getEntity();
 		Random rand = new Random();
 		ItemStack stack;
-		
+
 		if(Config.RocketEnchantDropRate > 0 && entity instanceof EntityWither)
 		{
 			if(rand.nextInt(Config.RocketEnchantDropRate) == 0)
@@ -78,7 +97,7 @@ public class EnchantEvents
 				entity.entityDropItem(stack, 0F);
 			}
 		}
-		
+
 		if(Config.ElytraEnchantDropRate > 0 && entity instanceof EntityDragon)
 		{
 			if(rand.nextInt(Config.ElytraEnchantDropRate) == 0)
@@ -104,7 +123,7 @@ public class EnchantEvents
 					if(stack.hasTagCompound() && stack.getTagCompound().hasKey("Rocket"))
 					{
 						int flag = stack.getSubCompound("Rocket").getInteger("Active");
-						ModNetwork.INSTANCE.sendToServer(new PacketToggle(flag));
+						ModNetwork.INSTANCE.sendToServer(new PacketToggle(flag, 0));
 					}
 				}
 			}
@@ -120,6 +139,50 @@ public class EnchantEvents
 		if(event.phase == Phase.END)
 		{
 			EntityPlayer player = event.player;
+
+			if(player.isPotionActive(ModPotions.PotionRocket))
+			{
+				ItemStack stack = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
+				if(!stack.isEmpty() && stack.getItem() instanceof ItemArmor && ((ItemArmor)stack.getItem()).armorType == EntityEquipmentSlot.FEET)
+				{
+					if(!stack.isItemEnchanted() || !stack.getTagCompound().hasKey("Rocket"))
+					{
+						player.removePotionEffect(ModPotions.PotionRocket);
+					}
+				}
+				else if(!stack.isEmpty() && (!(stack.getItem() instanceof ItemArmor) || ((ItemArmor)stack.getItem()).armorType != EntityEquipmentSlot.FEET))
+				{
+					player.removePotionEffect(ModPotions.PotionRocket);
+				}
+				else if(stack.isEmpty())
+				{
+					player.removePotionEffect(ModPotions.PotionRocket);
+				}
+			}
+
+			if(player.isPotionActive(ModPotions.PotionRocket))
+			{
+				if(player.world.isRemote)
+				{
+					PotionEffect effect = player.getActivePotionEffect(ModPotions.PotionRocket);
+					effect.setPotionDurationMax(true);
+					player.addPotionEffect(effect);
+				}
+			}
+			else
+			{
+				ItemStack stack = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
+				if(!stack.isEmpty() && stack.getItem() instanceof ItemArmor && ((ItemArmor)stack.getItem()).armorType == EntityEquipmentSlot.FEET)
+				{
+					if(stack.hasTagCompound() && stack.getTagCompound().hasKey("Rocket") && stack.getSubCompound("Rocket").getInteger("Active") == 1)
+					{
+						if(!player.isPotionActive(ModPotions.PotionRocket))
+						{
+							player.addPotionEffect(new PotionEffect(ModPotions.PotionRocket, 999999, 0));
+						}
+					}
+				}
+			}
 
 			if(player.isSneaking() && player.onGround)
 			{
@@ -183,10 +246,10 @@ public class EnchantEvents
 									{
 										if (player.world.isRemote)
 										{
-											Vec3d look = player.getLookVec();
-											player.motionX += look.x * 0.1D + (look.x * 0.75D - player.motionX) * 0.6D;
-											player.motionY += look.y * 0.1D + (look.y * 0.75D - player.motionY) * 0.6D;
-											player.motionZ += look.z * 0.1D + (look.z * 0.75D - player.motionZ) * 0.6D;
+												Vec3d look = player.getLookVec();
+												player.motionX += look.x * 0.1D + (look.x * Config.RocketBoost - player.motionX) * 0.5D;//(double) Config.RocketBoost;
+												player.motionY += look.y * 0.1D + (look.y * Config.RocketBoost - player.motionY) * 0.5D;//(double) Config.RocketBoost;
+												player.motionZ += look.z * 0.1D + (look.z * Config.RocketBoost - player.motionZ) * 0.5D;//(double) Config.RocketBoost;
 										}
 
 										player.world.spawnParticle(EnumParticleTypes.CLOUD, player.posX - player.getLookVec().x, player.posY - player.getLookVec().y, player.posZ - player.getLookVec().z, -player.getLookVec().x, -player.getLookVec().y, -player.getLookVec().z);
@@ -252,47 +315,25 @@ public class EnchantEvents
 				index = event.getToolTip().indexOf(ename);
 				level = I18n.translateToLocal("enchantment.level." + item.getCompoundTagAt(i).getInteger("lvl"));
 
-				if(!ename.contains("Rocket Power"))
+				if(ForgottenAnvilHelper.enchantments.containsKey(Enchantment.getEnchantmentByID(id)) && ForgottenAnvilHelper.enchantments.get(Enchantment.getEnchantmentByID(id)) == lvl)
 				{
-					if(ForgottenAnvilHelper.enchantments.containsKey(Enchantment.getEnchantmentByID(id)) && ForgottenAnvilHelper.enchantments.get(Enchantment.getEnchantmentByID(id)) == lvl)
-					{
-						replacer = FCOLOR + ename;
-						replacer = replacer.replaceAll(level, TextFormatting.RED + "F");
-					}
-					else
-					{
-						replacer = ECOLOR + ename;
-
-						if(lvl > 1)
-							replacer = replacer.replaceAll(level, TextFormatting.WHITE + "" + level);
-					}
-
-					if(event.getToolTip().contains(ename))
-						event.getToolTip().set(index, replacer);
+					replacer = FCOLOR + ename;
+					replacer = replacer.replaceAll(level, TextFormatting.RED + "F");
 				}
-			}
-		}
-
-		// ROCKET STATUS
-		if(stack.getItem() instanceof ItemArmor)
-		{
-			if(event.getToolTip().contains("Rocket Power"))
-			{
-				if(stack.hasTagCompound())
+				else
 				{
-					if(stack.getTagCompound().hasKey("Rocket"))
-					{
-						NBTTagCompound compound = stack.getSubCompound("Rocket");
+					replacer = ECOLOR + ename;
 
-						if(compound.hasKey("Active"))
-						{
-							String nt = getRocketStatus(compound.getInteger("Active") == 0);
-							event.getToolTip().set(event.getToolTip().indexOf("Rocket Power"), nt);
-						}
-
-					}
+					if(lvl >= 1 && Enchantment.getEnchantmentByID(id).getMaxLevel() > 1)
+						replacer = replacer.replaceAll(level, TextFormatting.WHITE + "" + level);
 				}
+
+				if(event.getToolTip().contains(ename))
+					event.getToolTip().set(index, replacer);
 			}
+
+			if(stack.getItem() instanceof ItemUltimateArmor)
+				event.getToolTip().add("");
 		}
 
 		// FORGE COLOR REMOVER

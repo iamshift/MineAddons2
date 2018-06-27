@@ -31,7 +31,9 @@ import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemEnchantedBook;
+import net.minecraft.item.ItemSkull;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -112,7 +114,7 @@ public class ContainerForgottenAnvil extends Container
 						onOutputTake(playerIn, ContainerForgottenAnvil.this.outputSlot.getStackInSlot(0), ContainerForgottenAnvil.this.inputSlots.getStackInSlot(0), ContainerForgottenAnvil.this.inputSlots.getStackInSlot(1)))
 				{
 					if(ContainerForgottenAnvil.this.matCost == 0)
-						ContainerForgottenAnvil.this.matCost = 1;
+						ContainerForgottenAnvil.this.matCost += 1;
 
 					ItemStack item = ContainerForgottenAnvil.this.inputSlots.getStackInSlot(0);
 					if(!item.isEmpty() && item.getCount() > ContainerForgottenAnvil.this.matCost)
@@ -126,7 +128,8 @@ public class ContainerForgottenAnvil extends Container
 					}
 				}
 
-				if(ContainerForgottenAnvil.this.disenchanting && ContainerForgottenAnvil.this.denchantment != null)
+				if(ContainerForgottenAnvil.this.disenchanting && ContainerForgottenAnvil.this.denchantment != null &&
+						onOutputTake(playerIn, ContainerForgottenAnvil.this.outputSlot.getStackInSlot(0), ContainerForgottenAnvil.this.inputSlots.getStackInSlot(0), ContainerForgottenAnvil.this.inputSlots.getStackInSlot(1)))
 				{
 					ItemStack item = ContainerForgottenAnvil.this.inputSlots.getStackInSlot(0);
 					Map<Enchantment, Integer> map1 = EnchantmentHelper.getEnchantments(item);
@@ -151,7 +154,8 @@ public class ContainerForgottenAnvil extends Container
 				else if(!ContainerForgottenAnvil.this.forgotten)
 					ContainerForgottenAnvil.this.inputSlots.setInventorySlotContents(1, ItemStack.EMPTY);
 
-				if(ContainerForgottenAnvil.this.forgotten)
+				if(ContainerForgottenAnvil.this.forgotten && 
+						onOutputTake(playerIn, ContainerForgottenAnvil.this.outputSlot.getStackInSlot(0), ContainerForgottenAnvil.this.inputSlots.getStackInSlot(0), ContainerForgottenAnvil.this.inputSlots.getStackInSlot(1)))
 				{
 					ItemStack item = ContainerForgottenAnvil.this.inputSlots.getStackInSlot(0);
 					if(!item.isEmpty() && item.getCount() > ContainerForgottenAnvil.this.matCost)
@@ -208,6 +212,7 @@ public class ContainerForgottenAnvil extends Container
 		this.disenchanting = false;
 		this.denchantment = null;
 		this.forgotten = false;
+		this.shouldDestroy = true;
 		int i = 0;
 		int j = 0;
 		int k = 0;
@@ -258,14 +263,6 @@ public class ContainerForgottenAnvil extends Container
 				}
 				else
 				{
-//					if (!flag && (item.getItem() != ingredient.getItem() || !item.isItemStackDamageable()) && !fluid.isFluidEqual(ingredient) && ingredient.getItem() != Items.BOOK)
-//					{
-//						this.outputSlot.setInventorySlotContents(0, ItemStack.EMPTY);
-//						this.maxCost = 0;
-//
-//						return;
-//					}
-
 					if (item.isItemStackDamageable() && !flag && !fluid.isFluidEqual(ingredient))
 					{
 						int l = stack.getMaxDamage() - stack.getItemDamage();
@@ -423,6 +420,10 @@ public class ContainerForgottenAnvil extends Container
 							{
 								EnchantmentHelper.setEnchantments(map, item);
 								this.outputSlot.setInventorySlotContents(0, item);
+								this.matCost = 64;
+								this.maxCost = 30;
+								this.shouldDestroy = true;
+
 								this.detectAndSendChanges();
 
 								return;
@@ -444,6 +445,39 @@ public class ContainerForgottenAnvil extends Container
 						this.disenchanting = true;
 						this.matCost = 1;
 						this.maxCost = 1;
+						this.shouldDestroy = false;
+
+						this.detectAndSendChanges();
+						return;
+					}
+
+					if(ingredient.getItem() == Items.BOOK && item.getItem() == Items.ENCHANTED_BOOK && !ItemEnchantedBook.getEnchantments(item).hasNoTags())
+					{
+						ItemStack newBook = new ItemStack(Items.ENCHANTED_BOOK);
+						EnchantmentHelper.setEnchantments(EnchantmentHelper.getEnchantments(item), newBook);
+
+						this.outputSlot.setInventorySlotContents(0, newBook);
+						this.matCost = 1;
+						this.maxCost = EnchantmentHelper.getEnchantments(item).size();
+						this.shouldDestroy = false;
+
+						this.detectAndSendChanges();
+						return;
+					}
+
+					if(ingredient.getItem() == Items.NAME_TAG && ingredient.hasDisplayName() && item.getItem() instanceof ItemSkull && item.getMetadata() == 3)
+					{
+						ItemStack skull = item.copy();
+
+						if(!skull.hasTagCompound())
+							skull.setTagCompound(new NBTTagCompound());
+
+						skull.getTagCompound().setString("SkullOwner", ingredient.getDisplayName());
+
+						this.outputSlot.setInventorySlotContents(0, skull);
+						this.matCost = 1;
+						this.maxCost = 1;
+						this.shouldDestroy = true;
 
 						this.detectAndSendChanges();
 						return;
@@ -488,6 +522,7 @@ public class ContainerForgottenAnvil extends Container
 					k = 1;
 					i += k;
 					item.clearCustomName();
+					this.matCost = 64;
 				}
 			}
 			else if (!this.repairedItemName.equals(stack.getDisplayName()))
@@ -495,6 +530,7 @@ public class ContainerForgottenAnvil extends Container
 				k = 1;
 				i += k;
 				item.setStackDisplayName(this.repairedItemName);
+				this.matCost = 64;
 			}
 			if (flag && !item.getItem().isBookEnchantable(item, ingredient)) item = ItemStack.EMPTY;
 

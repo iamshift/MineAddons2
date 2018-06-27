@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "mineaddons:blocks/colorable_torch_orange"
+        "layer0": "mineaddons:blocks/torchs/colorable_torch_orange"
     }
 }

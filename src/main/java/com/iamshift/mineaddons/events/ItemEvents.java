@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemFirework;
@@ -22,6 +23,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 
 @Mod.EventBusSubscriber(modid = Refs.ID)
 public class ItemEvents
@@ -54,11 +56,17 @@ public class ItemEvents
 	@SubscribeEvent
 	public static void onFiberToolUse(PlayerEvent.BreakSpeed event)
 	{
+		if(event.getEntityPlayer().isPotionActive(MobEffects.MINING_FATIGUE))
+		{
+			event.setNewSpeed(1.0F);
+			return;
+		}
+		
 		ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
 		if(!(stack.getItem() instanceof ItemTool))
 			return;
 		
-		if(!(stack.getItem() instanceof ItemFiberPickaxe) || !(stack.getItem() instanceof ItemFiberAxe) || !(stack.getItem() instanceof ItemFiberShovel))
+		if(!(stack.getItem() instanceof ItemFiberPickaxe) && !(stack.getItem() instanceof ItemFiberAxe) && !(stack.getItem() instanceof ItemFiberShovel))
 			return;
 		
 		IBlockState state = event.getState();
@@ -72,7 +80,7 @@ public class ItemEvents
 								  null; 
 		
 		
-		if(mat == Material.IRON || mat == Material.ANVIL || mat == Material.ROCK)
+		if(stack.getItem() instanceof ItemFiberPickaxe && (mat == Material.IRON || mat == Material.ANVIL || mat == Material.ROCK))
 		{
 			event.setNewSpeed(hardness * 50.0F);
 			return;
@@ -96,6 +104,28 @@ public class ItemEvents
 			}
 		}
 		
+		if(mat == Material.CIRCUITS)
+		{
+			event.setNewSpeed(1.0F);
+			return;
+		}
+		
 		event.setNewSpeed(hardness * 1.0F);
+	}
+	
+	
+	@SubscribeEvent
+	public static void onWaterCrafting(ItemCraftedEvent event)
+	{
+		if(event.crafting.getDisplayName().toLowerCase().equals("cursed water bucket") || event.crafting.getDisplayName().toLowerCase().equals("sacred water bucket"))
+		{
+			for(int i = 0; i < event.craftMatrix.getSizeInventory(); i++)
+			{
+				System.out.println(event.craftMatrix.getStackInSlot(i).getDisplayName());
+				
+				if(event.craftMatrix.getStackInSlot(i).getDisplayName().toLowerCase().equals("water bucket"))
+					event.craftMatrix.setInventorySlotContents(i, ItemStack.EMPTY);
+			}
+		}
 	}
 }

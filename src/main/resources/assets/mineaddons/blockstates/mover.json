@@ -1,0 +1,8 @@
+{
+	"variants": {
+       "connected=false,powered=false" : { "model": "mineaddons:mover_not" },
+       "connected=true,powered=false" : { "model": "mineaddons:mover_off" },
+       "connected=false,powered=true": { "model": "mineaddons:mover_not_on" },
+       "connected=true,powered=true": { "model": "mineaddons:mover_on" }
+    }
+}

@@ -37,10 +37,21 @@ public class MineTab extends CreativeTabs
 		list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.CursedWater, 1000)));
 		list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.ForgottenWater, 1000)));
 
-		if(Loader.isModLoaded("tconstruct") && Config.Tinker)
+		if(Config.Tinker)
 		{
 			list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.Fiberglass, 1000)));
 			list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.LiquidStar, 1000)));
+			
+			if(Config.Harmonious)
+				list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.Harmonious, 1000)));
+		}
+		
+		if(Config.Foundry)
+		{
+			list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.Fiberglass, 1000)));
+			list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.LiquidStar, 1000)));
+			list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.InfusedDiamond, 1000)));
+			list.add(FluidUtil.getFilledBucket(new FluidStack(ModFluids.FiberStar, 1000)));
 		}
 
 		Collections.sort(list, new Comparator<ItemStack>()

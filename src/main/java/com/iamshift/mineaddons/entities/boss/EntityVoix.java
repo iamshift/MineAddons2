@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.entities.items.EntitySpiritBomb;
 import com.iamshift.mineaddons.entities.items.EntityVoidball;
 import com.iamshift.mineaddons.init.ModItems;
@@ -39,6 +40,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -203,6 +205,9 @@ public class EntityVoix extends EntityBoss implements IUncapturable
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
+		if(Config.FakePlayer && source.getTrueSource() instanceof FakePlayer)
+			return false;
+		
 		if(this.isEntityInvulnerable(source))
 			return false;
 		else if(source.getTrueSource() instanceof EntityVex || source.getImmediateSource() instanceof EntitySpiritBomb)

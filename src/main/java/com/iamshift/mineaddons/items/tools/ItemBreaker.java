@@ -7,12 +7,14 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.iamshift.mineaddons.MineAddons;
 import com.iamshift.mineaddons.blocks.BlockInvLight;
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.init.ModItems;
 import com.iamshift.mineaddons.interfaces.IHasModel;
 import com.iamshift.mineaddons.interfaces.IRecipeProvider;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBarrier;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
@@ -143,7 +145,7 @@ public class ItemBreaker extends ItemTool implements IHasModel, IRecipeProvider
 					IBlockState state = world.getBlockState(pos);
 					boolean unbreakable = state.getBlockHardness(world, pos) < 0.0F ? true : false;
 
-					if(!unbreakable && !(state.getBlock() instanceof BlockInvLight))
+					if(!unbreakable || Config.isUnbreakble(state.getBlock().getRegistryName().getResourceDomain() + ":" + state.getBlock().getRegistryName().getResourcePath()))
 					{
 						event.setCanceled(true);
 						return;

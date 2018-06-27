@@ -1,0 +1,6 @@
+{
+	"variants": {
+       "half=bottom": { "model": "mineaddons:white_sandstone_slab_bottom" },
+       "half=top": { "model": "mineaddons:white_sandstone_slab_top" }
+    }
+}

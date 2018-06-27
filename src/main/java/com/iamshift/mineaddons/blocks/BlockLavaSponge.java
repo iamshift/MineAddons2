@@ -8,6 +8,7 @@ import java.util.Random;
 import com.google.common.collect.Lists;
 import com.iamshift.mineaddons.MineAddons;
 import com.iamshift.mineaddons.blocks.items.ItemLavaSponge;
+import com.iamshift.mineaddons.core.Config;
 import com.iamshift.mineaddons.core.Refs;
 import com.iamshift.mineaddons.init.ModItems;
 import com.iamshift.mineaddons.interfaces.IMetaName;
@@ -40,67 +41,67 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 public class BlockLavaSponge extends BlockBase implements IMetaName
 {
 	public static final PropertyBool WET = PropertyBool.create("wet");
-	
+
 	public BlockLavaSponge(String name) 
 	{
 		super(name, Material.SPONGE, true);
 		setHardness(0.3F);
 		setSoundType(SoundType.PLANT);
-		
+
 		setCreativeTab(MineAddons.minetab);
-		
+
 		this.setDefaultState(this.getDefaultState().withProperty(WET, Boolean.valueOf(false)));
 	}
-	
+
 	@Override
 	public int damageDropped(IBlockState state) 
 	{
 		return ((Boolean)state.getValue(WET)) ? 1 : 0;
 	}
-	
+
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) 
 	{
 		items.add(new ItemStack(this, 1, 0));
 		items.add(new ItemStack(this, 1, 1));
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
 		return this.getDefaultState().withProperty(WET, Boolean.valueOf(meta == 1));
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
 		return ((Boolean)state.getValue(WET)) ? 1 : 0;
 	}
-	
+
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
 	{
 		return new ItemStack(Item.getItemFromBlock(this), 1, this.getMetaFromState(state));
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
 		return new BlockStateContainer(this, new IProperty[] { WET } );
 	}
-	
+
 	@Override
 	public String getSpecialName(ItemStack stack) 
 	{
 		return stack.getItemDamage() == 0 ? "dry" : "wet";
 	}
-	
+
 	@Override
 	public void registerItemVariants()
 	{
 		ModItems.ITEMS.add(new ItemLavaSponge(this).setRegistryName(this.getRegistryName()));
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerModels()
@@ -108,7 +109,7 @@ public class BlockLavaSponge extends BlockBase implements IMetaName
 		MineAddons.proxy.registerVariantRenderer(Item.getItemFromBlock(this), 0, "lava_sponge_dry", "inventory");
 		MineAddons.proxy.registerVariantRenderer(Item.getItemFromBlock(this), 1, "lava_sponge_wet", "inventory");
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand)
@@ -165,20 +166,20 @@ public class BlockLavaSponge extends BlockBase implements IMetaName
 			}
 		}
 	}
-	
+
 	@Override
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
 	{
 		this.tryAbsorb(worldIn, pos, state);
 	}
-	
+
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
 	{
 		this.tryAbsorb(worldIn, pos, state);
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
 	}
-	
+
 	protected void tryAbsorb(World worldIn, BlockPos pos, IBlockState state)
 	{
 		if((!(Boolean)state.getValue(WET)) && this.absorb(worldIn, pos))
@@ -187,7 +188,7 @@ public class BlockLavaSponge extends BlockBase implements IMetaName
 			worldIn.playEvent(2001, pos, Block.getIdFromBlock(Blocks.LAVA));
 		}
 	}
-	
+
 	private boolean absorb(World worldIn, BlockPos pos)
 	{
 		Queue<Tuple<BlockPos, Integer>> queue = Lists.<Tuple<BlockPos, Integer>>newLinkedList();
@@ -231,35 +232,38 @@ public class BlockLavaSponge extends BlockBase implements IMetaName
 
 		return i > 0;
 	}
-	
+
 	@Override
 	public List<IRecipe> getRecipe()
 	{
 		List<IRecipe> list = new ArrayList<IRecipe>();
 		list.add(
 				new ShapelessOreRecipe(new ResourceLocation(Refs.ID), 
-				new ItemStack(this, 1), 
-				new Object[] {
-				new ItemStack(Blocks.SOUL_SAND, 1, 0), 
-				new ItemStack(ModItems.Cellulose, 1, 0),
-				new ItemStack(ModItems.Cellulose, 1, 0),
-				new ItemStack(ModItems.Cellulose, 1, 0),
-				new ItemStack(ModItems.Cellulose, 1, 0)
+						new ItemStack(this, 1), 
+						new Object[] {
+								new ItemStack(Blocks.SOUL_SAND, 1, 0), 
+								new ItemStack(ModItems.Cellulose, 1, 0),
+								new ItemStack(ModItems.Cellulose, 1, 0),
+								new ItemStack(ModItems.Cellulose, 1, 0),
+								new ItemStack(ModItems.Cellulose, 1, 0)
 				}).setRegistryName(new ResourceLocation(Refs.ID, "lava_sponge"))
 				);
 		
-		list.add(
-				new ShapelessOreRecipe(new ResourceLocation(Refs.ID), 
-				new ItemStack(Blocks.SPONGE, 1, 0), 
-				new Object[] {
-				"sand", 
-				new ItemStack(ModItems.Cellulose, 1, 0),
-				new ItemStack(ModItems.Cellulose, 1, 0),
-				new ItemStack(ModItems.Cellulose, 1, 0),
-				new ItemStack(ModItems.Cellulose, 1, 0)
-				}).setRegistryName(new ResourceLocation(Refs.ID, "sponge"))
-				);
-		
+		if(Config.SpongeRecipe)
+		{
+			list.add(
+					new ShapelessOreRecipe(new ResourceLocation(Refs.ID), 
+							new ItemStack(Blocks.SPONGE, 1, 0), 
+							new Object[] {
+									"sand", 
+									new ItemStack(ModItems.Cellulose, 1, 0),
+									new ItemStack(ModItems.Cellulose, 1, 0),
+									new ItemStack(ModItems.Cellulose, 1, 0),
+									new ItemStack(ModItems.Cellulose, 1, 0)
+					}).setRegistryName(new ResourceLocation(Refs.ID, "sponge"))
+					);
+		}
+
 		return list;
 	}
 }

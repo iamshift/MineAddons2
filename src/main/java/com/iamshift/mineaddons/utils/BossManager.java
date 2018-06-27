@@ -64,6 +64,10 @@ public class BossManager
 			.aisle("~~S~~", "~~~~~", "S~~~S", "~~~~~", "~~S~~")
 			.where('S', WITHER_SKELETON)
 			.where('~', BlockWorldState.hasState(BlockMaterialMatcher.forMaterial(Material.AIR)))
+			.aisle("~~~~~", "~~~~~", "~~~~~", "~~~~~", "~~~~~")
+			.where('~', BlockWorldState.hasState(BlockMaterialMatcher.forMaterial(Material.AIR)))
+			.aisle("~~~~~", "~~~~~", "~~~~~", "~~~~~", "~~~~~")
+			.where('~', BlockWorldState.hasState(BlockMaterialMatcher.forMaterial(Material.AIR)))
 			.build();
 	
 	private static BlockPattern witherblazePattern = FactoryBlockPattern.start()
@@ -79,6 +83,10 @@ public class BossManager
 			.aisle("~~~~~", "~~~~~", "~~S~~", "~~~~~", "~~~~~")
 			.where('S', WITHER_SKELETON)
 			.where('~', BlockWorldState.hasState(BlockMaterialMatcher.forMaterial(Material.AIR)))
+			.aisle("~~~~~", "~~~~~", "~~~~~", "~~~~~", "~~~~~")
+			.where('~', BlockWorldState.hasState(BlockMaterialMatcher.forMaterial(Material.AIR)))
+			.aisle("~~~~~", "~~~~~", "~~~~~", "~~~~~", "~~~~~")
+			.where('~', BlockWorldState.hasState(BlockMaterialMatcher.forMaterial(Material.AIR)))
 			.build();
 	
 	private static BlockPattern voixPattern = FactoryBlockPattern.start()
@@ -92,6 +100,10 @@ public class BossManager
 			.aisle("~~~~~", "~~~~~", "~~S~~", "~~~~~", "~~~~~")
 			.where('S', WITHER_SKELETON)
 			.where('~', BlockWorldState.hasState(BlockMaterialMatcher.forMaterial(Material.AIR)))
+			.aisle("~~~~~", "~~~~~", "~~~~~", "~~~~~", "~~~~~")
+			.where('~', BlockWorldState.hasState(BlockMaterialMatcher.forMaterial(Material.AIR)))
+			.aisle("~~~~~", "~~~~~", "~~~~~", "~~~~~", "~~~~~")
+			.where('~', BlockWorldState.hasState(BlockMaterialMatcher.forMaterial(Material.AIR)))
 			.build();
 
 	
@@ -101,7 +113,7 @@ public class BossManager
 		BlockPos pos = event.getPos();
 		World world = event.getWorld();
 		
-		if(pos.getY() >= 10 && world.getDifficulty() != EnumDifficulty.PEACEFUL && !world.isRemote)
+		if(pos.getY() >= 5 && world.getDifficulty() != EnumDifficulty.PEACEFUL && !world.isRemote)
 		{
 			if(event.getPlacedBlock().getBlock() instanceof BlockFire && world.provider instanceof WorldProviderSurface) //&& world.provider instanceof WorldProviderSurface
 			{

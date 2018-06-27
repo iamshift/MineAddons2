@@ -1,6 +1,6 @@
 {
     "parent": "block/torch_wall",
     "textures": {
-        "torch": "mineaddons:blocks/colorable_torch_blue"
+        "torch": "mineaddons:blocks/torchs/colorable_torch_blue"
     }
 }

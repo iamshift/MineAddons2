@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "color=white": { "model": "mineaddons:colorable_plank_white" },
+        "color=orange": { "model": "mineaddons:colorable_plank_orange" },
+        "color=magenta": { "model": "mineaddons:colorable_plank_magenta" },
+        "color=light_blue": { "model": "mineaddons:colorable_plank_light_blue" },
+        "color=yellow": { "model": "mineaddons:colorable_plank_yellow" },
+        "color=lime": { "model": "mineaddons:colorable_plank_lime" },
+        "color=pink": { "model": "mineaddons:colorable_plank_pink" },
+        "color=gray": { "model": "mineaddons:colorable_plank_gray" },
+        "color=silver": { "model": "mineaddons:colorable_plank_silver" },
+        "color=cyan": { "model": "mineaddons:colorable_plank_cyan" },
+        "color=purple": { "model": "mineaddons:colorable_plank_purple" },
+        "color=blue": { "model": "mineaddons:colorable_plank_blue" },
+        "color=brown": { "model": "mineaddons:colorable_plank_brown" },
+        "color=green": { "model": "mineaddons:colorable_plank_green" },
+        "color=red": { "model": "mineaddons:colorable_plank_red" },
+        "color=black": { "model": "mineaddons:colorable_plank_black" }
+    }
+}

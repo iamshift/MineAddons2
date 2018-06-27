@@ -6,7 +6,9 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.iamshift.mineaddons.init.ModSounds;
+import com.iamshift.mineaddons.utils.CustomExplosion;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.monster.EntityMob;
@@ -20,8 +22,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public abstract class EntityBoss extends EntityMob
@@ -276,6 +280,12 @@ public abstract class EntityBoss extends EntityMob
 		{
 			int i = this.getInvulTime() - 1;
 			this.setInvulTime(i);
+			
+			if(i <= 0 && getStage() == 1)
+			{
+				newExplosion(this, this.posX, this.posY + (double)this.getEyeHeight(), this.posZ, 7.0F, 7.0F, false, net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this));
+                this.world.playBroadcastSound(1023, new BlockPos(this), 0);
+			}
 		}
 		else
 		{
@@ -285,6 +295,15 @@ public abstract class EntityBoss extends EntityMob
 			if(this.spellTicks > 0)
 				--this.spellTicks;
 		}
+	}
+	
+	private Explosion newExplosion(@Nullable Entity entityIn, double x, double y, double z, float size, float strength, boolean isFlaming, boolean isSmoking)
+	{
+		CustomExplosion explosion = new CustomExplosion(this.world, entityIn, x, y, z, size, strength, isFlaming, isSmoking, true);
+		if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(this.world, explosion)) return explosion;
+		explosion.doExplosionA();
+		explosion.doExplosionB(true);
+		return explosion;
 	}
 	
 	@Override

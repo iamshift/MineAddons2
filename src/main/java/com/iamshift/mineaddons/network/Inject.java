@@ -31,6 +31,7 @@ import net.minecraftforge.fml.common.FMLLog;
 public class Inject implements IClassTransformer
 {
 	public static final ClassnameMap CLASS_MAPPINGS = new ClassnameMap(
+			"net/minecraft/entity/monster/EntityMob", "adc",
 			"net/minecraft/entity/EntityLivingBase", "vn",
 			"net/minecraft/client/entity/EntityPlayerSP", "bub",
 			"net/minecraft/inventory/EntityEquipmentSlot", "vl",
@@ -40,6 +41,7 @@ public class Inject implements IClassTransformer
 
 	static 
 	{
+		transformers.put("net.minecraft.entity.monster.EntityMob", Inject::transformEntityMobUpdate);
 		transformers.put("net.minecraft.entity.EntityLivingBase", Inject::transformElytraUpdate);
 		transformers.put("net.minecraft.client.entity.EntityPlayerSP", Inject::transformClientElytraUpdate);
 	}
@@ -64,7 +66,7 @@ public class Inject implements IClassTransformer
 
 					InsnList toInject = new InsnList();
 					toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/iamshift/mineaddons/network/Hooks", "update", "(Lnet/minecraft/entity/EntityLivingBase;)V"));
-					
+
 					method.instructions.insert(node, toInject);
 					method.instructions.remove(node);
 
@@ -94,7 +96,28 @@ public class Inject implements IClassTransformer
 
 		return transClass;
 	}
-	
+
+	private static byte[] transformEntityMobUpdate(byte[] basicClass)
+	{
+		log("Preparing to transform EntityMob");
+		MethodSignature sig = new MethodSignature("onUpdate", "func_70071_h_", "B_", "()V");
+
+		byte[] transClass = transform(basicClass, Pair.of(sig, combine(
+				(AbstractInsnNode node) -> node.getOpcode() == Opcodes.INVOKEVIRTUAL && checkDesc(((MethodInsnNode) node).desc, "()V"),
+				(MethodNode method, AbstractInsnNode node) -> {
+
+					InsnList toInject = new InsnList();
+					toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/iamshift/mineaddons/network/Hooks", "preventDespawn", "(Lnet/minecraft/entity/monster/EntityMob;)V"));
+
+					method.instructions.insert(node, toInject);
+					method.instructions.remove(node);
+
+					return true;
+				})));
+
+		return transClass;
+	}
+
 	private static byte[] transform(byte[] basicClass, Pair<MethodSignature, MethodAction>... methods) 
 	{
 		ClassReader reader = new ClassReader(basicClass);
