@@ -12,15 +12,18 @@ public class SmeltingRecipes
 {
 	public static void init()
 	{
-		FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(Items.WHEAT, 1), new ItemStack(ModItems.Cellulose, 1), 1.0F);
-		FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(Items.REEDS, 1), new ItemStack(ModItems.Cellulose, 2), 2.0F);
+		if(Config.LavaSponge || Config.SpongeRecipe)
+		{
+			FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(Items.WHEAT, 1), new ItemStack(ModItems.Cellulose, 1), 1.0F);
+			FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(Items.REEDS, 1), new ItemStack(ModItems.Cellulose, 2), 2.0F);
 
-		for(ItemStack stack : OreDictionary.getOres("treeLeaves"))
-			FurnaceRecipes.instance().addSmeltingRecipe(stack, new ItemStack(ModItems.Cellulose, 3), 3.0F);
+			for(ItemStack stack : OreDictionary.getOres("treeLeaves"))
+				FurnaceRecipes.instance().addSmeltingRecipe(stack, new ItemStack(ModItems.Cellulose, 3), 3.0F);
 
-		for(ItemStack stack : OreDictionary.getOres("treeSapling"))
-			FurnaceRecipes.instance().addSmeltingRecipe(stack, new ItemStack(ModItems.Cellulose, 5), 5.0F);
-
+			for(ItemStack stack : OreDictionary.getOres("treeSapling"))
+				FurnaceRecipes.instance().addSmeltingRecipe(stack, new ItemStack(ModItems.Cellulose, 5), 5.0F);
+		}
+		
 		if(Config.Tinker)
 		{
 			for(ItemStack stack : OreDictionary.getOres("blockGlass"))
