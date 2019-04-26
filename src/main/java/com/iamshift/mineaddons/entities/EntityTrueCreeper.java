@@ -266,7 +266,7 @@ public class EntityTrueCreeper extends EntityMob
 	{
 		if(Config.CreepierSpawnRate > 0)
 		{
-			if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.isValidLightLevel() && !isEntityInsideOpaqueBlock() && this.world.provider.getDimensionType() == DimensionType.OVERWORLD && (this.world.provider.getBiomeForCoords(this.getPosition()) != Biomes.MUSHROOM_ISLAND || this.world.provider.getBiomeForCoords(this.getPosition()) != Biomes.MUSHROOM_ISLAND_SHORE))
+			if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.isValidLightLevel() && !isEntityInsideOpaqueBlock() && this.world.provider.getDimensionType() == DimensionType.OVERWORLD && this.world.provider.getBiomeForCoords(this.getPosition()) != Biomes.MUSHROOM_ISLAND && this.world.provider.getBiomeForCoords(this.getPosition()) != Biomes.MUSHROOM_ISLAND_SHORE)
 			{
 				if(this.rand.nextInt(Config.CreepierSpawnRate) == 0)
 					return true;
