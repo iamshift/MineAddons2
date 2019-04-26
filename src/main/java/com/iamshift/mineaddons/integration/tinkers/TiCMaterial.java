@@ -74,7 +74,7 @@ public class TiCMaterial
 					new HeadMaterialStats(2000, 1, 30, 6), 
 					new HandleMaterialStats(1.5F, 500), 
 					new ExtraMaterialStats(750),
-					new BowMaterialStats(8F, 5F, 100F));
+					new BowMaterialStats(0.25F, 2.5F, 10F));
 			
 			TinkerRegistry.integrate(harmonious).preInit();
 
